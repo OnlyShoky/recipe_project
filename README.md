@@ -54,21 +54,32 @@ Visit the application at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
 ```
 recipe_project/
-    manage.py               # Django management script
-    recipe_project/         # Project settings and configurations
-        settings.py         # Main settings file
-        urls.py             # URL routing
-    recipes/                # App for recipe-related functionality
-        models.py           # Database models
-        serializers.py      # API serializers
-        views.py            # Logic for displaying recipes
-    api/                    # App for API-related functionality
-        views.py            # API views
-        urls.py             # API routes
-    frontend/               # App for frontend templates and views
-        templates/          # HTML files
-        static/             # Static files (CSS, JS, Images)
-    requirements.txt        # List of dependencies
+    backend/
+        recipe_project/
+            manage.py               # Django management script
+            recipe_project/         # Project settings and configurations
+                settings.py         # Main settings file
+                urls.py             # URL routing
+            recipes/                # App for recipe-related functionality
+                models.py           # Database models
+                serializers.py      # API serializers
+                views.py            # Logic for displaying recipes
+            api/                    # App for API-related functionality
+                views.py            # API views
+                urls.py             # API routes
+            frontend/               # App for frontend templates and views
+                templates/          # HTML files
+                static/             # Static files (CSS, JS, Images)
+            requirements.txt        # List of dependencies
+    steps/
+        step1.md
+        step2.md
+        ...
+    .gitignore
+    docker-compose.yml
+    env.template
+    README.md
+    server.py
 ```
 
 ---
