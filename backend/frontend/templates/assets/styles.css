@@ -1,0 +1,22 @@
+/* styles.css */
+
+/* Sepia background and text colors */
+body {
+    background-color: #f4e1c1; /* Soft sepia background */
+    color: #3e2a47;  /* Sepia-like text color */
+}
+
+header, footer {
+    background-color: #3e2a47; /* Dark sepia for header and footer */
+    color: #f4e1c1;  /* Light sepia for header and footer text */
+}
+
+header a {
+    color: #f4e1c1;  /* Sepia light color for the link */
+}
+
+img {
+    filter: sepia(1);  /* Apply sepia filter to images */
+}
+
+/* TailwindCSS classes can still be used alongside your custom styles */

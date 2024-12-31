@@ -3,7 +3,8 @@ from utils.model_abstracts import Model
 from django_extensions.db.models import (
 	TimeStampedModel, 
 	ActivatorModel,
-	TitleDescriptionModel
+	TitleDescriptionModel,
+    
 )
 
 
@@ -18,6 +19,7 @@ class Recipe(TimeStampedModel,
     
     ingredients = models.TextField()
     instructions = models.TextField()
+    image = models.ImageField(upload_to='recipes_images/', blank=True, null=True)  # Add ImageField
     # servings = models.IntegerField(blank=True, null=True)
     # prep_time = models.DurationField(blank=True, null=True)
     # cook_time = models.DurationField(blank=True, null=True)
