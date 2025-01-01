@@ -15,21 +15,5 @@ class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = ['name', 'nutrition']
+        fields = ['name', 'nutrition']  # Include other fields like quantity, unit, etc., if necessary
 
-    # You can override the create and update methods if necessary.
-    def create(self, validated_data):
-        nutrition_data = validated_data.pop('nutrition')
-        nutritional_table = NutritionalTable.objects.create(**nutrition_data)
-        ingredient = Ingredient.objects.create(nutrition=nutritional_table, **validated_data)
-        return ingredient
-
-    def update(self, instance, validated_data):
-        nutrition_data = validated_data.pop('nutrition')
-        instance.name = validated_data.get('name', instance.name)
-        # Update nutritional table data
-        for attr, value in nutrition_data.items():
-            setattr(instance.nutrition, attr, value)
-        instance.nutrition.save()
-        instance.save()
-        return instance

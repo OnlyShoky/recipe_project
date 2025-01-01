@@ -34,8 +34,8 @@ class RecipeTestCase(TestCase):
         self.recipe = Recipe.objects.create(**self.recipe_data)
 
         # Add ingredients via the through model (RecipeIngredient)
-        RecipeIngredient.objects.create(recipe=self.recipe, ingredient=self.ingredient1, quantity=2, unit='cups')
-        RecipeIngredient.objects.create(recipe=self.recipe, ingredient=self.ingredient2, quantity=1, unit='cup')
+        self.recipe_ingredient1 = RecipeIngredient.objects.create(recipe=self.recipe, ingredient=self.ingredient1, quantity=2, unit='cups')
+        self.recipe_ingredient2 = RecipeIngredient.objects.create(recipe=self.recipe, ingredient=self.ingredient2, quantity=1, unit='cup')
 
     def test_recipe_creation(self):
         # Check if the recipe was created correctly
@@ -67,15 +67,17 @@ class RecipeTestCase(TestCase):
         recipe = Recipe.objects.get(id=self.recipe.id)
         ingredients = recipe.ingredients.all()
         self.assertEqual(ingredients.count(), 2)
-        self.assertIn(self.ingredient1, ingredients)
-        self.assertIn(self.ingredient2, ingredients)
+        self.assertIn(self.recipe_ingredient1, ingredients)
+        self.assertIn(self.recipe_ingredient2, ingredients)
 
         # Check the quantity and unit of ingredients
         recipe_ingredient_1 = RecipeIngredient.objects.get(recipe=recipe, ingredient=self.ingredient1)
+        self.assertEqual(recipe_ingredient_1.ingredient, self.ingredient1)
         self.assertEqual(recipe_ingredient_1.quantity, 2)
         self.assertEqual(recipe_ingredient_1.unit, "cups")
 
         recipe_ingredient_2 = RecipeIngredient.objects.get(recipe=recipe, ingredient=self.ingredient2)
+        self.assertEqual(recipe_ingredient_2.ingredient, self.ingredient2)
         self.assertEqual(recipe_ingredient_2.quantity, 1)
         self.assertEqual(recipe_ingredient_2.unit, "cup")
 

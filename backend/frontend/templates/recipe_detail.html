@@ -23,18 +23,13 @@
     <section class="mb-6">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ingredients</h2>
         <ul class="list-disc pl-6 space-y-1">
-            <p> {{recipe.ingredients}} </p>
             
-            {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" alt="Recipe Image" class="rounded-xl">
-            {% else %}
-                <p>No image available</p>
-            {% endif %}
-            {% comment %} {% for ingredient in recipe.ingredients.split('.') %}
+            {% for ingredient in recipe.ingredients %}
                 {% if ingredient %}
                     <li class="text-gray-700">{{ ingredient }}</li>
                 {% endif %}
-            {% endfor %} {% endcomment %}
+            {% endfor %}
+            
         </ul>
     </section>
 
@@ -43,5 +38,11 @@
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">Instructions</h2>
         <p class="text-gray-700">{{ recipe.instructions }}</p>
     </section>
+
+    {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" alt="Recipe Image" class="rounded-xl">
+            {% else %}
+                <p>No image available</p>
+            {% endif %}
 
 {% endblock %}

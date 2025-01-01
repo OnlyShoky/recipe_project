@@ -9,7 +9,7 @@ from django_extensions.db.models import (
 
 from ingredients.models import Ingredient
 
-class Tag(TimeStampedModel, ActivatorModel, TitleDescriptionModel):
+class Tag(TimeStampedModel, ActivatorModel):
     """
     Model for tags with a type (e.g., Cuisine, Course, Other) to categorize them.
     """
@@ -43,6 +43,8 @@ class RecipeIngredient(models.Model):
     def __str__(self):
         return f"{self.quantity} {self.unit} of {self.ingredient.name}"
 
+    class Meta:
+        verbose_name_plural = "RecipeIngredients"
 
 class Recipe(TimeStampedModel, 
     ActivatorModel,
@@ -52,13 +54,16 @@ class Recipe(TimeStampedModel,
     class Meta:
         verbose_name_plural = "Recipes"
         
-    ingredients = models.ManyToManyField(RecipeIngredient, related_name='recipes')
+    # ingredients = models.ManyToManyField(Ingredient, related_name='recipes')  # Now we link to RecipeIngredient
+    # ingredients = models.ManyToManyField(RecipeIngredient, related_name='recipes')  # Now we link to RecipeIngredient
+    # ingredients = models.ForeignKey(RecipeIngredient, on_delete=models.DO_NOTHING, null=True, blank=True)  # This is the foreign key
+
     instructions = models.TextField()
     image = models.ImageField(upload_to='recipes_images/', blank=True, null=True)  # Add ImageField
     
     ## V2
-    course = models.ForeignKey(Tag, on_delete=models.CASCADE,null=True, blank=True)  # This is the foreign key
-    cuisine = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, blank=True, related_name='cuisine_recipes')
+    course = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True, blank=True)  # This is the foreign key
+    cuisine = models.ForeignKey(Tag, on_delete=models.CASCADE,null=True, blank=True, related_name='cuisine_recipes')
     
     prep_time = models.DurationField(null=True, blank=True)
     cook_time = models.DurationField(null=True, blank=True)
@@ -76,4 +81,10 @@ class Recipe(TimeStampedModel,
     def __str__(self):
         return self.title
 
+    @property
+    def ingredients(self):
+        """
+        Property to get all RecipeIngredient instances related to this Recipe.
+        """
+        return self.recipe_ingredients.all()
 
