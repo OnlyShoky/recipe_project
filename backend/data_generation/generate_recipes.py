@@ -84,3 +84,93 @@ class RecipeFactory(factory.django.DjangoModelFactory):
                 quantity=quantity,
                 unit=unit
             )
+            
+            
+import json
+from django.core.files.base import ContentFile
+
+
+def generate_recipes_from_json(json_data):
+    """
+    Generate Recipe, Tag, and RecipeIngredient instances from JSON data.
+    """
+    # Ensure we are working with a parsed dictionary (or list of dictionaries)
+    if isinstance(json_data, str):
+        json_data = json.loads(json_data)  # Parse the JSON string if it's not already a dictionary
+        
+    print("Starting import")
+        
+    for recipe_data in json_data["recipes"]:
+        attributes = recipe_data["data"]["attributes"]
+
+        # Create or retrieve the course (Tag of type 'Course')
+        course, _ = Tag.objects.get_or_create(
+            name=attributes["course"]["name"],
+            type="Course"
+        )
+
+        # Create or retrieve the cuisine (Tag of type 'Cuisine')
+        cuisine, _ = Tag.objects.get_or_create(
+            name=attributes["cuisine"]["name"],
+            type="Cuisine"
+        )
+
+        # Create the Recipe instance
+        recipe = Recipe.objects.create(
+            title=attributes["title"],
+            instructions=attributes["instructions"],
+            prep_time=timedelta(
+                minutes=int(attributes["prep_time"].split(":")[1])
+            ),
+            cook_time=timedelta(
+                minutes=int(attributes["cook_time"].split(":")[1])
+            ),
+            cool_time=timedelta(
+                minutes=int(attributes["cool_time"].split(":")[1])
+            ),
+            total_time=timedelta(
+                minutes=int(attributes["total_time"].split(":")[1])
+            ),
+            servings=attributes["servings"],
+            difficulty=attributes["difficulty"],
+            author=attributes["author"],
+            source=attributes["source"],
+            video_url=attributes["video_url"],
+            image = attributes["image"],
+            description = attributes["description"],
+            course=course,
+            cuisine=cuisine,
+        )
+
+        # # Attach the image to the Recipe
+        # if attributes["image"]:
+        #     image_content = ContentFile(
+        #         b"", name=attributes["image"].split("/")[-1]
+        #     )  # Placeholder for image data
+        #     recipe.image.save(image_content.name, image_content, save=True)
+
+        # Add ingredients to the Recipe
+        for ingredient_data in attributes["ingredients"]:
+            ingredient_name = ingredient_data["ingredient"]["name"]
+            quantity = ingredient_data["quantity"]
+            unit = ingredient_data["unit"]
+
+            # Create or retrieve the Ingredient instance
+            ingredient, _ = Ingredient.objects.get_or_create(name=ingredient_name)
+
+            # Create the RecipeIngredient instance
+            RecipeIngredient.objects.create(
+                recipe=recipe,
+                ingredient=ingredient,
+                quantity=quantity,
+                unit=unit
+            )
+
+    print("Recipes generated successfully.")
+
+# Example usage
+if __name__ == "__main__":
+    with open("recipes.json", "r") as file:
+        recipe_json = json.load(file)
+        generate_recipes_from_json(recipe_json)
+

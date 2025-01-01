@@ -1,0 +1,190 @@
+{
+    "recipes": [
+        {
+            "data": {
+                "type": "RecipeDetailAPIView",
+                "id": "1a2b3c4d-5678-90ab-cdef-111213141516",
+                "attributes": {
+                    "ingredients": [
+                        {
+                            "ingredient": {
+                                "name": "flour",
+                                "nutrition": "200 calories per cup"
+                            },
+                            "quantity": 2.0,
+                            "unit": "cups"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "sugar",
+                                "nutrition": "774 calories per cup"
+                            },
+                            "quantity": 1.0,
+                            "unit": "cup"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "baking powder",
+                                "nutrition": "10 calories per tsp"
+                            },
+                            "quantity": 1.0,
+                            "unit": "tsp"
+                        }
+                    ],
+                    "course": {
+                        "id": 1,
+                        "name": "Dessert",
+                        "type": "Course"
+                    },
+                    "cuisine": {
+                        "id": 2,
+                        "name": "American",
+                        "type": "Cuisine"
+                    },
+                    "prep_time": "00:20:00",
+                    "cook_time": "00:30:00",
+                    "cool_time": "00:15:00",
+                    "total_time": "01:05:00",
+                    "created": "2025-01-01T13:30:00.842823Z",
+                    "modified": "2025-01-01T13:30:04.411128Z",
+                    "title": "Classic Pancakes",
+                    "description": "Fluffy, delicious pancakes.",
+                    "status": 1,
+                    "activate_date": "2025-01-01T13:30:00.842823Z",
+                    "deactivate_date": null,
+                    "image": "/recipes_images/pancakes.jpg",
+                    "servings": 4,
+                    "difficulty": "Easy",
+                    "instructions": "Mix dry ingredients, add wet ingredients, and cook on a hot skillet.",
+                    "author": "John Doe",
+                    "source": "Grandma's Cookbook",
+                    "video_url": "https://www.example.com/pancakes"
+                }
+            }
+        },
+        {
+            "data": {
+                "type": "RecipeDetailAPIView",
+                "id": "2a2b3c4d-5678-90ab-cdef-222223242526",
+                "attributes": {
+                    "ingredients": [
+                        {
+                            "ingredient": {
+                                "name": "chicken breast",
+                                "nutrition": "165 calories per 100g"
+                            },
+                            "quantity": 500,
+                            "unit": "g"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "soy sauce",
+                                "nutrition": "10 calories per tbsp"
+                            },
+                            "quantity": 2,
+                            "unit": "tbsp"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "honey",
+                                "nutrition": "64 calories per tbsp"
+                            },
+                            "quantity": 2,
+                            "unit": "tbsp"
+                        }
+                    ],
+                    "course": {
+                        "id": 2,
+                        "name": "Main Course",
+                        "type": "Course"
+                    },
+                    "cuisine": {
+                        "id": 1,
+                        "name": "Asian",
+                        "type": "Cuisine"
+                    },
+                    "prep_time": "00:15:00",
+                    "cook_time": "00:20:00",
+                    "cool_time": "00:05:00",
+                    "total_time": "00:40:00",
+                    "created": "2025-01-01T13:35:00.842823Z",
+                    "modified": "2025-01-01T13:40:04.411128Z",
+                    "title": "Honey Soy Chicken",
+                    "description": "Sweet and savory glazed chicken.",
+                    "status": 1,
+                    "activate_date": "2025-01-01T13:35:00.842823Z",
+                    "deactivate_date": null,
+                    "image": "/recipes_images/honey_soy_chicken.jpg",
+                    "servings": 4,
+                    "difficulty": "Medium",
+                    "instructions": "Marinate chicken in soy sauce and honey, then bake at 375°F for 20 minutes.",
+                    "author": "Jane Smith",
+                    "source": "Asian Flavors",
+                    "video_url": "https://www.example.com/honey-soy-chicken"
+                }
+            }
+        },
+        {
+            "data": {
+                "type": "RecipeDetailAPIView",
+                "id": "3a2b3c4d-5678-90ab-cdef-333323343536",
+                "attributes": {
+                    "ingredients": [
+                        {
+                            "ingredient": {
+                                "name": "spaghetti",
+                                "nutrition": "220 calories per 100g"
+                            },
+                            "quantity": 300,
+                            "unit": "g"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "tomato sauce",
+                                "nutrition": "90 calories per 100g"
+                            },
+                            "quantity": 400,
+                            "unit": "g"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "parmesan cheese",
+                                "nutrition": "431 calories per 100g"
+                            },
+                            "quantity": 50,
+                            "unit": "g"
+                        }
+                    ],
+                    "course": {
+                        "id": 1,
+                        "name": "Main Course",
+                        "type": "Course"
+                    },
+                    "cuisine": {
+                        "id": 3,
+                        "name": "Italian",
+                        "type": "Cuisine"
+                    },
+                    "prep_time": "00:10:00",
+                    "cook_time": "00:20:00",
+                    "cool_time": "00:05:00",
+                    "total_time": "00:35:00",
+                    "created": "2025-01-01T14:30:00.842823Z",
+                    "modified": "2025-01-01T14:35:04.411128Z",
+                    "title": "Spaghetti Bolognese",
+                    "description": "Classic Italian pasta dish.",
+                    "status": 1,
+                    "activate_date": "2025-01-01T14:30:00.842823Z",
+                    "deactivate_date": null,
+                    "image": "/recipes_images/spaghetti.jpg",
+                    "servings": 4,
+                    "difficulty": "Easy",
+                    "instructions": "Cook spaghetti, heat sauce, combine and sprinkle cheese on top.",
+                    "author": "Mario Rossi",
+                    "source": "Italian Cuisine",
+                    "video_url": "https://www.example.com/spaghetti-bolognese"
+                }
+            }
+        }
+    ]
+}
