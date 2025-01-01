@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django_filters', #Used with DRF
     'rest_framework', #DRF package
     'recipes', # New app
+    'ingredients',
     'api',
 ]
 

@@ -9,6 +9,39 @@ from django_extensions.db.models import (
 
 from ingredients.models import Ingredient
 
+class Tag(TimeStampedModel, ActivatorModel, TitleDescriptionModel):
+    """
+    Model for tags with a type (e.g., Cuisine, Course, Other) to categorize them.
+    """
+    class Meta:
+        verbose_name_plural = "Tags"
+    
+    TAG_TYPES = [
+        ('Cuisine', 'Cuisine'),  # E.g., Italian, Mexican
+        ('Course', 'Course'),    # E.g., Main Course, Dessert
+        ('Other', 'Other'),      # E.g., Vegan, Gluten-Free, Pasta
+    ]
+    
+    name = models.CharField(max_length=255, unique=True)  # Tag name (e.g., 'Italian', 'Main Course')
+    type = models.CharField(
+        max_length=50,
+        choices=TAG_TYPES,
+        default='Other',
+    )  # The type of tag (e.g., Cuisine, Course, Other)
+
+    def __str__(self):
+        return self.name
+
+
+    
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, related_name='recipe_ingredients')
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='recipe_ingredients')
+    quantity = models.FloatField()  # Quantity of the ingredient (e.g., 2, 1.5, etc.)
+    unit = models.CharField(max_length=50, blank=True, null=True)  # e.g., 'cup', 'tbsp', 'grams'
+
+    def __str__(self):
+        return f"{self.quantity} {self.unit} of {self.ingredient.name}"
 
 
 class Recipe(TimeStampedModel, 
@@ -18,14 +51,14 @@ class Recipe(TimeStampedModel,
     ):
     class Meta:
         verbose_name_plural = "Recipes"
-    
-    ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient', related_name='recipes')
+        
+    ingredients = models.ManyToManyField(RecipeIngredient, related_name='recipes')
     instructions = models.TextField()
     image = models.ImageField(upload_to='recipes_images/', blank=True, null=True)  # Add ImageField
     
     ## V2
-    course = models.ForeignKey('Tag', on_delete=models.SET_NULL, null=True, blank=True, related_name='course_recipes')
-    cuisine = models.ForeignKey('Tag', on_delete=models.SET_NULL, null=True, blank=True, related_name='cuisine_recipes')
+    course = models.ForeignKey(Tag, on_delete=models.CASCADE,null=True, blank=True)  # This is the foreign key
+    cuisine = models.ForeignKey(Tag, on_delete=models.SET_NULL, null=True, blank=True, related_name='cuisine_recipes')
     
     prep_time = models.DurationField(null=True, blank=True)
     cook_time = models.DurationField(null=True, blank=True)
@@ -42,14 +75,5 @@ class Recipe(TimeStampedModel,
 
     def __str__(self):
         return self.title
-    
-class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, related_name='recipe_ingredients')
-    ingredient = models.ForeignKey('Ingredient', on_delete=models.CASCADE, related_name='recipe_ingredients')
-    quantity = models.FloatField()  # Quantity of the ingredient (e.g., 2, 1.5, etc.)
-    unit = models.CharField(max_length=50, blank=True, null=True)  # e.g., 'cup', 'tbsp', 'grams'
-
-    def __str__(self):
-        return f"{self.quantity} {self.unit} of {self.ingredient.name}"
 
 

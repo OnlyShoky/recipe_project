@@ -6,7 +6,7 @@ from django_extensions.db.models import (
     
 )
 
-from backend.utils.model_abstracts import Model
+from utils.model_abstracts import Model
 
 class NutritionalTable(models.Model):
     # Basic fields
