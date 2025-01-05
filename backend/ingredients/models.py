@@ -43,7 +43,14 @@ class Ingredient(TimeStampedModel,
     nutrition = models.OneToOneField(
         NutritionalTable, on_delete=models.CASCADE, blank=True, null=True
     )  # Link to the nutritional table
-
+    related_recipe = models.ForeignKey(
+        'recipes.Recipe',  # Reference to the Recipe model
+        on_delete=models.SET_NULL,  # Optional: Recipe can be deleted without deleting the ingredient
+        blank=True,
+        null=True,
+        related_name="used_as_ingredient",  # Reverse relation from Recipe to Ingredient
+        help_text="Optional: If this ingredient is a recipe, link the recipe here."
+    )
     def __str__(self):
         return self.name
     

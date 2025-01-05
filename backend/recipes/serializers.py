@@ -38,4 +38,21 @@ class RecipeSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = models.Recipe
-        fields = '__all__'
+        fields = [
+            'title', 
+            'description', 
+            'ingredients', 
+            'course', 
+            'cuisine', 
+            'prep_time', 
+            'cook_time', 
+            'cool_time', 
+            'total_time', 
+            'servings', 
+            'difficulty', 
+            'instructions', 
+            'author', 
+            'source', 
+            'video_url', 
+            'image'
+        ]

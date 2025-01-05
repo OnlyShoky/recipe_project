@@ -13,6 +13,8 @@ from recipes.models import Recipe
 
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
+    recipe.instructions_list = recipe.instructions.split('\n')
+    # recipe.instructions = recipe.instructions.split('\n')
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
 def recipe_list(request):

@@ -15,5 +15,5 @@ class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = ['name', 'nutrition']  # Include other fields like quantity, unit, etc., if necessary
+        fields = ['name', 'nutrition','related_recipe']  # Include other fields like quantity, unit, etc., if necessary
 

@@ -2,7 +2,7 @@ import factory
 from faker import Faker
 from datetime import timedelta
 from recipes.models import Recipe, Tag, RecipeIngredient
-from ingredients.models import Ingredient
+from ingredients.models import Ingredient,NutritionalTable
 from django.core.files import File
 from PIL import Image
 import io
@@ -167,6 +167,51 @@ def generate_recipes_from_json(json_data):
             )
 
     print("Recipes generated successfully.")
+
+import random
+from ingredients.models import Ingredient, NutritionalTable
+
+def create_and_assign_nutrition_tables():
+    """
+    Create a random NutritionalTable for each Ingredient that doesn't have one,
+    and assign it to the ingredient.
+    """
+    for ingredient in Ingredient.objects.all():
+        # Check if the ingredient already has a NutritionalTable
+        if not hasattr(ingredient, 'nutrition') or ingredient.nutrition is None:
+            # Create a new NutritionalTable with random values
+            nutritional_table = NutritionalTable.objects.create(
+                calories=random.uniform(50, 500),
+                carbohydrates=random.uniform(0, 100),
+                protein=random.uniform(0, 50),
+                fat=random.uniform(0, 50),
+                saturated_fat=random.uniform(0, 20),
+                trans_fat=random.uniform(0, 5),
+                fiber=random.uniform(0, 30),
+                sugar=random.uniform(0, 50),
+                sodium=random.uniform(0, 5000),
+                cholesterol=random.uniform(0, 300),
+                potassium=random.uniform(0, 3500),
+                vitamin_a=random.uniform(0, 10000),
+                vitamin_c=random.uniform(0, 100),
+                calcium=random.uniform(0, 1300),
+                iron=random.uniform(0, 18),
+            )
+
+            # Assign the new nutritional table to the ingredient
+            ingredient.nutrition = nutritional_table
+            ingredient.save()
+
+            print(f"Created and assigned nutrition table to ingredient '{ingredient.name}'")
+        else:
+            print(f"Ingredient '{ingredient.name}' already has a nutrition table")
+
+    print("Completed assigning nutritional tables to all ingredients.")
+
+# Example usage
+if __name__ == "__main__":
+    create_and_assign_nutrition_tables()
+
 
 # Example usage
 if __name__ == "__main__":

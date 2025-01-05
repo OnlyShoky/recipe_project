@@ -11,8 +11,8 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         # Delete all existing recipes before adding new ones
         Recipe.objects.all().delete()
-        Tag.objects.all().delete()
-        Ingredient.objects.all().delete()
+        # Tag.objects.all().delete()
+        # Ingredient.objects.all().delete()
 
         # Load the JSON data from the file
         with open('data_generation/recipes.json', 'r') as file:

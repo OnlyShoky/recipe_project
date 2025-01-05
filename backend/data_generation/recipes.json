@@ -55,7 +55,7 @@
                     "image": "/recipes_images/pancakes.jpg",
                     "servings": 4,
                     "difficulty": "Easy",
-                    "instructions": "Mix dry ingredients, add wet ingredients, and cook on a hot skillet.",
+                    "instructions": "In a large bowl, whisk together the flour, sugar, and baking powder.\nIn a separate bowl, mix the wet ingredients, then combine with the dry ingredients.\nHeat a non-stick skillet over medium heat, pour the batter, and cook until golden brown on both sides.\nServe warm with syrup or toppings of choice." ,
                     "author": "John Doe",
                     "source": "Grandma's Cookbook",
                     "video_url": "https://www.example.com/pancakes"
@@ -117,7 +117,7 @@
                     "image": "/recipes_images/honey_soy_chicken.jpg",
                     "servings": 4,
                     "difficulty": "Medium",
-                    "instructions": "Marinate chicken in soy sauce and honey, then bake at 375°F for 20 minutes.",
+                    "instructions": "In a small bowl, mix the soy sauce and honey.\nPlace the chicken in a shallow dish and pour the marinade over it, ensuring the chicken is well-coated.\nLet it marinate for 15 minutes.\nPreheat the oven to 375°F (190°C), place the chicken on a baking tray, and bake for 20 minutes, flipping halfway through.\nGarnish with sesame seeds and green onions before serving.",
                     "author": "Jane Smith",
                     "source": "Asian Flavors",
                     "video_url": "https://www.example.com/honey-soy-chicken"
@@ -179,10 +179,143 @@
                     "image": "/recipes_images/spaghetti.jpg",
                     "servings": 4,
                     "difficulty": "Easy",
-                    "instructions": "Cook spaghetti, heat sauce, combine and sprinkle cheese on top.",
+                    "instructions": "Bring a large pot of salted water to a boil and cook the spaghetti according to the package instructions.\nMeanwhile, in a skillet, heat the tomato sauce until simmering.\nDrain the spaghetti, combine it with the sauce, and toss well.\nSprinkle grated Parmesan cheese on top and serve warm."  ,
                     "author": "Mario Rossi",
                     "source": "Italian Cuisine",
                     "video_url": "https://www.example.com/spaghetti-bolognese"
+                }
+            }
+        },
+        {
+            "data": {
+                "type": "RecipeDetailAPIView",
+                "id": "5a2b3c4d-5678-90ab-cdef-888889909100",
+                "attributes": {
+                    "ingredients": [
+                        {
+                            "ingredient": {
+                                "name": "spaghetti",
+                                "nutrition": "220 calories per 100g"
+                            },
+                            "quantity": 300,
+                            "unit": "g"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "olive oil",
+                                "nutrition": "120 calories per tbsp"
+                            },
+                            "quantity": 2,
+                            "unit": "tbsp"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "garlic",
+                                "nutrition": "4 calories per clove"
+                            },
+                            "quantity": 3,
+                            "unit": "cloves"
+                        }
+                    ],
+                    "course": {
+                        "id": 1,
+                        "name": "Main Course",
+                        "type": "Course"
+                    },
+                    "cuisine": {
+                        "id": 3,
+                        "name": "Italian",
+                        "type": "Cuisine"
+                    },
+                    "prep_time": "00:10:00",
+                    "cook_time": "00:15:00",
+                    "cool_time": "00:05:00",
+                    "total_time": "00:30:00",
+                    "created": "2025-01-02T14:30:00.842823Z",
+                    "modified": "2025-01-02T14:35:04.411128Z",
+                    "title": "Spaghetti Aglio e Olio",
+                    "description": "Simple and flavorful Italian pasta dish.",
+                    "status": 1,
+                    "activate_date": "2025-01-02T14:30:00.842823Z",
+                    "deactivate_date": null,
+                    "image": "/recipes_images/aglio_olio.jpg",
+                    "servings": 4,
+                    "difficulty": "Easy",
+                    "instructions": "Bring a large pot of salted water to a boil and cook the spaghetti until al dente.\nReserve 1 cup of pasta water and drain the rest.\nIn a skillet over medium heat, add olive oil and sauté minced garlic until fragrant.\nAdd the cooked spaghetti and toss to coat, adding reserved pasta water if needed.\nGarnish with parsley and serve immediately.",
+                    "author": "Luigi Ferrero",
+                    "source": "Taste of Italy",
+                    "video_url": "https://www.example.com/aglio-e-olio"
+                }
+            }
+        },
+        {
+            "data": {
+                "type": "RecipeDetailAPIView",
+                "id": "4a2b3c4d-5678-90ab-cdef-444423343536",
+                "attributes": {
+                    "ingredients": [
+                        {
+                            "ingredient": {
+                                "name": "pie crust",
+                                "nutrition": "400 calories per crust"
+                            },
+                            "quantity": 1,
+                            "unit": "piece"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "apple",
+                                "nutrition": "95 calories per medium apple"
+                            },
+                            "quantity": 3,
+                            "unit": "pieces"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "sugar",
+                                "nutrition": "774 calories per cup"
+                            },
+                            "quantity": 0.5,
+                            "unit": "cup"
+                        },
+                        {
+                            "ingredient": {
+                                "name": "Classic Pancakes",
+                                "nutrition": null,
+                                "type": "Recipe"
+                            },
+                            "quantity": 1,
+                            "unit": "batch"
+                        }
+                    ],
+                    "course": {
+                        "id": 1,
+                        "name": "Dessert",
+                        "type": "Course"
+                    },
+                    "cuisine": {
+                        "id": 2,
+                        "name": "American",
+                        "type": "Cuisine"
+                    },
+                    "prep_time": "00:15:00",
+                    "cook_time": "00:45:00",
+                    "cool_time": "00:30:00",
+                    "total_time": "01:30:00",
+                    "created": "2025-01-02T14:30:00.842823Z",
+                    "modified": "2025-01-02T14:35:04.411128Z",
+                    "title": "Apple Pie",
+                    "description": "Classic American dessert with spiced apples.",
+                    "status": 1,
+                    "activate_date": "2025-01-02T14:30:00.842823Z",
+                    "deactivate_date": null,
+                    "image": "/recipes_images/apple_pie.jpg",
+                    "servings": 8,
+                    "difficulty": "Hard",
+                    "instructions": "Preheat the oven to 375°F (190°C).\nRoll out the pie crust and place it in a pie dish.\nPeel, core, and slice the apples, then mix with sugar and cinnamon in a bowl.\nFill the crust with the apple mixture, top with another crust, and seal the edges.\nCut small slits on top and bake for 45 minutes, or until golden brown.\nCool before serving."  ,
+                    "author": "Anna Baker",
+                    "source": "Baker's Delight",
+                    "video_url": "https://www.example.com/apple-pie"
                 }
             }
         }
