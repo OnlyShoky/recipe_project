@@ -1,0 +1,35 @@
+<!-- recipes/recipe_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Latest Recipes{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Home</h1>
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Latest Recipes</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for recipe in recipes %}
+            <a href="{% url 'recipe_detail' recipe.id %}" class="hover:scale-110 transition-transform">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <!-- Recipe Image -->
+                    {% if recipe.image %}
+                        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="w-full h-48 object-cover">
+                    {% else %}
+                        <div class="h-48 bg-gray-300"></div> <!-- Placeholder for no image -->
+                    {% endif %}
+                    
+                    <!-- Recipe Details -->
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold text-gray-800">{{ recipe.title }}</h2>
+                        <p class="text-sm text-gray-500">{{ recipe.activate_date|date:"F d, Y" }}</p>
+                        <p class="text-gray-700 mt-2">{{ recipe.description|truncatewords:20 }}</p>
+                        {% comment %} <a href="{% url 'recipe_detail' recipe.id %}" class="text-indigo-600 hover:text-indigo-800 mt-4 inline-block">View Recipe</a> {% endcomment %}
+                    </div>
+                
+                </div>
+
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

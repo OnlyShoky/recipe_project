@@ -14,6 +14,10 @@ from recipes.models import Recipe
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
     recipe.instructions_list = recipe.instructions.split('\n')
+    recipe.notes_list = recipe.notes.split('\n')
+
+    recipe.equipment_list = recipe.equipment.split('\n')
+
     # recipe.instructions = recipe.instructions.split('\n')
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
@@ -21,6 +25,11 @@ def recipe_list(request):
     # Fetch the last 5 recipes ordered by the activate_date
     recipes = Recipe.objects.all().order_by('created')[:6]
     return render(request, 'recipe_list.html', {'recipes': recipes})
+
+def home(request):
+    # Fetch the last 5 recipes ordered by the activate_date
+    recipes = Recipe.objects.all().order_by('created')[:6]
+    return render(request, 'home.html', {'recipes': recipes})
 
 class RecipeAPIView(views.APIView):
     """

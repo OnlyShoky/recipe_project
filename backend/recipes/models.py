@@ -70,9 +70,15 @@ class Recipe(TimeStampedModel,
     cool_time = models.DurationField(null=True, blank=True)
     total_time = models.DurationField(null=True, blank=True)
     
+
+    
     servings = models.IntegerField(blank=True, null=True)
     difficulty = models.CharField(max_length=50, blank=True, null=True)
     instructions = models.TextField()
+    
+    equipment = models.TextField(null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+
     
     author = models.CharField(max_length=100, blank=True, null=True)
     source = models.CharField(max_length=100, blank=True, null=True)
