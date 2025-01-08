@@ -37,8 +37,10 @@ class Tag(TimeStampedModel, ActivatorModel):
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, related_name='recipe_ingredients')
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='recipe_ingredients')
-    quantity = models.FloatField()  # Quantity of the ingredient (e.g., 2, 1.5, etc.)
+    quantity = models.FloatField(blank=True, null=True)  # Quantity of the ingredient (e.g., 2, 1.5, etc.)
     unit = models.CharField(max_length=50, blank=True, null=True)  # e.g., 'cup', 'tbsp', 'grams'
+    notes = models.CharField(max_length=100, blank=True, null=True)
+    groupName = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.quantity} {self.unit} of {self.ingredient.name}"
@@ -59,7 +61,9 @@ class Recipe(TimeStampedModel,
     # ingredients = models.ForeignKey(RecipeIngredient, on_delete=models.DO_NOTHING, null=True, blank=True)  # This is the foreign key
 
     instructions = models.TextField()
-    image = models.ImageField(upload_to='recipes_images/', blank=True, null=True)  # Add ImageField
+    image = models.ImageField(upload_to='recipes_images/feature/', blank=True, null=True)  # Add ImageField
+    image_card = models.ImageField(upload_to='recipes_images/card/', blank=True, null=True)  # Add ImageField
+
     
     ## V2
     course = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True, blank=True)  # This is the foreign key
@@ -83,6 +87,21 @@ class Recipe(TimeStampedModel,
     author = models.CharField(max_length=100, blank=True, null=True)
     source = models.CharField(max_length=100, blank=True, null=True)
     video_url = models.URLField(blank=True, null=True)
+    
+    # fields for ratings
+    rating = models.DecimalField(
+        max_digits=4,  # Allows values like 9.99
+        decimal_places=2,  # Two decimal places for average rating
+        null=True,
+        blank=True,
+        default=None,
+    )
+    number_of_ratings = models.IntegerField(
+        blank=True,
+        null=True,
+        default=None,
+        help_text="The number of user ratings for this recipe.",
+    )
 
     def __str__(self):
         return self.title

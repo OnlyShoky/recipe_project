@@ -3,12 +3,12 @@
   <!-- Recipe Image (Positioned in the top-right corner) -->
   {% if recipe.image %}
   <div class="absolute top-6 right-6">
-    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="w-[300px] h-[300px] object-cover rounded-md" />
+    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="w-[400px] h-[400px] object-cover rounded-md" />
   </div>
   {% endif %}
 
   <!-- Recipe Information (Title, Description, Tags, Times) -->
-  <div class="pr-[320px]">
+  <div class="pr-[500px]">
     <!-- Recipe Title -->
     <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ recipe.title }}</h1>
 
@@ -38,6 +38,8 @@
 
     <!-- Times (Prep, Cook, Cool, Total) -->
     <div class="grid grid-cols-2 gap-2 mb-6">
+
+      {% if recipe.prep_time %}
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 24 24">
@@ -49,6 +51,10 @@
         </span>
         <p class="text-gray-600 font-medium"><strong>Prep Time:</strong> {{ recipe.prep_time|duration_format }}</p>
       </div>
+      {% endif %}
+
+      {% if recipe.cook_time %}
+
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 24 24">
@@ -62,6 +68,9 @@
         </span>
         <p class="text-gray-600 font-medium"><strong>Cook Time:</strong> {{ recipe.cook_time|duration_format }}</p>
       </div>
+      {% endif %}
+
+      {% if recipe.cool_time %}
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false" x="0px" y="0px" width="16px" height="16px" viewBox="25 0 500 550">
@@ -70,6 +79,10 @@
         </span>
         <p class="text-gray-600 font-medium"><strong>Cool Time:</strong> {{ recipe.cool_time|duration_format }}</p>
       </div>
+      {% endif %}
+
+
+      {% if recipe.total_time %}
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16" height="16" viewBox="0 0 16 16">
@@ -78,6 +91,9 @@
         </span>
         <p class="text-gray-600 font-medium"><strong>Total Time:</strong> {{ recipe.total_time|duration_format }}</p>
       </div>
+
+      {% endif %}
+
     </div>
 
     <div class="flex items-center space-x-2 text-sm mb-6">
@@ -96,6 +112,7 @@
   </div>
 
   <!-- Equipment -->
+  {% if  recipe.equipment_list %}
   <section class="mb-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Equipment</h2>
     <ul class="list-disc pl-6 space-y-1 mb-2">
@@ -104,42 +121,60 @@
       {% endfor %}
     </ul>
   </section>
+  {% endif %}
 
   <!-- Ingredients -->
   <section class="mb-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ingredients</h2>
-
+    {% for category in recipe.ingredientsCategories %}
+    {% if category %}
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">{{category}}</h3>
+    {% endif %}
     <ul class="list-disc pl-6 space-y-1 mb-2">
-      {% for ingredient in recipe.ingredients %} {% if not ingredient.ingredient.related_recipe %}
-      <li class="text-gray-700">{{ ingredient }}</li>
-      {% else %}
-      <a href="{% url 'recipe_detail' ingredient.ingredient.related_recipe.id %}" class="hover:scale-110 transition-transform">
-        <li class="text-red-700">{{ ingredient }}</li>
-      </a>
-      {% endif %} {% endfor %}
+      {% for ingredient in recipe.ingredients %} 
+      {% if  ingredient.groupName == category %}
+          {% if not ingredient.ingredient.related_recipe %}
+          <li class="text-gray-700">{{ ingredient }}</li>
+          {% else %}
+          <a href="{% url 'recipe_detail' ingredient.ingredient.related_recipe.id %}" class="hover:scale-110 transition-transform">
+            <li class="text-red-700">{{ ingredient }}</li>
+          </a>
+          {% endif %} 
+        {% endif %} 
+      {% endfor %}
     </ul>
+    {% endfor %}
   </section>
+
 
   <!-- Instructions -->
   <section class="mb-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Instructions</h2>
-    <ol class="list-decimal pl-6 space-y-1">
-      {% for instruction in recipe.instructions_list %}
+    <ol class="pl-6 space-y-1">
+      {% for instruction in recipe.instructions_list %} {% if ':' in instruction %}
+
+      <!-- Add the group heading -->
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">{{ instruction }}</h3>
+
+      {% else %}
+      <!-- Add the instruction as a list item -->
       <li class="text-gray-700">{{ instruction }}</li>
-      {% endfor %}
+      {% endif %} {% endfor %}
     </ol>
   </section>
 
+
   <!-- Notes -->
+  {% if  recipe.notes_list %}
   <section class="mb-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Notes</h2>
     <ul class="list-disc pl-6 space-y-1 mb-2">
-
       {% for note in recipe.notes_list %}
       <li class="text-gray-700">{{ note }}</li>
       {% endfor %}
     </ul>
   </section>
+  {% endif %}
 
   <!-- Extra info  -->
   <section class="mb-6">

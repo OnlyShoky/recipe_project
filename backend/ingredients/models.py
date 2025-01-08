@@ -43,6 +43,7 @@ class Ingredient(TimeStampedModel,
     nutrition = models.OneToOneField(
         NutritionalTable, on_delete=models.CASCADE, blank=True, null=True
     )  # Link to the nutritional table
+
     related_recipe = models.ForeignKey(
         'recipes.Recipe',  # Reference to the Recipe model
         on_delete=models.SET_NULL,  # Optional: Recipe can be deleted without deleting the ingredient

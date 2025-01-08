@@ -7,6 +7,8 @@ from django.core.files import File
 from PIL import Image
 import io
 import random
+from tqdm import tqdm  # Import tqdm for the progress bar
+
 
 fake = Faker()
 
@@ -100,7 +102,7 @@ def generate_recipes_from_json(json_data):
         
     print("Starting import")
         
-    for recipe_data in json_data["recipes"]:
+    for recipe_data in tqdm(json_data["recipes"]):
         attributes = recipe_data["data"]["attributes"]
 
         # Create or retrieve the course (Tag of type 'Course')
@@ -114,30 +116,30 @@ def generate_recipes_from_json(json_data):
             name=attributes["cuisine"]["name"],
             type="Cuisine"
         )
+        
+        prep_time = timedelta(minutes=int(attributes["prep_time"].split(":")[1])) if attributes["prep_time"] else None
+        cook_time = timedelta(minutes=int(attributes["cook_time"].split(":")[1])) if attributes["cook_time"] else None
+        cool_time = timedelta(minutes=int(attributes["cool_time"].split(":")[1])) if attributes["cool_time"] else None
+        total_time = timedelta(minutes=int(attributes["total_time"].split(":")[1])) if attributes["total_time"] else None
 
         # Create the Recipe instance
         recipe = Recipe.objects.create(
             title=attributes["title"],
             instructions=attributes["instructions"],
-            prep_time=timedelta(
-                minutes=int(attributes["prep_time"].split(":")[1])
-            ),
-            cook_time=timedelta(
-                minutes=int(attributes["cook_time"].split(":")[1])
-            ),
-            cool_time=timedelta(
-                minutes=int(attributes["cool_time"].split(":")[1])
-            ),
-            total_time=timedelta(
-                minutes=int(attributes["total_time"].split(":")[1])
-            ),
+            prep_time=prep_time,
+            cook_time=cook_time,
+            cool_time=cool_time,
+            total_time=total_time,
             servings=attributes["servings"],
             difficulty=attributes["difficulty"],
             author=attributes["author"],
             source=attributes["source"],
             video_url=attributes["video_url"],
             image = attributes["image"],
+            image_card = attributes["image_card"],
             description = attributes["description"],
+            rating = attributes["rating"]["average"],
+            number_of_ratings = attributes["rating"]["count"],
             course=course,
             cuisine=cuisine,
         )
@@ -154,6 +156,8 @@ def generate_recipes_from_json(json_data):
             ingredient_name = ingredient_data["ingredient"]["name"]
             quantity = ingredient_data["quantity"]
             unit = ingredient_data["unit"]
+            notes = ingredient_data["notes"]
+            groupName = ingredient_data["groupName"]
 
             # Create or retrieve the Ingredient instance
             ingredient, _ = Ingredient.objects.get_or_create(name=ingredient_name)
@@ -163,7 +167,9 @@ def generate_recipes_from_json(json_data):
                 recipe=recipe,
                 ingredient=ingredient,
                 quantity=quantity,
-                unit=unit
+                unit=unit,
+                notes=notes,
+                groupName=groupName
             )
 
     print("Recipes generated successfully.")

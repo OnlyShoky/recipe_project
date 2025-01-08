@@ -7,7 +7,7 @@ class RecipeIngredientInline(admin.TabularInline):
     
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ( 'title', 'description', 'instructions','id',)
+    list_display = ( 'title', 'description', 'created','id',)
     inlines = [RecipeIngredientInline]  # Add the inline admin
     
 @admin.register(Tag)
@@ -16,4 +16,4 @@ class TagAdmin(admin.ModelAdmin):
     
 @admin.register(RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
-    list_display = ( 'recipe', 'ingredient', 'quantity')
+    list_display = ( 'recipe', 'ingredient', 'quantity', 'groupName')

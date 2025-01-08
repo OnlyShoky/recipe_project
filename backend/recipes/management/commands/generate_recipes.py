@@ -15,7 +15,7 @@ class Command(BaseCommand):
         # Ingredient.objects.all().delete()
 
         # Load the JSON data from the file
-        with open('data_generation/recipes.json', 'r') as file:
+        with open('data_generation/recipe.json', 'r', encoding='utf-8') as file:
             recipe_data = json.load(file)
             
         generate_recipes_from_json(recipe_data)
