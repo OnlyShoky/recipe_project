@@ -7,6 +7,7 @@ from django_extensions.db.models import (
     
 )
 
+from fractions import Fraction
 from ingredients.models import Ingredient
 
 class Tag(TimeStampedModel, ActivatorModel):
@@ -43,7 +44,7 @@ class RecipeIngredient(models.Model):
     groupName = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.quantity} {self.unit} of {self.ingredient.name}"
+        return f"{str(Fraction(self.quantity).limit_denominator(10))} {self.unit} of {self.ingredient.name}"
 
     class Meta:
         verbose_name_plural = "RecipeIngredients"

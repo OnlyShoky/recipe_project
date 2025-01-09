@@ -2,6 +2,8 @@ from rest_framework import views
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Recipe
+from ingredients.models import Ingredient
+
 from .serializers import RecipeSerializer
 from rest_framework.exceptions import NotFound
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
@@ -42,7 +44,9 @@ def recipe_list(request):
 def home(request):
     # Fetch the last 5 recipes ordered by the activate_date
     recipes = Recipe.objects.all().order_by('-created')[:6]
-    return render(request, 'home.html', {'recipes': recipes})
+    total_recipes = Recipe.objects.count()
+    total_ingredients = Ingredient.objects.count()
+    return render(request, 'home.html', {'recipes': recipes, 'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
 
 class RecipeAPIView(views.APIView):
     """
