@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Recipe,Tag, RecipeIngredient
+from .models import *
 
 class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
@@ -10,9 +10,18 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ( 'title', 'description', 'created','id',)
     inlines = [RecipeIngredientInline]  # Add the inline admin
     
+@admin.register(Cuisine)
+class CuisineAdmin(admin.ModelAdmin):
+    list_display = ( 'name','id')
+    
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ( 'name','id')
+    
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ( 'name', 'type','id')
+    list_display = ( 'name','id')
+    
     
 @admin.register(RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):

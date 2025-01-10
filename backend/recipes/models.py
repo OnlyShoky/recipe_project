@@ -12,23 +12,37 @@ from ingredients.models import Ingredient
 
 class Tag(TimeStampedModel, ActivatorModel):
     """
-    Model for tags with a type (e.g., Cuisine, Course, Other) to categorize them.
+    Model for tags with 
     """
     class Meta:
-        verbose_name_plural = "Tags"
+        verbose_name_plural = "Tags" 
+    name = models.CharField(max_length=255, unique=True)  # Tag name (e.g., 'Dessert', 'Halloween', etc.)
+
+    def __str__(self):
+        return self.name
     
-    TAG_TYPES = [
-        ('Cuisine', 'Cuisine'),  # E.g., Italian, Mexican
-        ('Course', 'Course'),    # E.g., Main Course, Dessert
-        ('Other', 'Other'),      # E.g., Vegan, Gluten-Free, Pasta
-    ]
+class Cuisine(TimeStampedModel, ActivatorModel):
+    """
+    Model for Cuisines with 
+    """
+    class Meta:
+        verbose_name_plural = "Cuisines" 
+    name = models.CharField(max_length=255, unique=True)  # Tag name (e.g., 'Morrocan', 'Japanese', etc.)
+
+    def __str__(self):
+        
+        """
+        Returns a string representation of the object, which is the tag name.
+        """
+        return self.name
     
-    name = models.CharField(max_length=255, unique=True)  # Tag name (e.g., 'Italian', 'Main Course')
-    type = models.CharField(
-        max_length=50,
-        choices=TAG_TYPES,
-        default='Other',
-    )  # The type of tag (e.g., Cuisine, Course, Other)
+class Course(TimeStampedModel, ActivatorModel):
+    """
+    Model for Courses with 
+    """
+    class Meta:
+        verbose_name_plural = "Courses" 
+    name = models.CharField(max_length=255, unique=True)  # Tag name (e.g., 'Dessert', 'Main-dish', etc.)
 
     def __str__(self):
         return self.name
@@ -44,7 +58,10 @@ class RecipeIngredient(models.Model):
     groupName = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return f"{str(Fraction(self.quantity).limit_denominator(10))} {self.unit} of {self.ingredient.name}"
+        try:
+            return f"{str(Fraction(self.quantity).limit_denominator(10))} {self.unit} of {self.ingredient.name}"
+        except TypeError:
+            return f"{self.unit} of {self.ingredient.name}"
 
     class Meta:
         verbose_name_plural = "RecipeIngredients"
@@ -57,9 +74,6 @@ class Recipe(TimeStampedModel,
     class Meta:
         verbose_name_plural = "Recipes"
         
-    # ingredients = models.ManyToManyField(Ingredient, related_name='recipes')  # Now we link to RecipeIngredient
-    # ingredients = models.ManyToManyField(RecipeIngredient, related_name='recipes')  # Now we link to RecipeIngredient
-    # ingredients = models.ForeignKey(RecipeIngredient, on_delete=models.DO_NOTHING, null=True, blank=True)  # This is the foreign key
 
     instructions = models.TextField()
     image = models.ImageField(upload_to='recipes_images/feature/', blank=True, null=True)  # Add ImageField
@@ -67,15 +81,18 @@ class Recipe(TimeStampedModel,
 
     
     ## V2
-    course = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True, blank=True)  # This is the foreign key
-    cuisine = models.ForeignKey(Tag, on_delete=models.CASCADE,null=True, blank=True, related_name='cuisine_recipes')
+    # course = models.ForeignKey(Tag, on_delete=models.CASCADE, null=True, blank=True)  # This is the foreign key
+    # cuisine = models.ForeignKey(Tag, on_delete=models.CASCADE,null=True, blank=True, related_name='cuisine_recipes')
+    # Many-to-Many Relationships
+    tags = models.ManyToManyField(Tag, related_name='recipes', blank=True)
+    cuisines = models.ManyToManyField(Cuisine, related_name='recipes', blank=True)
+    courses = models.ManyToManyField(Course, related_name='recipes', blank=True)
     
     prep_time = models.DurationField(null=True, blank=True)
     cook_time = models.DurationField(null=True, blank=True)
     cool_time = models.DurationField(null=True, blank=True)
     total_time = models.DurationField(null=True, blank=True)
     
-
     
     servings = models.IntegerField(blank=True, null=True)
     difficulty = models.CharField(max_length=50, blank=True, null=True)
@@ -104,13 +121,33 @@ class Recipe(TimeStampedModel,
         help_text="The number of user ratings for this recipe.",
     )
 
-    def __str__(self):
-        return self.title
-
     @property
     def ingredients(self):
         """
         Property to get all RecipeIngredient instances related to this Recipe.
         """
         return self.recipe_ingredients.all()
+    
+    # @property
+    # def tags(self):
+    #     """
+    #     Property to get all tags instances related to this Recipe.
+    #     """
+    #     return self.tags.all()
+    
+    # @property
+    # def courses(self):
+    #     """
+    #     Property to get all courses instances related to this Recipe.
+    #     """
+    #     return self.courses.all()
+    
+    # @property
+    # def cuisines(self):
+    #     """
+    #     Property to get all cuisines instances related to this Recipe.
+    #     """
+    #     return self.cuisines.all()
 
+    def __str__(self):
+        return self.title

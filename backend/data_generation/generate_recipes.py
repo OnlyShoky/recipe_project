@@ -1,7 +1,7 @@
 import factory
 from faker import Faker
 from datetime import timedelta
-from recipes.models import Recipe, Tag, RecipeIngredient
+from recipes.models import *
 from ingredients.models import Ingredient,NutritionalTable
 from django.core.files import File
 from PIL import Image
@@ -105,17 +105,7 @@ def generate_recipes_from_json(json_data):
     for recipe_data in tqdm(json_data["recipes"]):
         attributes = recipe_data["data"]["attributes"]
 
-        # Create or retrieve the course (Tag of type 'Course')
-        course, _ = Tag.objects.get_or_create(
-            name=attributes["course"]["name"],
-            type="Course"
-        )
-
-        # Create or retrieve the cuisine (Tag of type 'Cuisine')
-        cuisine, _ = Tag.objects.get_or_create(
-            name=attributes["cuisine"]["name"],
-            type="Cuisine"
-        )
+        
         
         prep_time = timedelta(minutes=int(attributes["prep_time"].split(":")[1])) if attributes["prep_time"] else None
         cook_time = timedelta(minutes=int(attributes["cook_time"].split(":")[1])) if attributes["cook_time"] else None
@@ -140,17 +130,21 @@ def generate_recipes_from_json(json_data):
             description = attributes["description"],
             rating = attributes["rating"]["average"],
             number_of_ratings = attributes["rating"]["count"],
-            course=course,
-            cuisine=cuisine,
         )
-
-        # # Attach the image to the Recipe
-        # if attributes["image"]:
-        #     image_content = ContentFile(
-        #         b"", name=attributes["image"].split("/")[-1]
-        #     )  # Placeholder for image data
-        #     recipe.image.save(image_content.name, image_content, save=True)
-
+        
+        # Create or retrieve tags and addthem 
+        for cuisine in attributes["cuisine"]:
+            cuisine, _ = Cuisine.objects.get_or_create(name=cuisine)
+            recipe.cuisines.add(cuisine)
+            
+        for course in attributes["course"]:
+            course, _ = Course.objects.get_or_create(name=course)
+            recipe.courses.add(course)
+            
+        for tag in attributes["tags"]:
+            tag, _ = Tag.objects.get_or_create(name=tag)
+            recipe.tags.add(tag)
+            
         # Add ingredients to the Recipe
         for ingredient_data in attributes["ingredients"]:
             ingredient_name = ingredient_data["ingredient"]["name"]

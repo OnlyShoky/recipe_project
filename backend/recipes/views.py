@@ -1,7 +1,7 @@
 from rest_framework import views
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Recipe
+from .models import Course, Cuisine, Recipe, Tag
 from ingredients.models import Ingredient
 
 from .serializers import RecipeSerializer
@@ -45,9 +45,12 @@ def home(request):
     # Fetch the last 5 recipes ordered by the activate_date
     recipes = Recipe.objects.all().order_by('-created')[:6]
     ingredients = Ingredient.objects.all().order_by('-created')[:6]
+    cuisines = Cuisine.objects.all().order_by('-created')
+    tags = Tag.objects.all().order_by('-created')
+    courses = Course.objects.all().order_by('-created')
     total_recipes = Recipe.objects.count()
     total_ingredients = Ingredient.objects.count()
-    return render(request, 'home.html', {'recipes': recipes, 'ingredients': ingredients, 'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
+    return render(request, 'home.html', {'recipes': recipes, 'cuisines': cuisines, 'tags': tags, 'courses': courses, 'ingredients': ingredients,  'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
 
 class RecipeAPIView(views.APIView):
     """

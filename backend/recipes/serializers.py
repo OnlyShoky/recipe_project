@@ -15,8 +15,18 @@ from ingredients.models import Ingredient
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
-        fields = ['id', 'name', 'type']  # Adjust to your specific needs
-        
+        fields = ['id', 'name']  # Adjust to your specific needs
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Course
+        fields = ['id', 'name']  # Adjust to your specific needs
+
+class CuisineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Cuisine
+        fields = ['id', 'name']  # Adjust to your specific needs
+               
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     ingredient = IngredientSerializer()  # Use the IngredientSerializer to handle the 'ingredient' field
  
@@ -29,8 +39,9 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     ingredients = RecipeIngredientSerializer(many=True, read_only=True)
-    course = TagSerializer(read_only=True)  # Using TagSerializer to represent the course tag
-    cuisine = TagSerializer(read_only=True)  # Using TagSerializer to represent the cuisine tag
+    courses = CourseSerializer(many=True,read_only=True)  # Using TagSerializer to represent the course tag
+    cuisines = CuisineSerializer(many=True,read_only=True)  # Using TagSerializer to represent the cuisine tag
+    tags = TagSerializer(many=True, read_only=True)
     prep_time = serializers.DurationField()  # Handling the DurationField as it is
     cook_time = serializers.DurationField()  # Handling the DurationField as it is
     cool_time = serializers.DurationField()  # Handling the DurationField as it is
@@ -41,14 +52,15 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = [
             'title', 
             'description', 
-            'ingredients', 
-            'course', 
-            'cuisine', 
+            'courses', 
+            'cuisines', 
+            'tags',
             'prep_time', 
             'cook_time', 
             'cool_time', 
             'total_time', 
             'servings', 
+            'ingredients', 
             'difficulty', 
             'instructions', 
             'author', 
