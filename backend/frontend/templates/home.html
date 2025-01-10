@@ -1,37 +1,99 @@
 <!-- recipes/recipe_list.html -->
 {% extends 'base.html' %}
 
-{% block title %}Latest Recipes{% endblock %}
+{% block title %}Welcome to My Recipe App{% endblock %}
 
 {% block content %}
-<h1 class="text-3xl font-bold text-gray-800 mb-6">Home</h1>
-<h2 class="text-xl font-bold text-gray-800 mb-6">Number of recipes: {{ total_recipes }} Number of ingredients {{ total_ingredients }}</h2>
+<div class="text-center py-10">
+    <!-- Page Header -->
+    <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to My Recipe App</h1>
+    <p class="text-gray-700 text-lg mb-6">Your ultimate destination for delicious recipes and cooking inspiration from around the world.</p>
+    
+    <!-- Stats Section -->
+    <div class="flex justify-center items-center space-x-10 text-lg">
+        <div class="bg-white shadow rounded-lg px-6 py-4">
+            <p class="font-semibold text-gray-800">Total Recipes</p>
+            <p class="text-indigo-600 text-xl font-bold">{{ total_recipes }}</p>
+        </div>
+        <div class="bg-white shadow rounded-lg px-6 py-4">
+            <p class="font-semibold text-gray-800">Total Ingredients</p>
+            <p class="text-indigo-600 text-xl font-bold">{{ total_ingredients }}</p>
+        </div>
+    </div>
+</div>
 
-    <div class="max-w-7xl mx-auto px-4 py-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-10">Latest Recipes</h1>
+<div class="max-w-5xl mx-auto px-4 py-8">
+    <!-- Latest Recipes Section -->
+    <section class="mb-10">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Latest Recipes</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for recipe in recipes %}
-            <a href="{% url 'recipe_detail' recipe.id %}" class="transform transition-transform hover:scale-110">
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <a href="{% url 'recipe_detail' recipe.id %}" class="transform transition-transform hover:scale-105">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-full">
                     <!-- Recipe Image -->
                     {% if recipe.image %}
-                        <img src="{{ recipe.image_card.url }}" alt="{{ recipe.title }}" class="w-full ">
+                        <img src="{{ recipe.image_card.url }}" alt="{{ recipe.title }}" class="w-full h-32 sm:h-36 lg:h-40 object-cover">
                     {% else %}
-                        <div class="h-48 bg-gray-300"></div> <!-- Placeholder for no image -->
+                        <div class="h-32 sm:h-36 lg:h-40 bg-gray-300 flex items-center justify-center">
+                            <p class="text-gray-500">No Image Available</p>
+                        </div>
                     {% endif %}
-                    
-                    <!-- Recipe Details -->
-                    <div class="p-4">
-                        <h2 class="text-xl font-semibold text-gray-800">{{ recipe.title }}</h2>
-                        <p class="text-sm text-gray-500">{{ recipe.activate_date|date:"F d, Y" }}</p>
-                        <p class="text-gray-700 mt-2 line-clamp-3">{{ recipe.description|truncatewords:20 }}</p>
-                        {% comment %} <a href="{% url 'recipe_detail' recipe.id %}" class="text-indigo-600 hover:text-indigo-800 mt-4 inline-block">View Recipe</a> {% endcomment %}
-                    </div>
-                
-                </div>
 
+                    <!-- Recipe Details -->
+                    <div class="p-4 flex-grow flex flex-col">
+                        <h3 class="text-lg font-semibold text-gray-800 truncate">{{ recipe.title }}</h3>
+                        <p class="text-sm text-gray-500 mb-2">{{ recipe.activate_date|date:"F d, Y" }}</p>
+                        <p class="text-gray-700 mt-2 line-clamp-3">{{ recipe.description|truncatewords:20 }}</p>
+                    </div>
+                </div>
             </a>
             {% endfor %}
         </div>
-    </div>
+    </section>
+</div>
+
+
+    <!-- Popular Ingredients Section -->
+    <section class="mb-10">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Popular Ingredients</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
+            {% for ingredient in ingredients %}
+            <div class="bg-white shadow rounded-lg text-center py-4 px-2 hover:shadow-lg transition-shadow">
+                <p class="text-gray-700 font-semibold">{{ ingredient.name }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    {% comment %} <!-- Explore Section -->
+    <section>
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Explore More</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <a href="{% url 'browse_countries' %}">
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-semibold text-gray-800">Browse by Country</h3>
+                        <p class="text-gray-600">Discover recipes from different cuisines worldwide.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <a href="{% url 'browse_recipes_by_name' %}">
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-semibold text-gray-800">Browse by Name</h3>
+                        <p class="text-gray-600">Find recipes alphabetically from A to Z.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <a href="{% url 'random_recipe' %}">
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-semibold text-gray-800">Random Recipe</h3>
+                        <p class="text-gray-600">Feeling adventurous? Try a random recipe!</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section> {% endcomment %}
+</div>
 {% endblock %}

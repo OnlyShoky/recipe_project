@@ -44,9 +44,10 @@ def recipe_list(request):
 def home(request):
     # Fetch the last 5 recipes ordered by the activate_date
     recipes = Recipe.objects.all().order_by('-created')[:6]
+    ingredients = Ingredient.objects.all().order_by('-created')[:6]
     total_recipes = Recipe.objects.count()
     total_ingredients = Ingredient.objects.count()
-    return render(request, 'home.html', {'recipes': recipes, 'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
+    return render(request, 'home.html', {'recipes': recipes, 'ingredients': ingredients, 'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
 
 class RecipeAPIView(views.APIView):
     """
