@@ -1,0 +1,88 @@
+<!-- recipes/recipe_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Latest Recipes{% endblock %}
+
+{% block content %}
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Latest Recipes</h1>
+        
+        <!-- Recipe Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for recipe in recipes %}
+            <a href="{% url 'recipe_detail' recipe.id %}" class="hover:scale-110 transition-transform">
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-full">
+                    <!-- Recipe Image -->
+                    {% if recipe.image %}
+                        <img src="{{ recipe.image_card.url }}" alt="{{ recipe.title }}" class="w-full h-48 object-cover">
+                    {% else %}
+                        <div class="h-48 bg-gray-300"></div>
+                    {% endif %}
+                    
+                    <!-- Recipe Details -->
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold text-gray-800">{{ recipe.title }}</h2>
+                        <p class="text-sm text-gray-500">{{ recipe.activate_date|date:"F d, Y" }}</p>
+                        <p class="text-gray-700 mt-2">{{ recipe.description|truncatewords:20 }}</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-20 flex justify-center">
+            <nav aria-label="Page navigation">
+                <ul class="inline-flex items-center -space-x-px">
+                    <!-- Previous Page Link -->
+                    {% if recipes.has_previous %}
+                    <li>
+                        <a href="?page={{ recipes.previous_page_number }}" 
+                           class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                           Previous
+                        </a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <span class="px-3 py-2 ml-0 leading-tight text-gray-400 bg-gray-200 border border-gray-300 rounded-l-lg cursor-not-allowed">
+                            Previous
+                        </span>
+                    </li>
+                    {% endif %}
+                    
+                    <!-- Page Numbers -->
+                    {% for page_num in recipes.paginator.page_range %}
+                        {% if page_num == recipes.number %}
+                        <li>
+                            <span class="px-3 py-2 text-white bg-indigo-600 border border-gray-300">{{ page_num }} </span>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="?page={{ page_num }}" 
+                               class="px-3 py-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                               {{ page_num }} 
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <!-- Next Page Link -->
+                    {% if recipes.has_next %}
+                    <li>
+                        <a href="?page={{ recipes.next_page_number }}" 
+                           class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                           Next
+                        </a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <span class="px-3 py-2 leading-tight text-gray-400 bg-gray-200 border border-gray-300 rounded-r-lg cursor-not-allowed">
+                            Next
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}

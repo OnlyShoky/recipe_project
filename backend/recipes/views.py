@@ -1,17 +1,13 @@
-from rest_framework import views
+from rest_framework import views, status
 from rest_framework.response import Response
-from rest_framework import status
-from .models import Course, Cuisine, Recipe, Tag
-from ingredients.models import Ingredient
-
-from .serializers import RecipeSerializer
-from rest_framework.exceptions import NotFound
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
-
+from .models import Course, Cuisine, Recipe, Tag
+from .serializers import RecipeSerializer
+from ingredients.models import Ingredient
 
 from django.shortcuts import render, get_object_or_404
-from recipes.models import Recipe
+from django.core.paginator import Paginator
 
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
@@ -36,10 +32,24 @@ def recipe_detail(request, id):
     # recipe.instructions = recipe.instructions.split('\n')
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
+# def recipe_list(request):
+#     # Fetch the last 5 recipes ordered by the activate_date
+#     recipes = Recipe.objects.all().order_by('-created',)[:6]
+#     return render(request, 'recipe_list.html', {'recipes': recipes})
+
 def recipe_list(request):
-    # Fetch the last 5 recipes ordered by the activate_date
-    recipes = Recipe.objects.all().order_by('-created',)[:6]
-    return render(request, 'recipe_list.html', {'recipes': recipes})
+    # Get all recipes, ordered by activation date
+    recipes = Recipe.objects.order_by('-created')
+    
+    # Set up pagination: 6 recipes per page
+    paginator = Paginator(recipes, 8)
+    page_number = request.GET.get('page')  # Get the current page number from the request
+    page_obj = paginator.get_page(page_number)  # Get the current page of recipes
+
+    context = {
+        'recipes': page_obj,  # Pass the page object to the template
+    }
+    return render(request, 'recipes/recipe_list.html', context)
 
 def home(request):
     # Fetch the last 5 recipes ordered by the activate_date
@@ -51,6 +61,10 @@ def home(request):
     total_recipes = Recipe.objects.count()
     total_ingredients = Ingredient.objects.count()
     return render(request, 'home.html', {'recipes': recipes, 'cuisines': cuisines, 'tags': tags, 'courses': courses, 'ingredients': ingredients,  'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
+
+
+
+## API VIEWS
 
 class RecipeAPIView(views.APIView):
     """
