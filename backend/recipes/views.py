@@ -52,6 +52,7 @@ def recipe_cuisine(request, cuisine_name):
     # Filter recipes by the given cuisine name
     cuisine = get_object_or_404(Cuisine, name=cuisine_name)
     recipes = Recipe.objects.filter(cuisines=cuisine).order_by('-created')
+    
     # Set up pagination: 6 recipes per page
     paginator = Paginator(recipes, 12)
     page_number = request.GET.get('page')  # Get the current page number from the request
@@ -63,7 +64,43 @@ def recipe_cuisine(request, cuisine_name):
         'cuisine_name': cuisine_name,  # Pass the selected cuisine name
         'title': title,  # Dynamic title for the page
     }
-    return render(request, 'recipes/recipe_cuisine.html', context)
+    return render(request, 'recipes/recipe_filter.html', context)
+
+def recipe_course(request, course_name):
+    # Filter recipes by the given cuisine name
+    course = get_object_or_404(Course, name=course_name)
+    recipes = Recipe.objects.filter(courses=course).order_by('-created')
+    
+    # Set up pagination: 6 recipes per page
+    paginator = Paginator(recipes, 12)
+    page_number = request.GET.get('page')  # Get the current page number from the request
+    page_obj = paginator.get_page(page_number)  # Get the current page of recipes
+    title = f"{course_name} Recipes"
+
+    context = {
+        'recipes': page_obj,  # Pass the page object to the template
+        'course_name': course_name,  # Pass the selected cuisine name
+        'title': title,  # Dynamic title for the page
+    }
+    return render(request, 'recipes/recipe_filter.html', context)
+
+def recipe_tag(request, tag_name):
+    # Filter recipes by the given cuisine name
+    tag = get_object_or_404(Tag, name=tag_name)
+    recipes = Recipe.objects.filter(tags=tag).order_by('-created')
+    
+    # Set up pagination: 6 recipes per page
+    paginator = Paginator(recipes, 12)
+    page_number = request.GET.get('page')  # Get the current page number from the request
+    page_obj = paginator.get_page(page_number)  # Get the current page of recipes
+    title = f'Recipes tagged with "{tag_name}"'
+
+    context = {
+        'recipes': page_obj,  # Pass the page object to the template
+        'tag_name': tag_name,  # Pass the selected cuisine name
+        'title': title,  # Dynamic title for the page
+    }
+    return render(request, 'recipes/recipe_filter.html', context)
 
 def home(request):
     # Fetch the last 5 recipes ordered by the activate_date
