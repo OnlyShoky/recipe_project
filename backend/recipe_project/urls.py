@@ -21,6 +21,7 @@ urlpatterns = [
     # ### Frontend Routes ###
     path('', views.home, name='home'),
     path('recipes/', views.recipe_list, name='recipe_list'),
+    path('recipes/cuisine/<str:cuisine_name>/', views.recipe_cuisine, name='recipe_cuisine'),
     path('recipes/<uuid:id>/', views.recipe_detail, name='recipe_detail'),
     
     

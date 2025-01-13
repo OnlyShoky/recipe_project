@@ -32,24 +32,38 @@ def recipe_detail(request, id):
     # recipe.instructions = recipe.instructions.split('\n')
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
-# def recipe_list(request):
-#     # Fetch the last 5 recipes ordered by the activate_date
-#     recipes = Recipe.objects.all().order_by('-created',)[:6]
-#     return render(request, 'recipe_list.html', {'recipes': recipes})
 
 def recipe_list(request):
     # Get all recipes, ordered by activation date
     recipes = Recipe.objects.order_by('-created')
     
     # Set up pagination: 6 recipes per page
-    paginator = Paginator(recipes, 8)
+    paginator = Paginator(recipes, 12)
     page_number = request.GET.get('page')  # Get the current page number from the request
     page_obj = paginator.get_page(page_number)  # Get the current page of recipes
 
     context = {
         'recipes': page_obj,  # Pass the page object to the template
+        'title': 'All Recipes',  # Dynamic title for the page
     }
     return render(request, 'recipes/recipe_list.html', context)
+
+def recipe_cuisine(request, cuisine_name):
+    # Filter recipes by the given cuisine name
+    cuisine = get_object_or_404(Cuisine, name=cuisine_name)
+    recipes = Recipe.objects.filter(cuisines=cuisine).order_by('-created')
+    # Set up pagination: 6 recipes per page
+    paginator = Paginator(recipes, 12)
+    page_number = request.GET.get('page')  # Get the current page number from the request
+    page_obj = paginator.get_page(page_number)  # Get the current page of recipes
+    title = f"{cuisine_name} Recipes"
+
+    context = {
+        'recipes': page_obj,  # Pass the page object to the template
+        'cuisine_name': cuisine_name,  # Pass the selected cuisine name
+        'title': title,  # Dynamic title for the page
+    }
+    return render(request, 'recipes/recipe_cuisine.html', context)
 
 def home(request):
     # Fetch the last 5 recipes ordered by the activate_date
