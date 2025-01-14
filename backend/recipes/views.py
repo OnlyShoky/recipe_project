@@ -2,12 +2,14 @@ from rest_framework import views, status
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
-from .models import Course, Cuisine, Recipe, Tag
+from .models import Course, Cuisine, Recipe, RecipeIngredient, Tag
 from .serializers import RecipeSerializer
 from ingredients.models import Ingredient
 
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
+
+from collections import Counter
 
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
@@ -106,12 +108,16 @@ def home(request):
     # Fetch the last 5 recipes ordered by the activate_date
     recipes = Recipe.objects.all().order_by('-created')[:6]
     ingredients = Ingredient.objects.all().order_by('-created')[:6]
+        
+    ingredients = [recipeIngredient.ingredient for recipeIngredient in RecipeIngredient.objects.all()]
+    ingredients = [ingredient[0] for ingredient in Counter(ingredients).most_common(6)]
+    
     cuisines = Cuisine.objects.all().order_by('-created')
     tags = Tag.objects.all().order_by('-created')
     courses = Course.objects.all().order_by('-created')
     total_recipes = Recipe.objects.count()
     total_ingredients = Ingredient.objects.count()
-    return render(request, 'home.html', {'recipes': recipes, 'cuisines': cuisines, 'tags': tags, 'courses': courses, 'ingredients': ingredients,  'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
+    return render(request, 'home.html', {'recipes': recipes,   'cuisines': cuisines, 'tags': tags, 'courses': courses, 'ingredients': ingredients,  'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
 
 
 
