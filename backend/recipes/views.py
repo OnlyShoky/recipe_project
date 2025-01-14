@@ -35,20 +35,62 @@ def recipe_detail(request, id):
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
 
-def recipe_list(request):
-    # Get all recipes, ordered by activation date
-    recipes = Recipe.objects.order_by('-created')
+# def recipe_list(request):
+#     # Get all recipes, ordered by activation date
+#     recipes = Recipe.objects.order_by('-created')
     
-    # Set up pagination: 6 recipes per page
-    paginator = Paginator(recipes, 12)
-    page_number = request.GET.get('page')  # Get the current page number from the request
-    page_obj = paginator.get_page(page_number)  # Get the current page of recipes
+#     # Set up pagination: 6 recipes per page
+#     paginator = Paginator(recipes, 12)
+#     page_number = request.GET.get('page')  # Get the current page number from the request
+#     page_obj = paginator.get_page(page_number)  # Get the current page of recipes
+
+#     context = {
+#         'recipes': page_obj,  # Pass the page object to the template
+#         'title': 'All Recipes',  # Dynamic title for the page
+#     }
+#     return render(request, 'recipes/recipe_list.html', context)
+
+def recipe_list(request):
+    cuisine_name = request.GET.get('cuisine')
+    course_name = request.GET.get('course')
+    tag_name = request.GET.get('tag')
+
+    recipes = Recipe.objects.all()
+    
+    title_parts = ['All']
+
+    if cuisine_name:
+        recipes = recipes.filter(cuisines__name__iexact=cuisine_name)
+        title_parts.append(f"{cuisine_name.capitalize()}")
+        title_parts.remove('All') if 'All' in title_parts else None
+    if course_name:
+        recipes = recipes.filter(courses__name__iexact=course_name)
+        title_parts.append(f"{course_name.capitalize()}")
+        title_parts.remove('All') if 'All' in title_parts else None
+    title_parts.append('Recipes')
+    if tag_name:
+        recipes = recipes.filter(tags__name__iexact=tag_name)
+        title_parts.append(f'tagged with "{tag_name}"')
+
+    title = '  '.join(title_parts)
+
+    paginator = Paginator(recipes, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Rebuild the query string excluding 'page'
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        query_params.pop('page')
+    query_string = query_params.urlencode()
 
     context = {
-        'recipes': page_obj,  # Pass the page object to the template
-        'title': 'All Recipes',  # Dynamic title for the page
+        'recipes': page_obj,
+        'title': title,
+        'query_string': query_string,
     }
     return render(request, 'recipes/recipe_list.html', context)
+
 
 def recipe_cuisine(request, cuisine_name):
     # Filter recipes by the given cuisine name
