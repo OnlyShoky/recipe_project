@@ -4,6 +4,13 @@
   {% if recipe.image %}
   <div class="absolute top-6 right-6">
     <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="w-[400px] h-[400px] object-cover rounded-md" />
+
+    <!-- Extra info  -->
+    <section class="mt-2 text-center">
+      <p class="text-gray-700">Author : {{ recipe.author }}</p>
+      <p class="text-gray-700">Source : {{ recipe.source }}</p>
+      <p class="text-gray-700">Video Link : {{ recipe.video_url }}</p>
+    </section>
   </div>
   {% endif %}
 
@@ -18,13 +25,18 @@
     <!-- Recipe Description -->
     <p class="text-gray-700 mb-6">{{ recipe.description }}</p>
 
+    <!-- Tags Section -->
+    {% comment %} <section class="mb-4 mt-4">
+      
+    </section> {% endcomment %}
+
     <!-- Course and Cuisine -->
     <div class="flex items-center space-x-6 mb-6">
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false" x="0px" y="0px" width="16px" height="16px" viewBox="25 0 500 550"><path fill="currentColor" d="M0 192c0-35.3 28.7-64 64-64c.5 0 1.1 0 1.6 0C73 91.5 105.3 64 144 64c15 0 29 4.1 40.9 11.2C198.2 49.6 225.1 32 256 32s57.8 17.6 71.1 43.2C339 68.1 353 64 368 64c38.7 0 71 27.5 78.4 64c.5 0 1.1 0 1.6 0c35.3 0 64 28.7 64 64c0 11.7-3.1 22.6-8.6 32L8.6 224C3.1 214.6 0 203.7 0 192zm0 91.4C0 268.3 12.3 256 27.4 256l457.1 0c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1L403.5 452c-2 16-15.6 28-31.8 28l-231.5 0c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4z" /></svg>
         </span>
-        <p class="text-gray-600 font-medium"><strong>Course:</strong> {{ recipe.course }}</p>
+        <p class="text-gray-600 font-medium"><strong>Course:</strong> {{ recipe.courses.all | join:', ' }}</p>
       </div>
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
@@ -32,13 +44,23 @@
             <path fill="currentColor" d="M57.7 193l9.4 16.4c8.3 14.5 21.9 25.2 38 29.8L163 255.7c17.2 4.9 29 20.6 29 38.5l0 39.9c0 11 6.2 21 16 25.9s16 14.9 16 25.9l0 39c0 15.6 14.9 26.9 29.9 22.6c16.1-4.6 28.6-17.5 32.7-33.8l2.8-11.2c4.2-16.9 15.2-31.4 30.3-40l8.1-4.6c15-8.5 24.2-24.5 24.2-41.7l0-8.3c0-12.7-5.1-24.9-14.1-33.9l-3.9-3.9c-9-9-21.2-14.1-33.9-14.1L257 256c-11.1 0-22.1-2.9-31.8-8.4l-34.5-19.7c-4.3-2.5-7.6-6.5-9.2-11.2c-3.2-9.6 1.1-20 10.2-24.5l5.9-3c6.6-3.3 14.3-3.9 21.3-1.5l23.2 7.7c8.2 2.7 17.2-.4 21.9-7.5c4.7-7 4.2-16.3-1.2-22.8l-13.6-16.3c-10-12-9.9-29.5 .3-41.3l15.7-18.3c8.8-10.3 10.2-25 3.5-36.7l-2.4-4.2c-3.5-.2-6.9-.3-10.4-.3C163.1 48 84.4 108.9 57.7 193zM464 256c0-36.8-9.6-71.4-26.4-101.5L412 164.8c-15.7 6.3-23.8 23.8-18.5 39.8l16.9 50.7c3.5 10.4 12 18.3 22.6 20.9l29.1 7.3c1.2-9 1.8-18.2 1.8-27.5zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
           </svg>
         </span>
-        <p class="text-gray-600 font-medium"><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
+        <p class="text-gray-600 font-medium"><strong>Cuisine:</strong> {{ recipe.cuisines.all | join:', ' }}</p>
+      </div>
+      <div class="flex items-center space-x-2">
+        <p class="text-gray-600 font-medium"><strong>Tags:</strong></p>
+        {% for tag in recipe.tags.all %}
+        <!-- Limit to 8 ingredients -->
+        <a href="{% url 'recipe_list' %}?tag={{ tag.name|slugify }}" class="transform transition-transform hover:scale-105">
+          <div class="bg-gray-300 px-2 py-0.5 shadow rounded-lg text-center hover:shadow-lg transition-shadow flex items-center justify-center">
+            <p class="text-black font-semibold">{{ tag | title }}</p>
+          </div>
+        </a>
+        {% endfor %}
       </div>
     </div>
 
     <!-- Times (Prep, Cook, Cool, Total) -->
     <div class="grid grid-cols-2 gap-2 mb-6">
-
       {% if recipe.prep_time %}
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
@@ -51,9 +73,7 @@
         </span>
         <p class="text-gray-600 font-medium"><strong>Prep Time:</strong> {{ recipe.prep_time|duration_format }}</p>
       </div>
-      {% endif %}
-
-      {% if recipe.cook_time %}
+      {% endif %} {% if recipe.cook_time %}
 
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
@@ -68,9 +88,7 @@
         </span>
         <p class="text-gray-600 font-medium"><strong>Cook Time:</strong> {{ recipe.cook_time|duration_format }}</p>
       </div>
-      {% endif %}
-
-      {% if recipe.cool_time %}
+      {% endif %} {% if recipe.cool_time %}
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false" x="0px" y="0px" width="16px" height="16px" viewBox="25 0 500 550">
@@ -79,10 +97,7 @@
         </span>
         <p class="text-gray-600 font-medium"><strong>Cool Time:</strong> {{ recipe.cool_time|duration_format }}</p>
       </div>
-      {% endif %}
-
-
-      {% if recipe.total_time %}
+      {% endif %} {% if recipe.total_time %}
       <div class="flex items-center space-x-2">
         <span class="text-sepia-light">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16" height="16" viewBox="0 0 16 16">
@@ -93,7 +108,6 @@
       </div>
 
       {% endif %}
-
     </div>
 
     <div class="flex items-center space-x-2 text-sm mb-6">
@@ -112,7 +126,7 @@
   </div>
 
   <!-- Equipment -->
-  {% if  recipe.equipment_list %}
+  {% if recipe.equipment_list %}
   <section class="mb-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Equipment</h2>
     <ul class="list-disc pl-6 space-y-1 mb-2">
@@ -126,26 +140,20 @@
   <!-- Ingredients -->
   <section class="mb-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ingredients</h2>
-    {% for category in recipe.ingredientsCategories %}
-    {% if category %}
-      <h3 class="text-xl font-semibold text-gray-800 mb-4">{{category}}</h3>
+    {% for category in recipe.ingredientsCategories %} {% if category %}
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">{{category}}</h3>
     {% endif %}
     <ul class="list-disc pl-6 space-y-1 mb-2">
-      {% for ingredient in recipe.ingredients %} 
-      {% if  ingredient.groupName == category %}
-          {% if not ingredient.ingredient.related_recipe %}
-          <li class="text-gray-700">{{ ingredient }}</li>
-          {% else %}
-          <a href="{% url 'recipe_detail' ingredient.ingredient.related_recipe.id %}" class="hover:scale-110 transition-transform">
-            <li class="text-red-700">{{ ingredient }}</li>
-          </a>
-          {% endif %} 
-        {% endif %} 
-      {% endfor %}
+      {% for ingredient in recipe.ingredients %} {% if ingredient.groupName == category %} {% if not ingredient.ingredient.related_recipe %}
+      <li class="text-gray-700">{{ ingredient }}</li>
+      {% else %}
+      <a href="{% url 'recipe_detail' ingredient.ingredient.related_recipe.id %}" class="hover:scale-110 transition-transform">
+        <li class="text-red-700">{{ ingredient }}</li>
+      </a>
+      {% endif %} {% endif %} {% endfor %}
     </ul>
     {% endfor %}
   </section>
-
 
   <!-- Instructions -->
   <section class="mb-6">
@@ -163,9 +171,8 @@
     </ol>
   </section>
 
-
   <!-- Notes -->
-  {% if  recipe.notes_list %}
+  {% if recipe.notes_list %}
   <section class="mb-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Notes</h2>
     <ul class="list-disc pl-6 space-y-1 mb-2">
@@ -175,15 +182,6 @@
     </ul>
   </section>
   {% endif %}
-
-  <!-- Extra info  -->
-  <section class="mb-6">
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Extra info :</h2>
-
-    <p class="text-gray-700">Author : {{ recipe.author }}</p>
-    <p class="text-gray-700">Source : {{ recipe.source }}</p>
-    <p class="text-gray-700">Video Link : {{ recipe.video_url }}</p>
-  </section>
 </div>
 
 {% endblock %}
