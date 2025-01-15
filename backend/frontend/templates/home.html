@@ -58,9 +58,11 @@
         <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Popular Ingredients</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6">
             {% for ingredient in ingredients %} <!-- Limit to 8 ingredients -->
-            <div class="bg-white shadow rounded-lg text-center py-6 px-4 hover:shadow-lg transition-shadow flex items-center justify-center">
-                <p class="text-gray-700 font-semibold text-lg">{{ ingredient.name }}</p>
-            </div>
+            <a href="{% url 'recipe_list' %}?ingredient={{ ingredient.name|slugify }}" class="transform transition-transform hover:scale-105">
+                <div class="bg-white shadow rounded-lg text-center py-6 px-4 hover:shadow-lg transition-shadow flex items-center justify-center">
+                    <p class="text-gray-700 font-semibold text-lg">{{ ingredient.name }}</p>
+                </div>
+            </a>
             {% endfor %}
         </div>
     </section>
