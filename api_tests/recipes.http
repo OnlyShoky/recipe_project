@@ -1,0 +1,8 @@
+### Get all recipes
+GET http://localhost:8000/recipes/
+
+### Get a single recipe by ID
+GET http://localhost:8000/recipes/0b0e2225-921a-4bcc-af72-9376e606e00b/
+
+### Get a reponse using curl 
+curl -v http://localhost:8000/recipes/

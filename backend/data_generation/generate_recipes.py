@@ -133,11 +133,11 @@ def generate_recipes_from_json(json_data):
         )
         
         # Create or retrieve tags and addthem 
-        for cuisine in attributes["cuisine"]:
+        for cuisine in attributes["cuisines"]:
             cuisine, _ = Cuisine.objects.get_or_create(name=cuisine)
             recipe.cuisines.add(cuisine)
             
-        for course in attributes["course"]:
+        for course in attributes["courses"]:
             course, _ = Course.objects.get_or_create(name=course)
             recipe.courses.add(course)
             

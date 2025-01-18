@@ -52,6 +52,7 @@
                     
                     <!-- Page Numbers -->
                     {% for page_num in recipes.paginator.page_range %}
+                    {% if recipes.number|add:-5 < page_num and page_num < recipes.number|add:5 or page_num  > recipes.paginator.num_pages|add:-5  %}
                         {% if page_num == recipes.number %}
                         <li>
                             <span class="px-3 py-2 text-white bg-indigo-600 border border-gray-300">{{ page_num }} </span>
@@ -63,6 +64,7 @@
                                {{ page_num }} 
                             </a>
                         </li>
+                        {% endif %}
                         {% endif %}
                     {% endfor %}
                     
