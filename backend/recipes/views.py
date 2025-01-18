@@ -80,7 +80,7 @@ def recipe_list(request):
             
     title = '  '.join(title_parts)
 
-    paginator = Paginator(recipes, 4)
+    paginator = Paginator(recipes, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

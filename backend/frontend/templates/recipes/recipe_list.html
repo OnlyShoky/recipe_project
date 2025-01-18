@@ -37,8 +37,12 @@
                     <!-- Previous Page Link -->
                     {% if recipes.has_previous %}
                     <li>
+                        <a href="?page={{query_string}}" 
+                           class="px-1 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                           <<
+                        </a>
                         <a href="?page={{ recipes.previous_page_number }}&{{query_string}}" 
-                           class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                           class="px-3 py-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
                            Previous
                         </a>
                     </li>
@@ -52,7 +56,7 @@
                     
                     <!-- Page Numbers -->
                     {% for page_num in recipes.paginator.page_range %}
-                    {% if recipes.number|add:-5 < page_num and page_num < recipes.number|add:5 or page_num  > recipes.paginator.num_pages|add:-5  %}
+                    {% if recipes.number|add:-5 < page_num and page_num < recipes.number|add:5 %}
                         {% if page_num == recipes.number %}
                         <li>
                             <span class="px-3 py-2 text-white bg-indigo-600 border border-gray-300">{{ page_num }} </span>
@@ -72,8 +76,12 @@
                     {% if recipes.has_next %}
                     <li>
                         <a href="?page={{ recipes.next_page_number }}&{{ query_string }}" 
-                           class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                           class="px-3 py-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
                            Next
+                        </a>
+                        <a href="?page={{ recipes.paginator.num_pages }}&{{ query_string }}" 
+                           class="px-1 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                           >>
                         </a>
                     </li>
                     {% else %}
