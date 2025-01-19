@@ -38,18 +38,20 @@
                     {% if recipes.has_previous %}
                     <li>
                         <a href="?page={{query_string}}" 
-                           class="px-1 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
-                           <<
+                           class="px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                           <strong>❮❮</strong>
                         </a>
+                    </li>
+                    <li>
                         <a href="?page={{ recipes.previous_page_number }}&{{query_string}}" 
-                           class="px-3 py-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                           Previous
+                           class="px-2 py-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                           <strong>❮</strong>
                         </a>
                     </li>
                     {% else %}
                     <li>
-                        <span class="px-3 py-2 ml-0 leading-tight text-gray-400 bg-gray-200 border border-gray-300 rounded-l-lg cursor-not-allowed">
-                            Previous
+                        <span class="px-2 py-2 leading-tight text-gray-400 bg-gray-200 border border-gray-300 rounded-l-lg cursor-not-allowed">
+                            <strong>❮</strong>
                         </span>
                     </li>
                     {% endif %}
@@ -76,18 +78,20 @@
                     {% if recipes.has_next %}
                     <li>
                         <a href="?page={{ recipes.next_page_number }}&{{ query_string }}" 
-                           class="px-3 py-2 text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                           Next
+                           class="px-2 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                         <strong>❯ </strong>
                         </a>
+                    </li>
+                    <li>
                         <a href="?page={{ recipes.paginator.num_pages }}&{{ query_string }}" 
-                           class="px-1 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
-                           >>
+                           class="px-2 py-2  text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 font-bold ">
+                           <strong> ❯❯ </strong>
                         </a>
                     </li>
                     {% else %}
                     <li>
-                        <span class="px-3 py-2 leading-tight text-gray-400 bg-gray-200 border border-gray-300 rounded-r-lg cursor-not-allowed">
-                            Next
+                        <span class="px-2 py-2 leading-tight text-gray-400 bg-gray-200 border border-gray-300 rounded-r-lg cursor-not-allowed">
+                        ❯
                         </span>
                     </li>
                     {% endif %}
