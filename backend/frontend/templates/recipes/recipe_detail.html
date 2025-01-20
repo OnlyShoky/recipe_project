@@ -1,6 +1,5 @@
 {% extends 'base.html' %} {% load custom_filters %} {% block title %}{{ recipe.title }}{% endblock %} {% block content %}
-<div class="bg-white shadow-md rounded-lg p-6 mb-8 flex flex-row justify-between ">
- 
+<div class="bg-white shadow-md rounded-lg p-6 mb-8 flex flex-row justify-between">
   <!-- Recipe Information (Title, Description, Tags, Times) -->
   <div class="">
     <!-- Recipe Title -->
@@ -31,7 +30,8 @@
       <div class="flex items-center space-x-2 mb-3">
         <span class="text-sepia-light">
           <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" focusable="false" x="0px" y="0px" width="16px" height="16px" viewBox="25 0 500 550">
-            <path fill="currentColor" d="M345 39.1L472.8 168.4c52.4 53 52.4 138.2 0 191.2L360.8 472.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L438.6 325.9c33.9-34.3 33.9-89.4 0-123.7L310.9 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM0 229.5L0 80C0 53.5 21.5 32 48 32l149.5 0c17 0 33.3 6.7 45.3 18.7l168 168c25 25 25 65.5 0 90.5L277.3 442.7c-25 25-65.5 25-90.5 0l-168-168C6.7 262.7 0 246.5 0 229.5zM144 144a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/></svg>
+            <path fill="currentColor" d="M345 39.1L472.8 168.4c52.4 53 52.4 138.2 0 191.2L360.8 472.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L438.6 325.9c33.9-34.3 33.9-89.4 0-123.7L310.9 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM0 229.5L0 80C0 53.5 21.5 32 48 32l149.5 0c17 0 33.3 6.7 45.3 18.7l168 168c25 25 25 65.5 0 90.5L277.3 442.7c-25 25-65.5 25-90.5 0l-168-168C6.7 262.7 0 246.5 0 229.5zM144 144a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" />
+          </svg>
         </span>
         <p class="text-gray-600 font-medium"><strong>Tags:</strong></p>
         {% for tag in recipe.tags.all %}
@@ -97,7 +97,7 @@
     </div>
   </div>
 
-   <!-- Recipe Image (Positioned in the top-right corner) -->
+  <!-- Recipe Image (Positioned in the top-right corner) -->
   {% if recipe.image %}
   <div class="flex flex-col items-center justify-center">
     <div><img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="w-[330px] h-[330px] object-cover rounded-md" /></div>
@@ -106,77 +106,142 @@
       <section class="mt-2 text-center">
         <p class="text-gray-700">Author : {{ recipe.author }}</p>
         <p class="text-gray-700">Source : {{ recipe.source }}</p>
-        {% comment %} <p class="text-gray-700">Video Link : {{ recipe.video_url }}</p> {% endcomment %}
+        {% comment %}
+        <p class="text-gray-700">Video Link : {{ recipe.video_url }}</p>
+        {% endcomment %}
       </section>
     </div>
   </div>
   {% endif %}
-
 </div>
-  <div class="bg-white shadow-md rounded-lg p-6 relative">
 
-    <!-- Equipment -->
-    {% if recipe.equipment_list %}
-    <section class="mb-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Equipment</h2>
-      <ul class="list-disc pl-6 space-y-1 mb-2">
-        {% for equipment in recipe.equipment_list %}
-        <li class="text-gray-700">{{ equipment }}</li>
-        {% endfor %}
-      </ul>
-    </section>
-    {% endif %}
-
-
-    <!-- Ingredients -->
-    <section class="mb-6">
-      <div class="flex items-center justify-between space-x-40 mb-4">
-        <h2 class="text-2xl font-semibold text-gray-800">Ingredients</h2>
-        <p class="text-xl text-gray-400">Servings : {{ recipe.servings }}</p>
-      </div>
-      {% for category in recipe.ingredientsCategories %} {% if category %}
-      <h3 class="text-xl font-semibold text-gray-800 mb-4">{{category}}</h3>
-      {% endif %}
-      <ul class="list-disc pl-6 space-y-1 mb-2">
-        {% for ingredient in recipe.ingredients %} {% if ingredient.groupName == category %} {% if not ingredient.ingredient.related_recipe %}
-        <li class="text-gray-700">{{ ingredient }}</li>
-        {% else %}
-        <a href="{% url 'recipe_detail' ingredient.ingredient.related_recipe.id %}" class="hover:scale-110 transition-transform">
-          <li class="text-red-700">{{ ingredient }}</li>
-        </a>
-        {% endif %} {% endif %} {% endfor %}
-      </ul>
+<!-- Equipment -->
+{% if recipe.equipment_list %}
+<div class="bg-white shadow-md rounded-lg p-6 relative m-6">
+  <section class="mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Equipment</h2>
+    <ul class="list-disc pl-6 space-y-1 mb-2">
+      {% for equipment in recipe.equipment_list %}
+      <li class="text-gray-700">{{ equipment }}</li>
       {% endfor %}
-    </section>
+    </ul>
+  </section>
+</div>
+{% endif %}
 
-    <!-- Instructions -->
-    <section class="mb-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Instructions</h2>
-      <ol class="pl-6 space-y-1">
-        {% for instruction in recipe.instructions_list %} {% if ':' in instruction %}
+<!-- Ingredients -->
+<div class="bg-white shadow-md rounded-lg p-6 relative">
+  <section class="mb-6">
+    <div class="flex items-center justify-between space-x-40 mb-4">
+      <h2 class="text-2xl font-semibold text-gray-800">Ingredients</h2>
+      <div class="flex items-center space-x-2">
+        <!-- Minus Button -->
+        <button
+          onclick="updateServings(-1)"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded-full"
+          aria-label="Decrease Servings"
+        >
+          -
+        </button>
 
-        <!-- Add the group heading -->
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">{{ instruction }}</h3>
+        <!-- Servings Display -->
+        <p id="servings" class="text-xl text-gray-800">
+          {{ recipe.servings }}
+        </p>
 
-        {% else %}
-        <!-- Add the instruction as a list item -->
-        <li class="text-gray-700">{{ instruction }}</li>
-        {% endif %} {% endfor %}
-      </ol>
-    </section>
+        <!-- Plus Button -->
+        <button
+          onclick="updateServings(1)"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded-full"
+          aria-label="Increase Servings"
+        >
+          +
+        </button>
+      </div>
+    </div>
 
-    <!-- Notes -->
-    {% if recipe.notes_list %}
-    <section class="mb-6">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Notes</h2>
-      <ul class="list-disc pl-6 space-y-1 mb-2">
-        {% for note in recipe.notes_list %}
-        <li class="text-gray-700">{{ note }}</li>
-        {% endfor %}
+    <!-- Ingredients Grid -->
+    {% for category in recipe.ingredientsCategories %}
+      {% if category %}
+        <h3 class="text-xl font-semibold text-gray-800 m-7 text-center">{{ category }}</h3>
+      {% endif %}
+
+      <ul class="list-disc pl-6 space-y-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
+          {% for ingredient in recipe.ingredients %}
+            {% if ingredient.groupName == category %}
+              <li class="text-gray-700">
+                
+                <span
+                  class="ingredient-quantity"
+                  data-quantity="{{ ingredient.quantity }}"
+                  data-servings="{{ recipe.servings }}"
+                >
+                  {{ ingredient.quantity }}
+                </span>
+                {{ ingredient.unit }}
+
+                <span class="ingredient-name"> of {{ ingredient.ingredient.name }}</span>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </div>
       </ul>
-    </section>
-    {% endif %}
-  </div>
+    {% endfor %}
+  </section>
+</div>
+
+<script>
+  // JavaScript Function to Update Servings and Ingredient Quantities
+  function updateServings(change) {
+    const servingsElement = document.getElementById('servings');
+    let currentServings = parseInt(servingsElement.textContent, 10);
+
+    // Update servings (ensure no negative values)
+    const newServings = Math.max(1, currentServings + change);
+
+    // Update the DOM for servings
+    servingsElement.textContent = newServings;
+
+    // Update each ingredient's quantity
+    const ingredientQuantities = document.querySelectorAll('.ingredient-quantity');
+    ingredientQuantities.forEach((quantityElement) => {
+      const baseQuantity = parseFloat(quantityElement.dataset.quantity); // Original quantity
+      const baseServings = parseInt(quantityElement.dataset.servings, 10); // Original servings
+      const newQuantity = ((baseQuantity / baseServings) * newServings).toFixed(2); // Adjust quantity
+      quantityElement.textContent = newQuantity; // Update the displayed quantity
+    });
+  }
+</script>
+
+<div class="bg-white shadow-md rounded-lg p-6 relative m-10">
+  <!-- Instructions -->
+  <section class="mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Instructions</h2>
+    <ol class="pl-6 space-y-1">
+      {% for instruction in recipe.instructions_list %} {% if ':' in instruction %}
+
+      <!-- Add the group heading -->
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">{{ instruction }}</h3>
+
+      {% else %}
+      <!-- Add the instruction as a list item -->
+      <li class="text-gray-700">{{ instruction }}</li>
+      {% endif %} {% endfor %}
+    </ol>
+  </section>
+
+  <!-- Notes -->
+  {% if recipe.notes_list %}
+  <section class="mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Notes</h2>
+    <ul class="list-disc pl-6 space-y-1 mb-2">
+      {% for note in recipe.notes_list %}
+      <li class="text-gray-700">{{ note }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
 </div>
 
 {% endblock %}
