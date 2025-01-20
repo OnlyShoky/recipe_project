@@ -19,6 +19,7 @@ def recipe_detail(request, id):
     recipe.instructions_list = recipe.instructions.split('\n') if recipe.instructions else []
     
     recipe.ingredientsCategories = set()
+    recipe.hasCategories = False
     
                 
     for i,instruction in enumerate(recipe.instructions_list) :
@@ -28,7 +29,8 @@ def recipe_detail(request, id):
                 recipe.instructions_list[i] += ':'
                 
     for ingredient in recipe.ingredients :
-        recipe.ingredientsCategories.add(ingredient.groupName)
+        if ingredient.groupName:
+            recipe.ingredientsCategories.add(ingredient.groupName)
 
         
     # recipe.instructions = recipe.instructions.split('\n')
