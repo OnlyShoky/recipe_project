@@ -158,6 +158,7 @@ def generate_recipes_from_json(json_data):
         
         # Assign the new nutritional table to the ingredient
         recipe.nutrition = nutritional_table
+        recipe.save()
         
         # Create or retrieve tags and addthem 
         for cuisine in attributes["cuisines"]:
