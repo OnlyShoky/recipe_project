@@ -133,15 +133,15 @@ def recipe_list(request):
 
 def home(request):
     # Fetch the last 5 recipes ordered by the activate_date
-    recipes = Recipe.objects.all().order_by('-created')[:6]
-    ingredients = Ingredient.objects.all().order_by('-created')[:6]
+    recipes = Recipe.objects.all().order_by('-created')[:8]
+    ingredients = Ingredient.objects.all()
         
     ingredients = [recipeIngredient.ingredient for recipeIngredient in RecipeIngredient.objects.all()]
-    ingredients = [ingredient[0] for ingredient in Counter(ingredients).most_common(6)]
+    ingredients = [ingredient[0] for ingredient in Counter(ingredients).most_common(8)]
     
-    cuisines = Cuisine.objects.all().order_by('-created')
-    tags = Tag.objects.all().order_by('-created')
-    courses = Course.objects.all().order_by('-created')
+    cuisines = Cuisine.objects.all()
+    tags = Tag.objects.all()
+    courses = Course.objects.all()
     total_recipes = Recipe.objects.count()
     total_ingredients = Ingredient.objects.count()
     return render(request, 'home.html', {'recipes': recipes,   'cuisines': cuisines, 'tags': tags, 'courses': courses, 'ingredients': ingredients,  'total_recipes': total_recipes, 'total_ingredients': total_ingredients})

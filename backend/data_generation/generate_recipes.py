@@ -128,9 +128,36 @@ def generate_recipes_from_json(json_data):
             image = attributes["image"],
             image_card = attributes["image_card"],
             description = attributes["description"],
+            notes = attributes["notes"],
+            equipment = attributes["equipment"],
             rating = attributes["rating"]["average"],
             number_of_ratings = attributes["rating"]["count"],
         )
+        
+        nutritional_table = NutritionalTable.objects.create(
+            servings=float(attributes["nutrition"].get("Serving", [0])[0]),
+            calories=float(attributes["nutrition"].get("Calories", [0])[0]),
+            carbohydrates=float(attributes["nutrition"].get("Carbohydrates", [0])[0]),
+            protein=float(attributes["nutrition"].get("Protein", [0])[0]),
+            fat=float(attributes["nutrition"].get("Fat", [0])[0]),
+            saturated_fat=float(attributes["nutrition"].get("Saturated Fat", [0])[0]),
+            trans_fat=float(attributes["nutrition"].get("Trans Fat", [0])[0]),
+            fiber=float(attributes["nutrition"].get("Fiber", [0])[0]),
+            sugar=float(attributes["nutrition"].get("Sugar", [0])[0]),
+            cholesterol=float(attributes["nutrition"].get("Cholesterol", [0])[0]),
+            sodium=float(attributes["nutrition"].get("Sodium", [0])[0]),
+            potassium=float(attributes["nutrition"].get("Potassium", [0])[0]),
+            vitamin_a=float(attributes["nutrition"].get("Vitamin A", [0])[0]),
+            vitamin_c=float(attributes["nutrition"].get("Vitamin C", [0])[0]),
+            calcium=float(attributes["nutrition"].get("Calcium", [0])[0]),
+            iron=float(attributes["nutrition"].get("Iron", [0])[0]),
+        )
+
+
+
+        
+        # Assign the new nutritional table to the ingredient
+        recipe.nutrition = nutritional_table
         
         # Create or retrieve tags and addthem 
         for cuisine in attributes["cuisines"]:

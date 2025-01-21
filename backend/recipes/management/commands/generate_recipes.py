@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Delete all existing recipes before adding new ones
-        Recipe.objects.all().delete()
+        # Recipe.objects.all().delete()
         # Tag.objects.all().delete()
         # Ingredient.objects.all().delete()
 

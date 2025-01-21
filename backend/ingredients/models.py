@@ -9,6 +9,8 @@ from django_extensions.db.models import (
 from utils.model_abstracts import Model
 
 class NutritionalTable(models.Model):
+    servings = models.FloatField(blank=True, null=True, help_text="Servings per container")
+    
     # Basic fields
     calories = models.FloatField(blank=True, null=True, help_text="Calories per serving (kcal)")
     carbohydrates = models.FloatField(blank=True, null=True, help_text="Total carbohydrates (g)")

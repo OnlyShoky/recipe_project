@@ -8,7 +8,7 @@ from django_extensions.db.models import (
 )
 
 from fractions import Fraction
-from ingredients.models import Ingredient
+from ingredients.models import Ingredient, NutritionalTable
 
 class Tag(TimeStampedModel, ActivatorModel):
     """
@@ -105,6 +105,11 @@ class Recipe(TimeStampedModel,
     author = models.CharField(max_length=100, blank=True, null=True)
     source = models.CharField(max_length=100, blank=True, null=True)
     video_url = models.URLField(blank=True, null=True)
+    
+    nutrition = models.OneToOneField(
+        NutritionalTable, on_delete=models.CASCADE, blank=True, null=True
+    )  # Link to the nutritional table
+
     
     # fields for ratings
     rating = models.DecimalField(
