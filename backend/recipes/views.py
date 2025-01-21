@@ -10,6 +10,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 
 from collections import Counter
+import re
 
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
@@ -22,11 +23,41 @@ def recipe_detail(request, id):
     recipe.hasCategories = False
     
                 
-    for i,instruction in enumerate(recipe.instructions_list) :
-        if 'GroupName' in instruction :
-            recipe.instructions_list[i] = recipe.instructions_list[i].replace('GroupName :', '')
-            if ':' not in instruction :
-                recipe.instructions_list[i] += ':'
+
+    # Initialize a new list to store the processed instructions
+    processed_instructions = []
+    step_number = 1  # Counter for instructions without a pre-existing number
+
+    # Define the regex pattern to capture step numbers at the beginning of the instruction
+    numbered_step_pattern = r"^\s*(\d+)\.\s*(.*)$"  # Matches "1. Text"
+
+    for instruction in recipe.instructions_list:
+        # Check if the instruction is a group header
+        if 'GroupName' in instruction:
+            # Process and format the group name
+            group_name = instruction.replace('GroupName :', '').strip()
+            if ':' not in group_name:
+                group_name += ':'
+            # Append group name to the processed list with None as the number
+            processed_instructions.append((None, group_name))
+        else:
+            # Check if the instruction is numbered using regex
+            match = re.match(numbered_step_pattern, instruction)
+            if match:
+                # Extract the number and the text
+                number = int(match.group(1))
+                text = match.group(2).strip()
+                processed_instructions.append((number, text))
+            else:
+                # If not numbered, assign the next step_number and increment it
+                processed_instructions.append((step_number, instruction.strip()))
+                step_number += 1
+
+    # Update the recipe.instructions_list with the processed instructions
+    recipe.instructions_list = processed_instructions
+
+
+
                 
     for ingredient in recipe.ingredients :
         if ingredient.groupName:

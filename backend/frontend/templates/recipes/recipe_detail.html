@@ -299,19 +299,34 @@
 <div class="bg-white shadow-md rounded-lg p-6 relative w-full">
   <!-- Instructions -->
   <section class="mb-6">
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Instructions</h2>
-    <ol class="pl-6 space-y-1">
-      {% for instruction in recipe.instructions_list %} {% if ':' in instruction %}
-
-      <!-- Add the group heading -->
-      <h3 class="text-xl font-semibold text-gray-800 mb-4">{{ instruction }}</h3>
-
-      {% else %}
-      <!-- Add the instruction as a list item -->
-      <li class="text-gray-700">{{ instruction }}</li>
-      {% endif %} {% endfor %}
+    <!-- Section Title -->
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Instructions</h2>
+    <!-- Instructions List -->
+    <ol class="space-y-6">
+      {% for instruction in recipe.instructions_list %}
+        {% if ':' in instruction.1 %}
+        <!-- Group Heading -->
+        <li class="text-xl font-bold text-gray-900 bg-gray-200 p-4 rounded-lg">
+          {{ instruction.1 }}
+        </li>
+        {% else %}
+        <!-- Individual Instruction -->
+        <li class="flex flex-row items-center items-start space-x-2 text-gray-700 bg-gray-50 p-2 rounded-lg shadow-sm">
+          <!-- Step Number -->
+          <span class="bg-gray-300 text-gray-900 text-xl rounded-full font-bold w-10 h-10 flex items-center justify-center m-4">
+            {{ instruction.0 }}
+          </span>
+          <!-- Instruction Text -->
+          <span class="w-11/12 text-left">{{ instruction.1 }}</span>
+        </li>
+        {% endif %}
+      {% endfor %}
     </ol>
   </section>
+
+
+
+
 
   <!-- Notes -->
   {% if recipe.notes_list %}
