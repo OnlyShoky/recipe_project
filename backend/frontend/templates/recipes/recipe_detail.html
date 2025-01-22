@@ -207,76 +207,91 @@
       </section>
 
       <!-- Nutritional Details -->
-      <div id="nutritionDetails" class="hidden space-y-4">
-        {% comment %} Basic fields {% endcomment %}
-        <div class="flex justify-between border-b pb-2">
+      <div id="nutritionDetails" class="hidden space-y-3">
+        {% comment %} Basic fields {% endcomment %} {% if recipe.nutrition.calories != 0 %}
+        <div class="flex justify-between border-b pb-1">
           <span class="text-gray-700">Calories</span>
-          <span class="font-semibold text-gray-900">{{recipe.nutrition.calories |floatformat:"-2"}} kcal</span>
+          <span class="font-semibold text-gray-900">{{ recipe.nutrition.calories|floatformat:"-2" }} kcal</span>
         </div>
-        <div class="flex justify-between border-b pb-2">
+        {% endif %} {% if recipe.nutrition.carbohydrates != 0 %}
+        <div class="flex justify-between border-b pb-1">
           <span class="text-gray-700">Carbohydrate</span>
-          <span class="font-semibold text-gray-900">{{recipe.nutrition.carbohydrates |floatformat:"-2"}} g</span>
+          <span class="font-semibold text-gray-900">{{ recipe.nutrition.carbohydrates|floatformat:"-2" }} g</span>
         </div>
-        <div class="flex justify-between border-b pb-2">
+        {% endif %} {% if recipe.nutrition.protein != 0 %}
+        <div class="flex justify-between border-b pb-1">
           <span class="text-gray-700">Protein</span>
-          <span class="font-semibold text-gray-900">{{recipe.nutrition.protein |floatformat:"-2"}} g</span>
+          <span class="font-semibold text-gray-900">{{ recipe.nutrition.protein|floatformat:"-2" }} g</span>
         </div>
-        <div class="flex justify-between border-b pb-2">
+        {% endif %} {% if recipe.nutrition.fat != 0 %}
+        <div class="flex justify-between border-b pb-1">
           <span class="text-gray-700">Fat</span>
-          <span class="font-semibold text-gray-900">{{recipe.nutrition.fat |floatformat:"-2"}} g</span>
+          <span class="font-semibold text-gray-900">{{ recipe.nutrition.fat|floatformat:"-2" }} g</span>
         </div>
-        <div class="flex justify-between border-b pb-2">
+        {% endif %} {% if recipe.nutrition.saturated_fat != 0 %}
+        <div class="flex justify-between border-b pb-1">
           <span class="text-gray-700">Saturated Fat</span>
-          <span class="font-semibold text-gray-900">{{recipe.nutrition.saturated_fat |floatformat:"-2"}} g</span>
+          <span class="font-semibold text-gray-900">{{ recipe.nutrition.saturated_fat|floatformat:"-2" }} g</span>
         </div>
-        <div class="flex justify-between border-b pb-2">
+        {% endif %} {% if recipe.nutrition.trans_fat != 0 %}
+        <div class="flex justify-between border-b pb-1">
           <span class="text-gray-700">Trans Fat</span>
-          <span class="font-semibold text-gray-900">{{recipe.nutrition.trans_fat |floatformat:"-2"}} g</span>
+          <span class="font-semibold text-gray-900">{{ recipe.nutrition.trans_fat|floatformat:"-2" }} g</span>
         </div>
-        <div class="flex justify-between border-b pb-2">
+        {% endif %} {% if recipe.nutrition.fiber != 0 %}
+        <div class="flex justify-between border-b pb-1">
           <span class="text-gray-700">Fiber</span>
-          <span class="font-semibold text-gray-900">{{recipe.nutrition.fiber |floatformat:"-2"}} g</span>
+          <span class="font-semibold text-gray-900">{{ recipe.nutrition.fiber|floatformat:"-2" }} g</span>
         </div>
-        <div class="flex justify-between border-b pb-2">
+        {% endif %} {% if recipe.nutrition.sugar != 0 %}
+        <div class="flex justify-between border-b pb-1">
           <span class="text-gray-700">Sugar</span>
-          <span class="font-semibold text-gray-900">{{recipe.nutrition.sugar|floatformat:"-2" }} g</span>
+          <span class="font-semibold text-gray-900">{{ recipe.nutrition.sugar|floatformat:"-2" }} g</span>
         </div>
+        {% endif %}
 
-        <div class="border-b pb-2">
-        {% comment %} Minerals {% endcomment %}
-        <h3 class="text-sm font-semibold text-gray-700 pb-2">Minerals / Vitamins</h3>
-        <div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm text-gray-600">
-          <div class="flex justify-between">
-            <span>Sodium</span>
-            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.sodium|floatformat:"-2"}} mg</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Vitamin A</span>
-            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.vitamin_a |floatformat:"-2"}} mg</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Cholesterol</span>
-            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.cholesterol |floatformat:"-2"}} mg</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Vitamin C</span>
-            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.vitamin_c |floatformat:"-2"}} mg</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Potassium</span>
-            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.potassium |floatformat:"-2"}} mg</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Calcium</span>
-            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.calcium |floatformat:"-2"}} mg</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Iron</span>
-            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.iron |floatformat:"-2"}} mg</span>
+        <div class="border-b pb-1">
+          {% comment %} Minerals {% endcomment %}
+          <h3 class="text-sm font-semibold text-gray-700 pb-2">Minerals / Vitamins</h3>
+          <div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm text-gray-600">
+            {% if recipe.nutrition.sodium != 0 %}
+            <div class="flex justify-between">
+              <span>Sodium</span>
+              <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.sodium|floatformat:"-2"}} mg</span>
+            </div>
+            {% endif %} {% if recipe.nutrition.vitamin_a != 0 %}
+            <div class="flex justify-between">
+              <span>Vitamin A</span>
+              <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.vitamin_a |floatformat:"-2"}} mg</span>
+            </div>
+            {% endif %} {% if recipe.nutrition.cholesterol != 0 %}
+            <div class="flex justify-between">
+              <span>Cholesterol</span>
+              <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.cholesterol |floatformat:"-2"}} mg</span>
+            </div>
+            {% endif %} {% if recipe.nutrition.vitamin_c != 0 %}
+            <div class="flex justify-between">
+              <span>Vitamin C</span>
+              <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.vitamin_c |floatformat:"-2"}} mg</span>
+            </div>
+            {% endif %} {% if recipe.nutrition.potassium != 0 %}
+            <div class="flex justify-between">
+              <span>Potassium</span>
+              <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.potassium |floatformat:"-2"}} mg</span>
+            </div>
+            {% endif %} {% if recipe.nutrition.calcium != 0 %}
+            <div class="flex justify-between">
+              <span>Calcium</span>
+              <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.calcium |floatformat:"-2"}} mg</span>
+            </div>
+            {% endif %} {% if recipe.nutrition.iron != 0 %}
+            <div class="flex justify-between">
+              <span>Iron</span>
+              <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.iron |floatformat:"-2"}} mg</span>
+            </div>
+            {% endif %}
           </div>
         </div>
-      </div>
       </div>
 
       <!-- Disclaimer -->
