@@ -132,37 +132,21 @@
           <button onclick="updateServings(1)" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded-full" aria-label="Increase Servings">+</button>
         </div>
       </div>
+    </section>
 
+    <section>
+      <!-- Ingredients Grid -->
+      {% if recipe.ingredientsCategories %}
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 p-4">
+        {% for category in recipe.ingredientsCategories %}
+        <div class="flex flex-col space-y-3">
+          <!-- Category Title -->
+          {% if category %}
+          <h3 class="text-lg italic font-bold text-gray-600 lg:text-left">{{ category }}</h3>
+          {% endif %}
 
-      <section>
-        <!-- Ingredients Grid -->
-        {% if recipe.ingredientsCategories %}
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 p-4">
-          {% for category in recipe.ingredientsCategories %}
-          <div class="flex flex-col space-y-3">
-            <!-- Category Title -->
-            {% if category %}
-            <h3 class="text-lg italic font-bold text-gray-600 lg:text-left">{{ category }}</h3>
-            {% endif %}
-      
-            <!-- Ingredients List -->
-            <ul class="list-disc pl-6 space-y-2">
-                {% for ingredient in recipe.ingredients %} {% if ingredient.groupName == category %}
-                <li class="text-gray-700">
-                  <span class="ingredient-quantity" data-quantity="{{ ingredient.quantity }}" data-servings="{{ recipe.servings }}"> {{ ingredient.quantity |floatformat:"-2" }} </span>
-                  {{ ingredient.unit }}
-    
-                  <span class="ingredient-name"> of {{ ingredient.ingredient.name }}</span>
-                </li>
-                {% endif %} {% endfor %}
-            </ul>
-          </div>
-          {% endfor %}
-        </div>
-        {% else %}
-        <!-- No Categories: Grid of Ingredients -->
-        <ul class="list-disc pl-6 space-y-1">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
+          <!-- Ingredients List -->
+          <ul class="list-disc pl-6 space-y-2">
             {% for ingredient in recipe.ingredients %} {% if ingredient.groupName == category %}
             <li class="text-gray-700">
               <span class="ingredient-quantity" data-quantity="{{ ingredient.quantity }}" data-servings="{{ recipe.servings }}"> {{ ingredient.quantity |floatformat:"-2" }} </span>
@@ -171,12 +155,26 @@
               <span class="ingredient-name"> of {{ ingredient.ingredient.name }}</span>
             </li>
             {% endif %} {% endfor %}
-          </div>
-        </ul>
-        {% endif %}
-      </section>
-      
-      
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <!-- No Categories: Grid of Ingredients -->
+      <ul class="list-disc pl-6 space-y-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
+          {% for ingredient in recipe.ingredients %} {% if ingredient.groupName == category %}
+          <li class="text-gray-700">
+            <span class="ingredient-quantity" data-quantity="{{ ingredient.quantity }}" data-servings="{{ recipe.servings }}"> {{ ingredient.quantity |floatformat:"-2" }} </span>
+            {{ ingredient.unit }}
+
+            <span class="ingredient-name"> of {{ ingredient.ingredient.name }}</span>
+          </li>
+          {% endif %} {% endfor %}
+        </div>
+      </ul>
+      {% endif %}
+    </section>
   </div>
 
   <div class="w-1/3 h-1/3 flex flex-col items-center">
@@ -199,55 +197,86 @@
       <section class="mb-6">
         <div class="flex items-center justify-between">
           <h2 class="text-2xl font-semibold text-gray-800">Nutritional Information</h2>
+
           <!-- Expand/Collapse Button -->
           <button id="toggleNutrition" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded-full flex items-center" onclick="toggleNutrition()">
             <span id="toggleIcon" class="transition-transform transform rotate-0">&#9660;</span>
           </button>
         </div>
+        <h2 class="text-sm ml-6 text-gray-700">/ per serving</h2>
       </section>
 
       <!-- Nutritional Details -->
       <div id="nutritionDetails" class="hidden space-y-4">
-        <div class="flex justify-between border-b pb-2">
-          <span class="text-gray-700">Energy (kJ)</span>
-          <span class="font-semibold text-gray-900">0 kJ</span>
-        </div>
+        {% comment %} Basic fields {% endcomment %}
         <div class="flex justify-between border-b pb-2">
           <span class="text-gray-700">Calories</span>
-          <span class="font-semibold text-gray-900">545 kcal</span>
-        </div>
-        <div class="flex justify-between border-b pb-2">
-          <span class="text-gray-700">Fat</span>
-          <span class="font-semibold text-gray-900">17 g</span>
-        </div>
-        <div class="flex justify-between border-b pb-2">
-          <span class="text-gray-700">Saturated Fat</span>
-          <span class="font-semibold text-gray-900">5 g</span>
+          <span class="font-semibold text-gray-900">{{recipe.nutrition.calories |floatformat:"-2"}} kcal</span>
         </div>
         <div class="flex justify-between border-b pb-2">
           <span class="text-gray-700">Carbohydrate</span>
-          <span class="font-semibold text-gray-900">46 g</span>
-        </div>
-        <div class="flex justify-between border-b pb-2">
-          <span class="text-gray-700">Sugar</span>
-          <span class="font-semibold text-gray-900">6 g</span>
-        </div>
-        <div class="flex justify-between border-b pb-2">
-          <span class="text-gray-700">Dietary Fiber</span>
-          <span class="font-semibold text-gray-900">7 g</span>
+          <span class="font-semibold text-gray-900">{{recipe.nutrition.carbohydrates |floatformat:"-2"}} g</span>
         </div>
         <div class="flex justify-between border-b pb-2">
           <span class="text-gray-700">Protein</span>
-          <span class="font-semibold text-gray-900">52 g</span>
+          <span class="font-semibold text-gray-900">{{recipe.nutrition.protein |floatformat:"-2"}} g</span>
         </div>
         <div class="flex justify-between border-b pb-2">
-          <span class="text-gray-700">Cholesterol</span>
-          <span class="font-semibold text-gray-900">114 mg</span>
+          <span class="text-gray-700">Fat</span>
+          <span class="font-semibold text-gray-900">{{recipe.nutrition.fat |floatformat:"-2"}} g</span>
         </div>
-        <div class="flex justify-between">
-          <span class="text-gray-700">Sodium</span>
-          <span class="font-semibold text-gray-900">355 mg</span>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-gray-700">Saturated Fat</span>
+          <span class="font-semibold text-gray-900">{{recipe.nutrition.saturated_fat |floatformat:"-2"}} g</span>
         </div>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-gray-700">Trans Fat</span>
+          <span class="font-semibold text-gray-900">{{recipe.nutrition.trans_fat |floatformat:"-2"}} g</span>
+        </div>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-gray-700">Fiber</span>
+          <span class="font-semibold text-gray-900">{{recipe.nutrition.fiber |floatformat:"-2"}} g</span>
+        </div>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-gray-700">Sugar</span>
+          <span class="font-semibold text-gray-900">{{recipe.nutrition.sugar|floatformat:"-2" }} g</span>
+        </div>
+
+        <div class="border-b pb-2">
+        {% comment %} Minerals {% endcomment %}
+        <h3 class="text-sm font-semibold text-gray-700 pb-2">Minerals / Vitamins</h3>
+        <div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm text-gray-600">
+          <div class="flex justify-between">
+            <span>Sodium</span>
+            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.sodium|floatformat:"-2"}} mg</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Vitamin A</span>
+            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.vitamin_a |floatformat:"-2"}} mg</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Cholesterol</span>
+            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.cholesterol |floatformat:"-2"}} mg</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Vitamin C</span>
+            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.vitamin_c |floatformat:"-2"}} mg</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Potassium</span>
+            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.potassium |floatformat:"-2"}} mg</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Calcium</span>
+            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.calcium |floatformat:"-2"}} mg</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Iron</span>
+            <span class="font-medium font-semibold text-gray-700">{{recipe.nutrition.iron |floatformat:"-2"}} mg</span>
+          </div>
+        </div>
+      </div>
       </div>
 
       <!-- Disclaimer -->
@@ -303,34 +332,26 @@
     <h2 class="text-3xl font-bold text-gray-800 mb-6 text-left">Instructions</h2>
     <!-- Instructions List -->
     <ol class="space-y-6 p-2">
-      {% for instruction in recipe.instructions_list %}
-        {% if ':' in instruction.1 %}
-        <!-- Group Heading -->
-        <li class="text-xl font-bold text-gray-900 bg-gray-200 p-4 rounded-lg">
-          {{ instruction.1 }}
-        </li>
-        {% else %}
-        <!-- Individual Instruction -->
-        <li class="flex flex-row items-center items-start space-x-2 text-gray-700 bg-gray-50 p-2 rounded-lg shadow-sm">
-          <!-- Step Number -->
-          <span class="bg-gray-300 text-gray-900 text-xl rounded-full font-bold w-10 h-10 flex items-center justify-center m-4">
-            {{ instruction.0 }}
-          </span>
-          <!-- Instruction Text -->
-          <span class="w-11/12 text-left">{{ instruction.1 }}</span>
-        </li>
-        {% endif %}
-      {% endfor %}
+      {% for instruction in recipe.instructions_list %} {% if ':' in instruction.1 %}
+      <!-- Group Heading -->
+      <li class="text-xl font-bold text-gray-900 bg-gray-200 p-4 rounded-lg">{{ instruction.1 }}</li>
+      {% else %}
+      <!-- Individual Instruction -->
+      <li class="flex flex-row items-center items-start space-x-2 text-gray-700 bg-gray-50 p-2 rounded-lg shadow-sm">
+        <!-- Step Number -->
+        <span class="bg-gray-300 text-gray-900 text-xl rounded-full font-bold w-10 h-10 flex items-center justify-center m-4"> {{ instruction.0 }} </span>
+        <!-- Instruction Text -->
+        <span class="w-11/12 text-left">{{ instruction.1 }}</span>
+      </li>
+      {% endif %} {% endfor %}
     </ol>
   </section>
-
 </div>
 
 {% if recipe.notes_list %}
 <div class="bg-white shadow-md rounded-lg p-10 relative w-full">
-
   <!-- Notes -->
-  
+
   <section class="mb-6">
     <h2 class="text-3xl font-bold text-gray-800 mb-6 text-left">Notes</h2>
 
@@ -340,8 +361,5 @@
       {% endfor %}
     </ul>
   </section>
-  
 </div>
-{% endif %}
-
-{% endblock %}
+{% endif %} {% endblock %}
