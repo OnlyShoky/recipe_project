@@ -22,10 +22,11 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('recipes/', views.recipe_list, name='recipe_list'),
     path('recipes/<uuid:id>/', views.recipe_detail, name='recipe_detail'),
+    path('search/', views.search_recipes, name='search_recipes'),
     
     
     # ### Backend Routes ###
-    # path('api/', include(router.urls)),
+    path('api/', include(router.urls)),
     # ### Ingredient API Routes ###
     path('api/ingredients/', IngredientAPIView.as_view(), name='ingredient-list'),
     path('api/ingredients/<uuid:id>/', IngredientDetailAPIView.as_view(), name='ingredient-detail'),

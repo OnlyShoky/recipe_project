@@ -6,11 +6,31 @@ from .models import Course, Cuisine, Recipe, RecipeIngredient, Tag
 from .serializers import RecipeSerializer
 from ingredients.models import Ingredient
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from collections import Counter
 import re
+
+def search_recipes(request):
+    query = request.GET.get('q')  # Get the search query from the request
+    recipes = Recipe.objects.all()  # Default: show all recipes
+
+    if query:
+        recipes = Recipe.objects.filter(
+            Q(title__icontains=query) 
+        )
+        
+    if recipes.count() == 1:
+        recipe = recipes.first()
+        return redirect('recipe_detail', recipe.id)
+
+    context = {
+        'recipes': recipes,
+        'query': query
+    }
+    return render(request, 'search_results.html', context)
 
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
