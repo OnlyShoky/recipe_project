@@ -159,8 +159,8 @@ def home(request):
     ingredients = [recipeIngredient.ingredient for recipeIngredient in RecipeIngredient.objects.all()]
     ingredients = [ingredient[0] for ingredient in Counter(ingredients).most_common(8)]
     
-    cuisines = Cuisine.objects.all()
     tags = Tag.objects.all()
+    cuisines = Cuisine.objects.all()
     courses = Course.objects.all()
     total_recipes = Recipe.objects.count()
     total_ingredients = Ingredient.objects.count()
