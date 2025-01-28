@@ -1,149 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Recipe App{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
     <style>
-        body {
-            background-color: #feeed2; /* Soft sepia background */
-        }
+      body {
+        background-color: #feeed2; /* Soft sepia background */
+      }
 
-        .bg-sepia-700 {
-            background-color: #dbc0a1; /* Dark sepia for the header and footer */
-        }
-        .bg-sepia-600 {
-            background-color: #edd3b6; /* Dark sepia for the header and footer */
-        }
-        .bg-sepia-500 {
-            background-color: #fae5c0; /* Dark sepia for the header and footer */
-        }
-        .bg-sepia-400 {
-            background-color: #feeed2; /* Dark sepia for the header and footer */
-        }
-        .bg-sepia-300 {
-            background-color:  #fff3dd; /* Dark sepia for the header and footer */
-        }
-        .bg-sepia-200 {
-            background-color: #fff5e4; /* Dark sepia for the header and footer */
-        }
-        .bg-sepia-100 {
-            background-color: #fffcf6; /* Dark sepia for the header and footer */
-        }
+      .bg-sepia-700 {
+        background-color: #dbc0a1; /* Dark sepia for the header and footer */
+      }
+      .bg-sepia-600 {
+        background-color: #edd3b6; /* Dark sepia for the header and footer */
+      }
+      .bg-sepia-500 {
+        background-color: #fae5c0; /* Dark sepia for the header and footer */
+      }
+      .bg-sepia-400 {
+        background-color: #feeed2; /* Dark sepia for the header and footer */
+      }
+      .bg-sepia-300 {
+        background-color: #fff3dd; /* Dark sepia for the header and footer */
+      }
+      .bg-sepia-200 {
+        background-color: #fff5e4; /* Dark sepia for the header and footer */
+      }
+      .bg-sepia-100 {
+        background-color: #fffcf6; /* Dark sepia for the header and footer */
+      }
 
-        .bg-azure-200 {
-            background-color: #D9EAFD; /* Dark sepia for the header and footer */
-        }
-        .bg-azure-100 {
-            background-color: #F8FAFC; /* Dark sepia for the header and footer */
-        }
+      .bg-azure-200 {
+        background-color: #d9eafd; /* Dark sepia for the header and footer */
+      }
+      .bg-azure-100 {
+        background-color: #f8fafc; /* Dark sepia for the header and footer */
+      }
 
-        .text-sepia-warn {
-            color: #6D2323; /* Light sepia for text */
-        }
+      .text-sepia-warn {
+        color: #6d2323; /* Light sepia for text */
+      }
 
-        .text-normal {
-            color: black; /* Light sepia for text */
-        }
+      .text-normal {
+        color: black; /* Light sepia for text */
+      }
 
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
+      .dropdown:hover .dropdown-menu {
+        display: block;
+      }
 
-        .icon {
-            width: 1.5rem; /* Matches the `w-6` size (6 x 0.25rem) */
-            height: 1.5rem; /* Matches the `h-6` size (6 x 0.25rem) */
-            fill: none;
-            stroke: currentColor;
-            vertical-align: middle;
-            stroke-width: 2;
-        }
+      .icon {
+        width: 1.5rem; /* Matches the `w-6` size (6 x 0.25rem) */
+        height: 1.5rem; /* Matches the `h-6` size (6 x 0.25rem) */
+        fill: none;
+        stroke: currentColor;
+        vertical-align: middle;
+        stroke-width: 2;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Header -->
     <header class="text-normal py-4">
-        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-            <!-- Logo -->
-            <h1 class="text-2xl font-bold">
-                <a href="/" class="hover:text-gray-800 transition">My Recipe App</a>
-            </h1>
+      <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+        <!-- Logo -->
+        <h1 class="text-2xl font-bold">
+          <a href="/" class="hover:text-gray-800 transition">My Recipe App</a>
+        </h1>
 
-            
-            <form method="get" action="{% url 'search_recipes' %}" class="flex items-center bg-sepia-100 rounded-full px-4 py-2 focus-within:ring-2 ring-sepia-500 transition-shadow">
-                <input 
-                    type="text" 
-                    name="q" 
-                    placeholder="Search recipes..." 
-                    class="w-full bg-transparent outline-none placeholder-gray-600 text-normal"
-                    aria-label="Search recipes"
-                >
-                <button type="submit" class="ml-2 text-sepia-700 hover:text-sepia-500 transition-colors">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form> 
-            
-            <!-- Navigation -->
-            <nav class="flex space-x-4 items-center">
-                
-                <!-- Button to Recipe List -->
-                <a href="{% url 'recipe_list' %}" 
-                   class="text-sepia-light hover:text-gray-800 font-medium transition">
-                   Recipes
-                </a>
+        <form method="get" action="{% url 'search_recipes' %}" class="flex items-center bg-sepia-100 rounded-full px-4 py-2 focus-within:ring-2 ring-sepia-500 transition-shadow">
+          <input type="text" name="q" placeholder="Search recipes..." class="w-full bg-transparent outline-none placeholder-gray-600 text-normal" aria-label="Search recipes" />
+          <button type="submit" class="ml-2 text-sepia-700 hover:text-sepia-500 transition-colors">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
 
+        <!-- Navigation -->
+        <nav class="flex space-x-2 items-center">
+          <div class="flex bg-sepia-100 w-fit shadow-box-up rounded-xl dark:bg-box-dark dark:shadow-box-dark-out">
+            <div class="dark:shadow-buttons-box-dark rounded-2xl w-full md:px-1">
+              <button title="Go to post list page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
                 <!-- Button to API -->
-                <a href="/api/" 
-                   class="text-sepia-light hover:text-gray-800 font-medium transition">
-                   API
-                </a>
-
-                <!-- Dropdown Menu for Tags -->
-                <div class="relative dropdown">
-                    <button class="text-sepia-light hover:text-gray-800 font-medium transition focus:outline-none">
-                        Tags
-                    </button>
-                    <div class="absolute hidden dropdown-menu bg-white shadow-lg rounded mt-2 py-2 w-48 z-50">
-                        {% for tag in tags %}
-                        <a href="{% url 'recipe_list' %}?tag={{ tag.name }}" 
-                           class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
-                           {{ tag.name }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-
+                <a href="{% url 'recipe_list' %}"> Recipes </a>
+              </button>
+              <button title="Go to post API page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
+                <!-- Button to API -->
+          <a href="/api/"> API </a>
+              </button>
+              <button title="Go to post list page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
                 <!-- PayPal Button -->
-                <a href="https://www.paypal.com/yourlink" 
-                   class="text-sepia-light hover:text-gray-800 font-medium transition"
-                   target="_blank"
-                   title="Support me on PayPal">
-                    <i class="fab fa-paypal"></i>
-                </a>
-
-                <!-- Buy Me a Coffee Button -->
-                <a href="https://www.buymeacoffee.com/yourlink" 
-                   class="text-sepia-light hover:text-gray-800 font-medium transition"
-                   target="_blank"
-                   title="Buy me a coffee">
+          <a href="https://www.paypal.com/donate/?hosted_button_id=P49L3AK8RDVMN" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Support me on PayPal">
+            <i class="fab fa-paypal"></i>
+          </a>
+              </button>
+              <button title="Go to about me page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
+                <a href="https://www.buymeacoffee.com/shoky" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Buy me a coffee">
                     <i class="fas fa-coffee"></i>
-                </a>
-                
-            </nav>
-        </div>
+                  </a>
+              </button>
+            </div>
+          </div>
+
+        
+
+          {% comment %} <!-- Button to Recipe List -->
+          <a href="{% url 'recipe_list' %}" class="px-4 py-2 text-sepia-light bg-sepia-200 rounded-lg font-medium hover:bg-sepia-200 hover:text-gray-800 hover:shadow-md transition-all duration-300"> Recipes </a>
+
+          <!-- Button to API -->
+          <a href="/api/" class="text-sepia-light hover:text-gray-800 font-medium transition"> API </a>
+
+          <!-- Dropdown Menu for Tags -->
+          <div class="relative dropdown">
+            <button class="text-sepia-light hover:text-gray-800 font-medium transition focus:outline-none">Tags</button>
+            <div class="absolute hidden dropdown-menu bg-white shadow-lg rounded mt-2 py-2 w-48 z-50">
+              {% for tag in tags %}
+              <a href="{% url 'recipe_list' %}?tag={{ tag.name }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"> {{ tag.name }} </a>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- PayPal Button -->
+          <a href="https://www.paypal.com/yourlink" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Support me on PayPal">
+            <i class="fab fa-paypal"></i>
+          </a>
+
+
+          <!-- Buy Me a Coffee Button -->
+          <a href="https://www.buymeacoffee.com/yourlink" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Buy me a coffee">
+            <i class="fas fa-coffee"></i>
+          </a> {% endcomment %}
+        </nav>
+      </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
-        {% block content %}
-        {% endblock %}
-    </main>
+    <main class="max-w-7xl mx-auto px-4 py-6">{% block content %} {% endblock %}</main>
 
     <!-- Footer -->
     <footer class="bg-sepia text-sepia-light py-4 text-center">
-        <p>&copy; 2024 My Recipe App. All rights reserved.</p>
+      <p>&copy; 2024 My Recipe App. All rights reserved.</p>
     </footer>
-</body>
+  </body>
 </html>
