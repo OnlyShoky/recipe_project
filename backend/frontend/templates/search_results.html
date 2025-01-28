@@ -6,6 +6,7 @@
   <ul class="p-6">
     {% for recipe in recipes %}
     <li class="mb-4">
+      <a href="{% url 'recipe_detail' recipe.id %}" class="text-gray-800 ">
       <div class="flex items-center space-x-4">
         {% if recipe.image %}
         <img src="{{ recipe.image_card.url }}" alt="{{ recipe.title }}" class="w-16 h-16 object-cover" />
@@ -13,10 +14,11 @@
         <div class="h-48 bg-gray-300"></div>
         {% endif %}
         <div class="">
-          <a href="{% url 'recipe_detail' recipe.id %}" class="text-gray-800 font-semibold">{{ recipe.title }}</a>
+          <p class = "font-semibold text-gray-800">{{ recipe.title }} </p>
           <p class="text-gray-500">{{ recipe.description|truncatewords:20 }}</p>
         </div>
       </div>
+    </a>
     </li>
     {% endfor %}
   </ul>

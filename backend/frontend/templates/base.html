@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Recipe App{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #feeed2; /* Soft sepia background */
@@ -70,18 +71,23 @@
                 <a href="/" class="hover:text-gray-800 transition">My Recipe App</a>
             </h1>
 
-            <form method="get" action="{% url 'search_recipes' %}" class="flex border border-gray-900 rounded-lg">
+            
+            <form method="get" action="{% url 'search_recipes' %}" class="flex items-center bg-sepia-100 rounded-full px-4 py-2 focus-within:ring-2 ring-sepia-500 transition-shadow">
                 <input 
                     type="text" 
                     name="q" 
                     placeholder="Search recipes..." 
-                    class="p-1 rounded-l-lg">
-                <button type="submit" class="bg-orange-300 hover:bg-orange-400 border-l border-gray-900 text-black px-3 py-1 rounded-r-lg">Search</button>
-            </form>
-            
+                    class="w-full bg-transparent outline-none placeholder-gray-600 text-normal"
+                    aria-label="Search recipes"
+                >
+                <button type="submit" class="ml-2 text-sepia-700 hover:text-sepia-500 transition-colors">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form> 
             
             <!-- Navigation -->
             <nav class="flex space-x-4 items-center">
+                
                 <!-- Button to Recipe List -->
                 <a href="{% url 'recipe_list' %}" 
                    class="text-sepia-light hover:text-gray-800 font-medium transition">
@@ -108,6 +114,23 @@
                         {% endfor %}
                     </div>
                 </div>
+
+                <!-- PayPal Button -->
+                <a href="https://www.paypal.com/yourlink" 
+                   class="text-sepia-light hover:text-gray-800 font-medium transition"
+                   target="_blank"
+                   title="Support me on PayPal">
+                    <i class="fab fa-paypal"></i>
+                </a>
+
+                <!-- Buy Me a Coffee Button -->
+                <a href="https://www.buymeacoffee.com/yourlink" 
+                   class="text-sepia-light hover:text-gray-800 font-medium transition"
+                   target="_blank"
+                   title="Buy me a coffee">
+                    <i class="fas fa-coffee"></i>
+                </a>
+                
             </nav>
         </div>
     </header>
