@@ -60,13 +60,11 @@
         vertical-align: middle;
         stroke-width: 2;
       }
-      
-      
     </style>
   </head>
-  <body > 
+  <body>
     <!-- Header -->
-    <header class="text-normal  ">
+    <header class="text-normal">
       <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center border-b border-gray-300">
         <!-- Logo -->
         <h1 class="text-2xl font-bold">
@@ -90,22 +88,21 @@
               </button>
               <button title="Go to post API page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
                 <!-- Button to API -->
-          <a href="/api/"> API </a>
+                <a href="/api/"> API </a>
               </button>
               <button title="Go to post list page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
                 <!-- PayPal Button -->
-          <a href="https://www.paypal.com/donate/?hosted_button_id=P49L3AK8RDVMN" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Support me on PayPal">
-            <i class="fab fa-paypal"></i>
-          </a>
+                <a href="https://www.paypal.com/donate/?hosted_button_id=P49L3AK8RDVMN" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Support me on PayPal">
+                  <i class="fab fa-paypal"></i>
+                </a>
               </button>
               <button title="Go to about me page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
                 <a href="https://www.buymeacoffee.com/shoky" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Buy me a coffee">
-                    <i class="fas fa-coffee"></i>
-                  </a>
+                  <i class="fas fa-coffee"></i>
+                </a>
               </button>
             </div>
           </div>
-
         </nav>
       </div>
     </header>
@@ -114,7 +111,18 @@
     <main class="max-w-7xl mx-auto px-4 py-6">{% block content %} {% endblock %}</main>
 
     <!-- Footer -->
-    <footer class="bg-sepia text-sepia-light py-4 text-center">
+    <footer class="bg-sepia text-sepia-light py-4 text-center items-center">
+      <!-- Donation Buttons -->
+      <div class="flex justify-center space-x-4 mt-10 mb-4">
+        <a href="https://www.paypal.com/donate/?hosted_button_id=P49L3AK8RDVMN" target="_blank" class="flex items-center px-6 py-2 bg-sepia-600 text-black shadow-md hover:shadow-lg font-semibold rounded-lg transform transition-transform hover:scale-105 transition-colors duration-300">
+          <i class="fab fa-paypal mr-2"></i>
+          Support via PayPal
+        </a>
+        <a href="https://www.buymeacoffee.com/shoky" target="_blank" class="flex items-center px-6 py-2 bg-sepia-700 text-black shadow-md hover:shadow-lg font-semibold rounded-lg transform transition-transform hover:scale-105 transition-colors duration-300">
+          <i class="fas fa-coffee mr-2"></i>
+          Buy Me a Coffee
+        </a>
+      </div>
       <p>&copy; 2024 My Recipe App. All rights reserved.</p>
     </footer>
   </body>

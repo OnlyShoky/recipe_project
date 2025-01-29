@@ -8,10 +8,12 @@ from ingredients.models import Ingredient
 
 from django.shortcuts import redirect, render, get_object_or_404
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count
+
 
 from collections import Counter
 import re
+import time
 
 def search_recipes(request):
     query = request.GET.get('q')  # Get the search query from the request
@@ -151,19 +153,28 @@ def recipe_list(request):
     return render(request, 'recipes/recipe_list.html', context)
 
 
+
+
+
 def home(request):
+    start = time.perf_counter()
     # Fetch the last 5 recipes ordered by the activate_date
     recipes = Recipe.objects.all().order_by('-created')[:8]
-    ingredients = Ingredient.objects.all()
-        
-    ingredients = [recipeIngredient.ingredient for recipeIngredient in RecipeIngredient.objects.all()]
-    ingredients = [ingredient[0] for ingredient in Counter(ingredients).most_common(8)]
+    ingredients = (
+        RecipeIngredient.objects.values('ingredient__name')
+        .annotate(count=Count('ingredient'))
+        .order_by('-count')[:8]  # Get the top 8 most common ingredients
+    )
+    ingredients = [ingredient['ingredient__name'] for ingredient in ingredients]
+
     
     tags = Tag.objects.all()
     cuisines = Cuisine.objects.all()
     courses = Course.objects.all()
     total_recipes = Recipe.objects.count()
     total_ingredients = Ingredient.objects.count()
+    
+    print(f" total time took {time.perf_counter() - start:.5f} seconds")
     return render(request, 'home.html', {'recipes': recipes,   'cuisines': cuisines, 'tags': tags, 'courses': courses, 'ingredients': ingredients,  'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
 
 
