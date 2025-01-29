@@ -100,7 +100,10 @@ USE_TZ = True
 
 # Directory to store user-uploaded files (e.g., images)
 
-STATIC_URL = "static/"
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path where media files are stored
 
@@ -138,4 +141,5 @@ REST_FRAMEWORK = {
         'user': '5/minute',  # 5 requests per minute per user
         'anon': '2/minute',  # 2 requests per minute per anonymous user
     },
+    
 }

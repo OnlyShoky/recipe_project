@@ -1,0 +1,69 @@
+.navbar {
+  font-size: medium; /* Soft sepia background */
+  background-color: #feeed2;
+  color :black !important ; 
+}
+
+a{
+    color : None !important  ;
+}
+
+.container {
+    background-color: #feeed2;
+
+} 
+
+body {
+  background-color: #feeed2; /* Soft sepia background */
+  color :black !important ;
+}
+
+.bg-sepia-700 {
+  background-color: #dbc0a1; /* Dark sepia for the header and footer */
+}
+.bg-sepia-600 {
+  background-color: #edd3b6; /* Dark sepia for the header and footer */
+}
+.bg-sepia-500 {
+  background-color: #fae5c0; /* Dark sepia for the header and footer */
+}
+.bg-sepia-400 {
+  background-color: #feeed2; /* Dark sepia for the header and footer */
+}
+.bg-sepia-300 {
+  background-color: #fff3dd; /* Dark sepia for the header and footer */
+}
+.bg-sepia-200 {
+  background-color: #fff5e4; /* Dark sepia for the header and footer */
+}
+.bg-sepia-100 {
+  background-color: #fffcf6; /* Dark sepia for the header and footer */
+}
+
+.bg-azure-200 {
+  background-color: #d9eafd; /* Dark sepia for the header and footer */
+}
+.bg-azure-100 {
+  background-color: #f8fafc; /* Dark sepia for the header and footer */
+}
+
+.text-sepia-warn {
+  color: #6d2323; /* Light sepia for text */
+}
+
+.text-normal {
+  color: black; /* Light sepia for text */
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.icon {
+  width: 1.5rem; /* Matches the `w-6` size (6 x 0.25rem) */
+  height: 1.5rem; /* Matches the `h-6` size (6 x 0.25rem) */
+  fill: none;
+  stroke: currentColor;
+  vertical-align: middle;
+  stroke-width: 2;
+}
