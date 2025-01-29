@@ -1,16 +1,12 @@
-{% extends "rest_framework/base.html" %} {% block branding %}
-<div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center border-b border-gray-300 text-normal">
+{% extends "rest_framework/base.html" %} 
+{% block navbar %}
+<div class="px-4 py-4 flex justify-between items-center border-b border-gray-300 text-normal">
   <!-- Logo -->
   <h1 class="text-2xl font-bold ">
     <a href="/" class="hover:text-gray-800 transition text-normal">My Recipe App</a>
   </h1>
 
-  <form method="get" action="{% url 'search_recipes' %}" class="flex items-center bg-sepia-100 rounded-full px-4 py-2 focus-within:ring-2 ring-sepia-500 transition-shadow">
-    <input type="text" name="q" placeholder="Search recipes..." class="w-full bg-transparent outline-none placeholder-gray-500 text-normal" aria-label="Search recipes" />
-    <button type="submit" class="ml-2 text-sepia-700 hover:text-sepia-500 transition-colors">
-      <i class="fas fa-search"></i>
-    </button>
-  </form>
+
 
   <!-- Navigation -->
   <nav class="flex space-x-2 items-center">
@@ -35,17 +31,33 @@
             <i class="fas fa-coffee"></i>
           </a>
         </button>
+        {% block userlinks %}
+        
+        {% endblock %}
+
       </div>
     </div>
   </nav>
 </div>
-{% endblock %} {% block breadcrumbs %} {{ block.super }} {# This keeps the default breadcrumb navigation #} {% endblock %} {% block content %}
-<main class="max-w-7xl mx-auto px-4 py-6">
+{% endblock %} 
+
+
+{% block breadcrumbs %}
+{{ block.super }}{# This keeps the default breadcrumb navigation #} 
+{% endblock %}
+
+{% block bodyclass %}
+max-w-7xl mx-auto bg-none bg-sepia-400
+{% endblock %}
+{% block body %}
   {{ block.super }} {# This keeps the default breadcrumb navigation #}
-</main>
-{% endblock %} {% block style %} {{ block.super }} {# This keeps the default styles #}
+{% endblock %} 
+
+{% block style %} 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="/static/custom.css" />
+{{ block.super }} {# This keeps the default breadcrumb navigation #}
+
 
 {% endblock %}
