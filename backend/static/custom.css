@@ -13,6 +13,10 @@ a:hover {
   color: black !important;
 }
 
+.text-black{
+    color: black !important;
+}
+
 .text-gray-500 {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity, 1));
@@ -21,6 +25,15 @@ a:hover {
 .font-bold {
   font-weight: 600;
 }
+
+.items-center {
+  align-items: center !important;
+}
+
+.navlinks {
+    font-size: 14px;
+    padding-top: 15px;
+}  
 
 button {
   font-weight: bold;
@@ -63,16 +76,15 @@ h1 {
   font-size: 1.5rem !important;
   line-height: 2rem !important;
 }
-
-.pull-right {
-  float: right !important;
-}
-
 .btn-primary {
   background-color: #d4a276 !important;
   transition: background-color 0.3s ease; /* Smooth transition */
-  color: black;
+  color: black !important;
   border: none;
+}
+
+.mt-4 {
+  margin-top: 1rem !important;
 }
 
 .btn-primary:hover {
@@ -95,6 +107,7 @@ h1 {
 }
 .bg-sepia-400 {
   background-color: #feeed2; /* Dark sepia for the header and footer */
+  background-image: none;
 }
 .bg-sepia-300 {
   background-color: #fff3dd; /* Dark sepia for the header and footer */
@@ -132,4 +145,78 @@ h1 {
   stroke: currentColor;
   vertical-align: middle;
   stroke-width: 2;
+}
+
+
+
+
+/* RECIP API CSS STYLE */
+
+.api-doc-container {
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.doc-header {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.doc-title {
+    font-size: 2rem;
+    color: #333;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: #222;
+    margin-top: 20px;
+}
+
+.request-method {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.endpoint-url {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #444;
+}
+
+.api-block {
+    margin-top: 20px;
+}
+
+.parameter-list, .header-list {
+    list-style: none;
+    padding: 0;
+}
+
+.parameter-list li, .header-list li {
+    background: #f8f9fa;
+    padding: 10px;
+    border-left: 5px solid #007bff;
+    margin-bottom: 10px;
+}
+
+.parameter-list h5, .header-list h5 {
+    margin: 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+.required {
+    color: red;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.optional {
+    color: #777;
+    font-weight: bold;
+    font-size: 0.9rem;
 }

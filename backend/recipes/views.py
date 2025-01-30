@@ -184,8 +184,10 @@ def home(request):
 class RecipeAPIView(views.APIView):
     """
     APIView to retrieve a list of the last 5 recipes added.
+    
     """
     throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    testeo = "hola"
     def get(self, request, *args, **kwargs):
         recipes = Recipe.objects.all().order_by('created')[:5]  # Fetch last 5 recipes
         serializer = RecipeSerializer(recipes, many=True)

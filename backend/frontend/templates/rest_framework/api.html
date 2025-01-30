@@ -6,15 +6,14 @@
 <div class="header">
   <!-- Logo -->
   <h1 class="text-2xl font-bold ">
-    <a href="/" class="hover:text-gray-800 transition text-normal">My Recipe App</a>
+    <a href="/" class="hover:text-gray-800 transition text-black">My Recipe App</a>
   </h1>
 
 
-
   <!-- Navigation -->
-  <nav class="flex space-x-2 items-center">
+  <nav class="flex space-x-2 items-center navlinks">
     <div class="flex w-fit shadow-box-up rounded-xl dark:bg-box-dark dark:shadow-box-dark-out">
-      <div class="dark:shadow-buttons-box-dark rounded-2xl w-full">
+      <div class="dark:shadow-buttons-box-dark rounded-2xl w-full ">
         <button title="Go to post list page" class="text-gray-500 font-bold">
           <!-- Button to API -->
           <a href="{% url 'recipe_list' %}"> Recipes </a>
@@ -46,9 +45,69 @@
 
 
 {% block bodyclass %}
-bg-sepia-400
+  bg-sepia-400
 {% endblock %}
 
+{% comment %} {% block content %}
+  {% if name == 'Api Root' %}
+  <div class="request-info mt-4" style="clear: both" aria-label="{% trans "request info" %}">
+    <pre class="prettyprint"><b>{{ request.method }}</b> {{ request.get_full_path }}</pre>
+  </div>  
+  
+  {% else%}
+    {{ block.super }}
+
+  {% endif%}
+
+{% endblock %} {% endcomment %}
+
+{% block content %}
+  {% if name == 'Api Root' %}
+  <div class="request-info mt-4" style="clear: both" aria-label="{% trans "request info" %}">
+    <pre class="prettyprint"><b>{{ request.method }}</b> {{ request.get_full_path }}</pre>
+  </div>  
+
+  <div class="api-doc-container">
+    <div class="doc-header">
+      <h1 class="doc-title">Recipe API</h1>
+      <p>The Recipe API provides access to hundreds of thousands of creative recipes from all cuisines.</p>
+    </div>
+
+    <h2 class="section-title">/v1/recipe <span class="request-method">GET</span></h2>
+    <p class="endpoint-url"><code>https://api.api-ninjas.com/v1/recipe</code></p>
+    <p>Get a list of recipes for a given search query. Returns at most <strong>10</strong> results. Use the <code>offset</code> parameter for pagination.</p>
+
+    <hr>
+
+    <div class="api-block">
+      <h4>Parameters</h4>
+      <ul class="parameter-list">
+        <li>
+          <h5><strong><code>query</code></strong> <span class="required">required</span></h5>
+          <p>Query text to search.</p>
+        </li>
+        <li>
+          <h5><strong><code>offset</code></strong> <span class="optional">optional</span></h5>
+          <p>Number of results to offset for pagination.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="api-block">
+      <h4>Headers</h4>
+      <ul class="header-list">
+        <li>
+          <h5><strong><code>X-Api-Key</code></strong> <span class="required">required</span></h5>
+          <p>API Key associated with your account.</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  {% else %}
+    {{ block.super }}
+  {% endif %}
+{% endblock %}
 
 
 
