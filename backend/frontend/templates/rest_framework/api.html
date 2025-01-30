@@ -1,6 +1,9 @@
 {% extends "rest_framework/base.html" %} 
+{% load static %}
+{% load i18n %}
+{% load rest_framework %}
 {% block navbar %}
-<div class="px-4 py-4 flex justify-between items-center border-b border-gray-300 text-normal">
+<div class="header">
   <!-- Logo -->
   <h1 class="text-2xl font-bold ">
     <a href="/" class="hover:text-gray-800 transition text-normal">My Recipe App</a>
@@ -12,21 +15,21 @@
   <nav class="flex space-x-2 items-center">
     <div class="flex w-fit shadow-box-up rounded-xl dark:bg-box-dark dark:shadow-box-dark-out">
       <div class="dark:shadow-buttons-box-dark rounded-2xl w-full">
-        <button title="Go to post list page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
+        <button title="Go to post list page" class="text-gray-500 font-bold">
           <!-- Button to API -->
           <a href="{% url 'recipe_list' %}"> Recipes </a>
         </button>
-        <button title="Go to post API page" class="text-sepia-light font-semibold hover:text-black text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
+        <button title="Go to post API page" class="text-gray-500 font-bold">
           <!-- Button to API -->
           <a href="/api/"> API </a>
         </button>
-        <button title="Go to post list page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
+        <button title="Go to post list page" class="text-gray-500">
           <!-- PayPal Button -->
           <a href="https://www.paypal.com/donate/?hosted_button_id=P49L3AK8RDVMN" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Support me on PayPal">
             <i class="fab fa-paypal"></i>
           </a>
         </button>
-        <button title="Go to about me page" class="text-sepia-light font-semibold hover:text-black dark:text-gray-500 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0">
+        <button title="Go to about me page" class="text-gray-500 ">
           <a href="https://www.buymeacoffee.com/shoky" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Buy me a coffee">
             <i class="fas fa-coffee"></i>
           </a>
@@ -42,22 +45,18 @@
 {% endblock %} 
 
 
-{% block breadcrumbs %}
-{{ block.super }}{# This keeps the default breadcrumb navigation #} 
+{% block bodyclass %}
+bg-sepia-400
 {% endblock %}
 
-{% block bodyclass %}
-max-w-7xl mx-auto bg-none bg-sepia-400
-{% endblock %}
-{% block body %}
-  {{ block.super }} {# This keeps the default breadcrumb navigation #}
-{% endblock %} 
+
+
 
 {% block style %} 
-<script src="https://cdn.tailwindcss.com"></script>
+{% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="/static/custom.css" />
-{{ block.super }} {# This keeps the default breadcrumb navigation #}
 
+<link rel="stylesheet" type="text/css" href="/static/custom.css" />
+{{ block.super }}
 
 {% endblock %}
