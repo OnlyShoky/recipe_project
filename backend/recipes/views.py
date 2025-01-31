@@ -101,35 +101,22 @@ def recipe_list(request):
     title_parts = ['All']
 
     if cuisine_name:
-        cuisine_name = cuisine_name.replace('-', ' ')
         recipes = recipes.filter(cuisines__name__iexact=cuisine_name)
         title_parts.append(f"{cuisine_name.capitalize()}")
         title_parts.remove('All') if 'All' in title_parts else None
     if course_name:
-        course_name = course_name.replace('-', ' ')
         recipes = recipes.filter(courses__name__iexact=course_name)
         title_parts.append(f"{course_name.capitalize()}")
         title_parts.remove('All') if 'All' in title_parts else None
     title_parts.append('Recipes')
     if tag_name:
-        tag_name = tag_name.replace('-', ' ')
-        recipes = recipes.filter(tags__name__iexact=tag_name)
+        recipes = recipes.filter(tags__name__icontains=tag_name)
         title_parts.append(f'tagged with "{tag_name}"')
         
     if ingredient_name:
         ingredient_name = ingredient_name.replace('-', ' ')
-        recipesCopy = recipes.filter(recipe_ingredients__ingredient__name__iexact=ingredient_name).distinct()
+        recipes = recipes.filter(recipe_ingredients__ingredient__name__iexact=ingredient_name).distinct()
         
-        # if no recipes were found in cases like 'all-purpose flour'
-        if not recipesCopy :
-            allIngredients = Ingredient.objects.all()
-            for i in allIngredients :
-                if i.name.replace('-', ' ') == ingredient_name :
-                    recipesCopy = recipes.filter(recipe_ingredients__ingredient__name__iexact=i.name).distinct()
-                    ingredient_name = i.name
-                    break
-            
-        recipes = recipesCopy
         title_parts.append(f'that contains "{ingredient_name}"')
  
             
@@ -180,6 +167,43 @@ def home(request):
 
 
 ## API VIEWS
+
+
+
+class RecipeSearchAPIView(views.APIView):
+    """
+    APIView to retrieve a list of the last 5 recipes added.
+    
+    """
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    def get(self, request, *args, **kwargs):
+        query = request.GET.get('q')  # Get the search query from the request
+        cuisine_name = request.GET.get('cuisine')
+        course_name = request.GET.get('course')
+        tag_name = request.GET.get('tag')
+        recipes = Recipe.objects.all()  # Default: show all recipes
+        
+        filters = Q()  # Start with an empty query filter
+        
+        if cuisine_name:
+            cuisine_name = cuisine_name.replace('-', ' ')
+            filters &= Q(cuisines__name__iexact=cuisine_name)
+
+        if course_name:
+            course_name = course_name.replace('-', ' ')
+            filters &= Q(courses__name__iexact=course_name)
+
+        if tag_name:
+            tag_name = tag_name.replace('-', ' ')
+            filters &= Q(tags__name__iexact=tag_name)
+
+        if query:
+            filters &= Q(title__icontains=query)
+
+        recipes = recipes.filter(filters)[:5]
+
+        serializer = RecipeSerializer(recipes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class RecipeAPIView(views.APIView):
     """

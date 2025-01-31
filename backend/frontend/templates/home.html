@@ -78,7 +78,7 @@
       <div id="ingredients" class="mt-4 mb-4">
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
           {% for ingredient in ingredients %}
-          <a href="{% url 'recipe_list' %}?ingredient={{ ingredient.name|slugify }}" class="bg-orange-50 shadow rounded-lg text-center py-4 px-2 hover:shadow-lg">
+          <a href="{% url 'recipe_list' %}?ingredient={{ ingredient }}" class="bg-orange-50 shadow rounded-lg text-center py-4 px-2 hover:shadow-lg">
             <p class="text-gray-700 font-semibold truncate">{{ ingredient }}</p>
           </a>
           {% endfor %}
@@ -92,7 +92,7 @@
       <div id="tags" class="mb-4 mt-10">
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
           {% for tag in tags %}
-          <a href="{% url 'recipe_list' %}?tag={{ tag.name|slugify }}" class="bg-orange-50 shadow rounded-lg text-center py-4 px-2 hover:shadow-lg">
+          <a href="{% url 'recipe_list' %}?tag={{ tag.name }}" class="bg-orange-50 shadow rounded-lg text-center py-4 px-2 hover:shadow-lg">
             <p class="text-gray-700 font-semibold truncate">{{ tag }}</p>
           </a>
           {% endfor %}
@@ -106,7 +106,7 @@
       <div id="cuisines" class="mb-4 mt-10">
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
           {% for cuisine in cuisines %}
-          <a href="{% url 'recipe_list' %}?cuisine={{ cuisine.name|slugify }}" class="bg-orange-50 shadow rounded-lg text-center py-4 px-2 hover:shadow-lg">
+          <a href="{% url 'recipe_list' %}?cuisine={{ cuisine.name }}" class="bg-orange-50 shadow rounded-lg text-center py-4 px-2 hover:shadow-lg">
             <p class="text-gray-700 font-semibold truncate">{{ cuisine.name }}</p>
           </a>
           {% endfor %}
@@ -120,7 +120,7 @@
       <div id="courses" class="mb-4 mt-10">
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
           {% for course in courses %}
-          <a href="{% url 'recipe_list' %}?course={{ course.name|slugify }}" class="bg-orange-50 shadow rounded-lg text-center py-4 px-2 hover:shadow-lg">
+          <a href="{% url 'recipe_list' %}?course={{ course.name }}" class="bg-orange-50 shadow rounded-lg text-center py-4 px-2 hover:shadow-lg">
             <p class="text-gray-700 font-semibold truncate">{{ course.name }}</p>
           </a>
           {% endfor %}

@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import include, path
 from ingredients.views import IngredientAPIView, IngredientDetailAPIView
-from recipes.views import RecipeAPIView, RecipeDetailAPIView
+from recipes.views import RecipeAPIView, RecipeDetailAPIView, RecipeSearchAPIView
 
 # Registering API routes with the DefaultRouter if needed
 router = routers.DefaultRouter()
@@ -34,6 +34,7 @@ urlpatterns = [
     # ### Recipe API Routes ###
     # URL to fetch the last 5 recipes
     path('api/recipes/', RecipeAPIView.as_view(), name='recipe-list'),
+    path('api/recipes/search', RecipeSearchAPIView.as_view(), name='recipe-search'),
     
     # URL to fetch a single recipe by ID
     path('api/recipes/<uuid:id>/', RecipeDetailAPIView.as_view(), name='recipe-detail'),
