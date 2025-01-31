@@ -98,29 +98,33 @@ def recipe_list(request):
 
     recipes = Recipe.objects.all()
     
+    filters = Q()  # Start with an empty query filter
+    
     title_parts = ['All']
 
+
     if cuisine_name:
-        recipes = recipes.filter(cuisines__name__iexact=cuisine_name)
+        filters &= Q(cuisines__name__iexact=cuisine_name)
         title_parts.append(f"{cuisine_name.capitalize()}")
         title_parts.remove('All') if 'All' in title_parts else None
     if course_name:
-        recipes = recipes.filter(courses__name__iexact=course_name)
+        filters &= Q(courses__name__iexact=course_name)
         title_parts.append(f"{course_name.capitalize()}")
         title_parts.remove('All') if 'All' in title_parts else None
     title_parts.append('Recipes')
     if tag_name:
-        recipes = recipes.filter(tags__name__icontains=tag_name)
+        filters &= Q(tags__name__iexact=tag_name)
         title_parts.append(f'tagged with "{tag_name}"')
         
     if ingredient_name:
-        ingredient_name = ingredient_name.replace('-', ' ')
-        recipes = recipes.filter(recipe_ingredients__ingredient__name__iexact=ingredient_name).distinct()
+        filters &= Q(recipe_ingredients__ingredient__name__iexact=ingredient_name)
         
         title_parts.append(f'that contains "{ingredient_name}"')
  
             
     title = '  '.join(title_parts)
+    
+    recipes = recipes.filter(filters).distinct()
 
     paginator = Paginator(recipes, 12)
     page_number = request.GET.get('page')
