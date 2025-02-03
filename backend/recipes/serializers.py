@@ -15,24 +15,24 @@ from ingredients.models import Ingredient
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
-        fields = ['id', 'name']  # Adjust to your specific needs
+        fields = ['name']  # Adjust to your specific needs
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Course
-        fields = ['id', 'name']  # Adjust to your specific needs
+        fields = ['name']  # Adjust to your specific needs
 
 class CuisineSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cuisine
-        fields = ['id', 'name']  # Adjust to your specific needs
+        fields = ['name']  # Adjust to your specific needs
                
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     ingredient = IngredientSerializer()  # Use the IngredientSerializer to handle the 'ingredient' field
  
     class Meta:
         model = models.RecipeIngredient
-        fields = ['ingredient', 'quantity', 'unit']  # Ensure the correct fields are used
+        fields = ['ingredient', 'quantity', 'unit', 'notes', 'groupName']  # Ensure the correct fields are used
 
 
         

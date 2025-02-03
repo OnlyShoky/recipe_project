@@ -20,7 +20,7 @@
         </button>
         <button title="Go to post API page" class="text-gray-500 font-bold">
           <!-- Button to API -->
-          <a href="/api/"> API </a>
+          <a href="/api/v1/"> API </a>
         </button>
         <button title="Go to post list page" class="text-gray-500">
           <!-- PayPal Button -->
@@ -48,19 +48,6 @@
   bg-sepia-400
 {% endblock %}
 
-{% comment %} {% block content %}
-  {% if name == 'Api Root' %}
-  <div class="request-info mt-4" style="clear: both" aria-label="{% trans "request info" %}">
-    <pre class="prettyprint"><b>{{ request.method }}</b> {{ request.get_full_path }}</pre>
-  </div>  
-  
-  {% else%}
-    {{ block.super }}
-
-  {% endif%}
-
-{% endblock %} {% endcomment %}
-
 {% block content %}
   {% if name == 'Api Root' %}
   <div class="request-info mt-4" style="clear: both" aria-label="{% trans "request info" %}">
@@ -70,25 +57,42 @@
   <div class="api-doc-container">
     <div class="doc-header">
       <h1 class="doc-title">Recipe API</h1>
-      <p>The Recipe API provides access to hundreds of thousands of creative recipes from all cuisines.</p>
+      <p>The Recipe API provides access to a large collection of recipes from different cuisines worldwide.</p>
     </div>
 
-    <h2 class="section-title">/v1/recipe <span class="request-method">GET</span></h2>
-    <p class="endpoint-url"><code>https://api.api-ninjas.com/v1/recipe</code></p>
-    <p>Get a list of recipes for a given search query. Returns at most <strong>10</strong> results. Use the <code>offset</code> parameter for pagination.</p>
 
-    <hr>
+ 
+    <div class="api-block">
+      <h4>Example Request</h4>
+      <pre class="prettyprint"><b>{{ request.method }}</b> api/v1/recipes?search=carbonara&cuisine=Italian</pre>
+    </div>
 
     <div class="api-block">
       <h4>Parameters</h4>
       <ul class="parameter-list">
         <li>
-          <h5><strong><code>query</code></strong> <span class="required">required</span></h5>
-          <p>Query text to search.</p>
+          <h5><strong><code class="code">search</code></strong> <span class="required">optional</span></h5>
+          <p>The search term for recipe names.</p>
         </li>
         <li>
-          <h5><strong><code>offset</code></strong> <span class="optional">optional</span></h5>
-          <p>Number of results to offset for pagination.</p>
+          <h5><strong><code class="code">cuisine</code></strong> <span class="optional">optional</span></h5>
+          <p>Filter results by cuisine type (e.g., Italian, Mexican).</p>
+        </li>
+        <li>
+          <h5><strong><code class="code">course</code></strong> <span class="optional">optional</span></h5>
+          <p>Filter by course type (e.g., dessert, maincourse, snack).</p>
+        </li>
+        <li>
+          <h5><strong><code class="code">tag</code></strong> <span class="optional">optional</span></h5>
+          <p>Filter by specific tags (e.g., air-fryer, sandwiches).</p>
+        </li>
+        <li>
+          <h5><strong><code class="code">limit</code></strong> <span class="optional">optional</span></h5>
+          <p>Set the maximum number of results (default: 5, max: 10).</p>
+        </li>
+        <li>
+          <h5><strong><code class="code">offset</code></strong> <span class="optional">optional</span></h5>
+          <p>Used for pagination. Skip a number of results.</p>
         </li>
       </ul>
     </div>
@@ -97,17 +101,35 @@
       <h4>Headers</h4>
       <ul class="header-list">
         <li>
-          <h5><strong><code>X-Api-Key</code></strong> <span class="required">required</span></h5>
-          <p>API Key associated with your account.</p>
+          <h5><strong><code class="code">X-Api-Key</code></strong> <span class="required">required</span></h5>
+          <p>API Key for authentication.</p>
         </li>
       </ul>
     </div>
+
+    <h2 class="section-title">Retrieve a Specific Recipe</h2>
+    <p>To get a recipe by its unique ID, use the following endpoint:</p>
+    
+    <div class="api-block">
+      <h4>Example Request</h4>
+      <pre class="prettyprint"><b>{{ request.method }}</b> /api/v1/recipes/48772c5b-1eaf-4c5a-9f6e-edec48267047/</pre>
+    </div>
+
+
+    <div class="api-block">
+      <h4>Example Requests with curl</h4>
+      <pre><code>curl -X GET "http://127.0.0.1:8000/api/v1/recipes?search=carbonara" -H "X-Api-Key: YOUR_API_KEY"</code></pre>
+      <pre><code>curl -X GET "http://127.0.0.1:8000/api/v1/recipes/48772c5b-1eaf-4c5a-9f6e-edec48267047/" -H "X-Api-Key: YOUR_API_KEY"</code></pre>
+    </div>
+
   </div>
 
   {% else %}
     {{ block.super }}
   {% endif %}
 {% endblock %}
+
+
 
 
 

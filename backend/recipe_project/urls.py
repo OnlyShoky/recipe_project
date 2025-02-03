@@ -26,16 +26,16 @@ urlpatterns = [
     
     
     # ### Backend Routes ###
-    path('api/', include(router.urls)),
+    path('api/v1/', include(router.urls)),
     # ### Ingredient API Routes ###
     path('api/ingredients/', IngredientAPIView.as_view(), name='ingredient-list'),
     path('api/ingredients/<uuid:id>/', IngredientDetailAPIView.as_view(), name='ingredient-detail'),
     
     # ### Recipe API Routes ###
     # URL to fetch the last 5 recipes
-    path('api/recipes/', RecipeAPIView.as_view(), name='recipe-list'),
-    path('api/recipes/search', RecipeSearchAPIView.as_view(), name='recipe-search'),
+    path('api/v1/recipes/', RecipeAPIView.as_view(), name='recipe-list'),
+    path('api/v1/recipes', RecipeSearchAPIView.as_view(), name='recipe-search'),
     
     # URL to fetch a single recipe by ID
-    path('api/recipes/<uuid:id>/', RecipeDetailAPIView.as_view(), name='recipe-detail'),
+    path('api/v1/recipes/<uuid:id>/', RecipeDetailAPIView.as_view(), name='recipe-detail'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

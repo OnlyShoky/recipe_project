@@ -27,10 +27,20 @@ def search_recipes(request):
     if recipes.count() == 1:
         recipe = recipes.first()
         return redirect('recipe_detail', recipe.id)
+    
+    paginator = Paginator(recipes, 30)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Rebuild the query string excluding 'page'
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        query_params.pop('page')
+    query_string = query_params.urlencode()
 
     context = {
-        'recipes': recipes,
-        'query': query
+        'recipes': page_obj,
+        'query_string': query_string
     }
     return render(request, 'search_results.html', context)
 
@@ -176,38 +186,39 @@ def home(request):
 
 class RecipeSearchAPIView(views.APIView):
     """
-    APIView to retrieve a list of the last 5 recipes added.
-    
+    APIView to retrieve a list of recipes with filtering options.
     """
     throttle_classes = [UserRateThrottle, AnonRateThrottle]
+
     def get(self, request, *args, **kwargs):
-        query = request.GET.get('q')  # Get the search query from the request
-        cuisine_name = request.GET.get('cuisine')
-        course_name = request.GET.get('course')
-        tag_name = request.GET.get('tag')
-        recipes = Recipe.objects.all()  # Default: show all recipes
-        
-        filters = Q()  # Start with an empty query filter
-        
-        if cuisine_name:
-            cuisine_name = cuisine_name.replace('-', ' ')
-            filters &= Q(cuisines__name__iexact=cuisine_name)
+        search = request.GET.get('search')  
+        cuisine = request.GET.get('cuisine') 
+        course = request.GET.get('course')  
+        tag = request.GET.get('tag')  
+        limit = min(10,int(request.GET.get('limit', 10)))  # Agregué límite con valor por defecto
+        offset = int(request.GET.get('offset', 0))  # Agregué paginación
 
-        if course_name:
-            course_name = course_name.replace('-', ' ')
-            filters &= Q(courses__name__iexact=course_name)
+        recipes = Recipe.objects.all()  
 
-        if tag_name:
-            tag_name = tag_name.replace('-', ' ')
-            filters &= Q(tags__name__iexact=tag_name)
+        filters = Q()  
 
-        if query:
-            filters &= Q(title__icontains=query)
+        if cuisine:
+            filters &= Q(cuisines__name__iexact=cuisine)
 
-        recipes = recipes.filter(filters)[:5]
+        if course:
+            filters &= Q(courses__name__iexact=course)
+
+        if tag:
+            filters &= Q(tags__name__iexact=tag)
+
+        if search:
+            filters &= Q(title__icontains=search)
+
+        recipes = recipes.filter(filters)[offset:offset + limit]  # Aplicando paginación
 
         serializer = RecipeSerializer(recipes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class RecipeAPIView(views.APIView):
     """

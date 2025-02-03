@@ -167,19 +167,11 @@ h1 {
     color: #333;
 }
 
-.section-title {
-    font-size: 1.5rem;
-    color: #222;
-    margin-top: 20px;
+.code{
+  color : #6d2323;
+  background-color: #fffcf6;
 }
 
-.request-method {
-    background-color: #007bff;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-}
 
 .endpoint-url {
     font-size: 1.1rem;
@@ -197,9 +189,9 @@ h1 {
 }
 
 .parameter-list li, .header-list li {
-    background: #f8f9fa;
+    background: #fffcf6;
     padding: 10px;
-    border-left: 5px solid #007bff;
+    border-left: 5px solid #c08552;
     margin-bottom: 10px;
 }
 
@@ -210,13 +202,13 @@ h1 {
 }
 
 .required {
-    color: red;
+    color: oklch(0.551 0.027 264.364);
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 }
 
 .optional {
-    color: #777;
+    color: oklch(0.551 0.027 264.364);
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 }

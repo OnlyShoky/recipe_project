@@ -11,9 +11,8 @@ class NutritionalTableSerializer(serializers.ModelSerializer):
         ]
 
 class IngredientSerializer(serializers.ModelSerializer):
-    nutrition = NutritionalTableSerializer()
 
     class Meta:
         model = Ingredient
-        fields = ['name', 'nutrition','related_recipe']  # Include other fields like quantity, unit, etc., if necessary
+        fields = ['name','related_recipe']  # Include other fields like quantity, unit, etc., if necessary
 
