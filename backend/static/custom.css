@@ -188,9 +188,14 @@ h1 {
     padding: 0;
 }
 
+.parameter-list p {
+  margin: 5px 5px 0 5px;
+
+}
+
 .parameter-list li, .header-list li {
     background: #fffcf6;
-    padding: 10px;
+    padding: 5px;
     border-left: 5px solid #c08552;
     margin-bottom: 10px;
 }

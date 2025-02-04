@@ -10,6 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = int(os.environ.get("DEBUG", default=0))
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 # Application definition
@@ -101,12 +102,23 @@ USE_TZ = True
 # Directory to store user-uploaded files (e.g., images)
 
 
+# settings.py
+
+# Static files (CSS, JavaScript, images)
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # Add this line
+
+# Directory for collecting static files in production
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# Additional directories to search for static files
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
+# Media files (uploaded files)
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path where media files are stored
+
+# Since your media folder is inside the static folder
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')  # Store media inside the 'static/media' folder
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

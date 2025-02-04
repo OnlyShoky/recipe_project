@@ -1,0 +1,10 @@
+runtime: python310
+entrypoint: gunicorn -b :$PORT my_tennis_club.wsgi
+
+beta_settings:
+  cloud_sql_instances: "YOUR_PROJECT_ID:REGION:INSTANCE_NAME"
+
+env_variables:
+    APPENGINE_URL: https://prepweek.uc.r.appspot.com
+    
+instance_class: F2
