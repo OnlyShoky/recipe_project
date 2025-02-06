@@ -1,6 +1,5 @@
 runtime: python310
 
-    
 entrypoint: gunicorn -b :$PORT recipe_project.wsgi
 
 handlers:

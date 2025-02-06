@@ -96,103 +96,108 @@ def generate_recipes_from_json(json_data):
     """
     Generate Recipe, Tag, and RecipeIngredient instances from JSON data.
     """
-    # Ensure we are working with a parsed dictionary (or list of dictionaries)
+    import json
+    from datetime import timedelta
+    from django.db import transaction
+    from tqdm import tqdm
+
     if isinstance(json_data, str):
-        json_data = json.loads(json_data)  # Parse the JSON string if it's not already a dictionary
+        json_data = json.loads(json_data)
         
     print("Starting import")
+    success_count = 0
+    failure_count = 0
         
     for recipe_data in tqdm(json_data["recipes"]):
-        attributes = recipe_data["data"]["attributes"]
+        try:
+            attributes = recipe_data["data"]["attributes"]
 
-        
-        
-        prep_time = timedelta(minutes=int(attributes["prep_time"].split(":")[1])) if attributes["prep_time"] else None
-        cook_time = timedelta(minutes=int(attributes["cook_time"].split(":")[1])) if attributes["cook_time"] else None
-        cool_time = timedelta(minutes=int(attributes["cool_time"].split(":")[1])) if attributes["cool_time"] else None
-        total_time = timedelta(minutes=int(attributes["total_time"].split(":")[1])) if attributes["total_time"] else None
+            prep_time = timedelta(minutes=int(attributes["prep_time"].split(":")[1])) if attributes["prep_time"] else None
+            cook_time = timedelta(minutes=int(attributes["cook_time"].split(":")[1])) if attributes["cook_time"] else None
+            cool_time = timedelta(minutes=int(attributes["cool_time"].split(":")[1])) if attributes["cool_time"] else None
+            total_time = timedelta(minutes=int(attributes["total_time"].split(":")[1])) if attributes["total_time"] else None
 
-        # Create the Recipe instance
-        recipe = Recipe.objects.create(
-            title=attributes["title"],
-            instructions=attributes["instructions"],
-            prep_time=prep_time,
-            cook_time=cook_time,
-            cool_time=cool_time,
-            total_time=total_time,
-            servings=attributes["servings"],
-            difficulty=attributes["difficulty"],
-            author=attributes["author"],
-            source=attributes["source"],
-            video_url=attributes["video_url"],
-            image = attributes["image"],
-            image_card = attributes["image_card"],
-            description = attributes["description"],
-            notes = attributes["notes"],
-            equipment = attributes["equipment"],
-            rating = attributes["rating"]["average"],
-            number_of_ratings = attributes["rating"]["count"],
-        )
-        
-        nutritional_table = NutritionalTable.objects.create(
-            servings=float(attributes["nutrition"].get("Serving", [0])[0]),
-            calories=float(attributes["nutrition"].get("Calories", [0])[0]),
-            carbohydrates=float(attributes["nutrition"].get("Carbohydrates", [0])[0]),
-            protein=float(attributes["nutrition"].get("Protein", [0])[0]),
-            fat=float(attributes["nutrition"].get("Fat", [0])[0]),
-            saturated_fat=float(attributes["nutrition"].get("Saturated Fat", [0])[0]),
-            trans_fat=float(attributes["nutrition"].get("Trans Fat", [0])[0]),
-            fiber=float(attributes["nutrition"].get("Fiber", [0])[0]),
-            sugar=float(attributes["nutrition"].get("Sugar", [0])[0]),
-            cholesterol=float(attributes["nutrition"].get("Cholesterol", [0])[0]),
-            sodium=float(attributes["nutrition"].get("Sodium", [0])[0]),
-            potassium=float(attributes["nutrition"].get("Potassium", [0])[0]),
-            vitamin_a=float(attributes["nutrition"].get("Vitamin A", [0])[0]),
-            vitamin_c=float(attributes["nutrition"].get("Vitamin C", [0])[0]),
-            calcium=float(attributes["nutrition"].get("Calcium", [0])[0]),
-            iron=float(attributes["nutrition"].get("Iron", [0])[0]),
-        )
+            with transaction.atomic():
+                recipe = Recipe.objects.create(
+                    title=attributes["title"],
+                    instructions=attributes["instructions"],
+                    prep_time=prep_time,
+                    cook_time=cook_time,
+                    cool_time=cool_time,
+                    total_time=total_time,
+                    servings=attributes["servings"],
+                    difficulty=attributes["difficulty"],
+                    author=attributes["author"],
+                    source=attributes["source"],
+                    video_url=attributes["video_url"],
+                    image=attributes["image"],
+                    image_card=attributes["image_card"],
+                    description=attributes["description"],
+                    notes=attributes["notes"],
+                    equipment=attributes["equipment"],
+                    rating=attributes["rating"]["average"],
+                    number_of_ratings=attributes["rating"]["count"],
+                )
 
+                nutritional_table = NutritionalTable.objects.create(
+                    servings=float(attributes["nutrition"].get("Serving", [0])[0]),
+                    calories=float(attributes["nutrition"].get("Calories", [0])[0]),
+                    carbohydrates=float(attributes["nutrition"].get("Carbohydrates", [0])[0]),
+                    protein=float(attributes["nutrition"].get("Protein", [0])[0]),
+                    fat=float(attributes["nutrition"].get("Fat", [0])[0]),
+                    saturated_fat=float(attributes["nutrition"].get("Saturated Fat", [0])[0]),
+                    trans_fat=float(attributes["nutrition"].get("Trans Fat", [0])[0]),
+                    fiber=float(attributes["nutrition"].get("Fiber", [0])[0]),
+                    sugar=float(attributes["nutrition"].get("Sugar", [0])[0]),
+                    cholesterol=float(attributes["nutrition"].get("Cholesterol", [0])[0]),
+                    sodium=float(attributes["nutrition"].get("Sodium", [0])[0]),
+                    potassium=float(attributes["nutrition"].get("Potassium", [0])[0]),
+                    vitamin_a=float(attributes["nutrition"].get("Vitamin A", [0])[0]),
+                    vitamin_c=float(attributes["nutrition"].get("Vitamin C", [0])[0]),
+                    calcium=float(attributes["nutrition"].get("Calcium", [0])[0]),
+                    iron=float(attributes["nutrition"].get("Iron", [0])[0]),
+                )
 
-
-        
-        # Assign the new nutritional table to the ingredient
-        recipe.nutrition = nutritional_table
-        recipe.save()
-        
-        # Create or retrieve tags and addthem 
-        for cuisine in attributes["cuisines"]:
-            cuisine, _ = Cuisine.objects.get_or_create(name=cuisine)
-            recipe.cuisines.add(cuisine)
+                recipe.nutrition = nutritional_table
+                recipe.save()
+                
+                for cuisine in attributes["cuisines"]:
+                    cuisine, _ = Cuisine.objects.get_or_create(name=cuisine)
+                    recipe.cuisines.add(cuisine)
+                
+                for course in attributes["courses"]:
+                    course, _ = Course.objects.get_or_create(name=course)
+                    recipe.courses.add(course)
+                
+                for tag in attributes["tags"]:
+                    tag, _ = Tag.objects.get_or_create(name=tag)
+                    recipe.tags.add(tag)
+                
+                for ingredient_data in attributes["ingredients"]:
+                    ingredient_name = ingredient_data["ingredient"]["name"]
+                    quantity = ingredient_data["quantity"]
+                    unit = ingredient_data["unit"]
+                    notes = ingredient_data["notes"]
+                    groupName = ingredient_data["groupName"]
+                    
+                    ingredient, _ = Ingredient.objects.get_or_create(name=ingredient_name)
+                    
+                    RecipeIngredient.objects.create(
+                        recipe=recipe,
+                        ingredient=ingredient,
+                        quantity=quantity,
+                        unit=unit,
+                        notes=notes,
+                        groupName=groupName
+                    )
             
-        for course in attributes["courses"]:
-            course, _ = Course.objects.get_or_create(name=course)
-            recipe.courses.add(course)
-            
-        for tag in attributes["tags"]:
-            tag, _ = Tag.objects.get_or_create(name=tag)
-            recipe.tags.add(tag)
-            
-        # Add ingredients to the Recipe
-        for ingredient_data in attributes["ingredients"]:
-            ingredient_name = ingredient_data["ingredient"]["name"]
-            quantity = ingredient_data["quantity"]
-            unit = ingredient_data["unit"]
-            notes = ingredient_data["notes"]
-            groupName = ingredient_data["groupName"]
+            success_count += 1
+        except Exception as e:
+            print(f"Error processing recipe: {e}")
+            failure_count += 1
+    
+    print(f"Import finished: {success_count} successful, {failure_count} failed.")
 
-            # Create or retrieve the Ingredient instance
-            ingredient, _ = Ingredient.objects.get_or_create(name=ingredient_name)
-
-            # Create the RecipeIngredient instance
-            RecipeIngredient.objects.create(
-                recipe=recipe,
-                ingredient=ingredient,
-                quantity=quantity,
-                unit=unit,
-                notes=notes,
-                groupName=groupName
-            )
 
     print("Recipes generated successfully.")
 

@@ -12,26 +12,26 @@ import environ
 env = environ.Env(DEBUG=(bool, False))
 env_file = os.path.join(BASE_DIR, ".env")
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = Path(__file__).resolve().parent.parent
+# settings.py
 
 
-# SECRET_KEY = os.environ.get("SECRET_KEY")
 
+SECRET_KEY = env('SECRET_KEY', default='default_secret_key')
 
-print("------------------------------------------")
 
 if os.path.isfile(env_file):
     # Use a local secret file, if provided
     env.read_env(env_file)
         
-    print("System environment variables:")
-    for key, value in os.environ.items():
-        print(f"{key}: {value}")
+    # print("System environment variables:")
+    # for key, value in os.environ.items():
+    #     print(f"{key}: {value}")
         
-    DEBUG = int(env('DEBUG', default=0))
-    ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS', default='*').split(" ")
     
+    ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS', default='*').split(" ")
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Store media inside the 'static/media' folder
+        
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     # Pull secrets from Secret Manager
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
@@ -42,14 +42,23 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
 
     env.read_env(io.StringIO(payload))
-    
-    print("System environment variables Google cloud:")
-    print(env)
+
     ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS', default='*').split(" ")
-    
+    GS_MEDIA_BUCKET_NAME = env('GS_BUCKET_NAME', default='')  # Should be correctly set in .env
+    MEDIA_URL = f"https://storage.googleapis.com/{GS_MEDIA_BUCKET_NAME}/media/"
 
 else:
     raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+
+DEBUG = int(env('DEBUG', default=0))
+# Static files (CSS, JavaScript, images)
+STATIC_URL = '/static/'
+
+# Directory for collecting static files in production
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# Additional directories to search for static files
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 
 # Application definition
@@ -67,6 +76,8 @@ INSTALLED_APPS = [
     'ingredients',
     'api',
 ]
+
+INSTALLED_APPS += ["storages"]  # Add storages to installed apps
 
 MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
@@ -123,8 +134,6 @@ WSGI_APPLICATION = "recipe_project.wsgi.application"
 
 DATABASES = {"default": env.db()}
 
-print(DATABASES)
-
 # If the flag as been set, configure to use proxy
 if env('USE_CLOUD_SQL_AUTH_PROXY') == "True" :
     DATABASES["default"]["HOST"] = "127.0.0.1"
@@ -162,24 +171,7 @@ USE_TZ = True
 # Directory to store user-uploaded files (e.g., images)
 
 
-# settings.py
 
-# Static files (CSS, JavaScript, images)
-STATIC_URL = '/static/'
-
-# Directory for collecting static files in production
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-# Additional directories to search for static files
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-
-# Media files (uploaded files)
-MEDIA_URL = '/media/'
-
-# Since your media folder is inside the static folder
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')  # Store media inside the 'static/media' folder
-
-SECRET_KEY = env('SECRET_KEY', default='default_secret_key')
 
 
 # Default primary key field type
@@ -218,3 +210,4 @@ REST_FRAMEWORK = {
     },
     
 }
+

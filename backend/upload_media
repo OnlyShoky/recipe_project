@@ -1,0 +1,25 @@
+import os
+from google.cloud import storage
+
+# Configura el cliente de Google Cloud Storage
+client = storage.Client()
+bucket_name = "prepweek_prepweek.appspot.com"  # Nombre de tu bucket
+bucket = client.bucket(bucket_name)
+
+# Carpeta local donde están las imágenes
+local_directory = os.path.join(os.path.dirname(__file__), 'staticfiles/media/recipes_images')
+
+# Función para subir imágenes recursivamente
+def upload_files(local_path, bucket, path_prefix=""):
+    if os.path.isdir(local_path):  # Si es una carpeta
+        # Recorre los archivos y sube cada uno
+        for file_name in os.listdir(local_path):
+            file_path = os.path.join(local_path, file_name)
+            upload_files(file_path, bucket, path_prefix=os.path.join(path_prefix, file_name))  # Llamada recursiva
+    elif os.path.isfile(local_path):  # Si es un archivo
+        blob = bucket.blob(os.path.join(path_prefix))  # Subir con el prefijo (nombre de carpeta)
+        blob.upload_from_filename(local_path)
+        print(f"Archivo {local_path} subido a {path_prefix}")
+        
+# Llama a la función para empezar la subida desde la carpeta principal
+upload_files(local_directory, bucket)
