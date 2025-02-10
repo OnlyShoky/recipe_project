@@ -57,12 +57,12 @@
             {% if recipes.number|add:-5 < page_num and page_num < recipes.number|add:5 %}
                 {% if page_num == recipes.number %}
                 <li>
-                    <span class="px-3 py-2 text-white bg-indigo-600 border border-gray-300">{{ page_num }} </span>
+                    <span class="px-3 py-2 text-white bg-sepia-800 border border-gray-300">{{ page_num }} </span>
                 </li>
                 {% else %}
                 <li>
                     <a href="?page={{ page_num }}&{{query_string}}" 
-                       class="px-3 py-2 text-gray-500 bg-orange-50 border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                       class="px-1 py-2 md:px-3 text-gray-500 bg-orange-50 border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
                        {{ page_num }} 
                     </a>
                 </li>

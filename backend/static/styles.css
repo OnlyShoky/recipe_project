@@ -3,7 +3,10 @@
 body {
     background-color: #feeed2; /* Soft sepia background */
   }
-  
+
+  .bg-sepia-800 {
+    background-color: #705C53; /* Dark sepia for the header and footer */
+  }
   .bg-sepia-700 {
     background-color: #dbc0a1; /* Dark sepia for the header and footer */
   }
@@ -38,7 +41,7 @@ body {
   }
   
   .text-normal {
-    color: black; /* Light sepia for text */
+    color: #2f1107; /* Light sepia for text */
   }
   
   .dropdown:hover .dropdown-menu {
@@ -81,3 +84,29 @@ body {
       margin-top: 1rem;
     }
   }
+
+ /* Default styles */
+h1 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Font styles */
+
+/* Rock Salt Font */
+.rock-salt {
+  font-family: 'Rock Salt', cursive;
+  font-weight: 400; /* Default weight for Rock Salt */
+}
+
+/* Ruslan Display Font */
+.ruslan-display {
+  font-family: 'Ruslan Display', cursive;
+  font-weight: 400; /* Default weight for Ruslan Display */
+}
+
+/* Example with the existing .roboto class (if needed) */
+.roboto {
+  font-family: 'Permanent Marker', cursive;
+  font-weight: 700;
+}
