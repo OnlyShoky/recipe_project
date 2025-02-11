@@ -15,6 +15,16 @@ from collections import Counter
 import re
 import time
 
+def contact_view(request):
+    return render(request, 'contact.html')
+
+def faq_view(request):
+    return render(request, 'faq.html')
+
+def about_view(request):
+    return render(request, 'about.html')
+
+
 def search_recipes(request):
     query = request.GET.get('q')  # Get the search query from the request
     recipes = Recipe.objects.all()  # Default: show all recipes

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}About Us - Meal Prep Codex{% endblock %}
+{% block content %}
+  <div class="max-w-3xl mx-auto p-6 bg-orange-50 shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold text-center mb-4">About Meal Prep Codex</h1>
+    
+    <p class="text-lg mb-4">
+      Welcome to <strong>Meal Prep Codex</strong>, a platform dedicated to making cooking easier, faster, and more accessible for everyone. Whether you're a seasoned chef or a home cook looking for inspiration, we aim to provide a curated selection of recipes that are both delicious and simple to prepare.
+    </p>
+
+    <h2 class="text-xl font-semibold mt-6 mb-2">The Story</h2>
+    <p class="mb-4">
+      Meal Prep Codex was built in <strong>2025</strong> as a <strong>solo project</strong> to explore <strong>Django, APIs, and Web Scraping</strong>. It started as a way to learn modern web development while solving a real-world problem: making high-quality recipes available for free, without clutter or unnecessary paywalls.
+    </p>
+
+    <h2 class="text-xl font-semibold mt-6 mb-2">What We Offer</h2>
+    <ul class="list-disc ml-6 mb-4">
+      <li><strong>Fast & Free Recipes</strong>: No subscriptions, no sign-ups—just recipes, instantly available.</li>
+      <li><strong>API for Developers</strong>: We provide a structured API with a large collection of recipes, so others can integrate it into their own applications.</li>
+      <li><strong>Original Content</strong>: While we aggregate some well-known recipes, we also focus on providing unique and original dishes.</li>
+    </ul>
+
+    <h2 class="text-xl font-semibold mt-6 mb-2">Technology Behind the Project</h2>
+    <p class="mb-4">
+      This platform is built using <strong>Django</strong> as the backend framework, leveraging <strong>APIs and Web Scraping</strong> to gather and serve a wide variety of recipes. The goal was to learn how to build a robust and scalable web application while providing something valuable to the community.
+    </p>
+
+    <h2 class="text-xl font-semibold mt-6 mb-2">Our Mission</h2>
+    <p class="mb-4">
+      We believe that cooking should be simple, fun, and accessible to everyone. Our mission is to create a reliable, ad-free recipe hub where users can quickly find, save, and share meal ideas. 
+    </p>
+
+    <h2 class="text-xl font-semibold mt-6 mb-2">Get in Touch</h2>
+    <p class="mb-4">
+      Since this is a solo project, feedback is always welcome! If you find a bug, have suggestions, or want to discuss business opportunities, feel free to <a href="{% url 'contact' %}" class="text-blue-600 hover:underline">contact me</a>.
+    </p>
+
+    <p class="text-center text-sm text-gray-600 mt-6">
+      &copy; 2025 Meal Prep Codex. Built with passion and curiosity.
+    </p>
+  </div>
+{% endblock %}

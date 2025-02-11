@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}FAQ - Meal Prep Codex{% endblock %}
+{% block content %}
+  <div class="max-w-3xl mx-auto p-6 bg-orange-50 shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold text-center mb-4">Frequently Asked Questions</h1>
+
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">1. Is Meal Prep Codex free to use?</h2>
+      <p>Yes! The platform is completely free to use. You don’t need to sign up or subscribe—just browse recipes and enjoy.</p>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">2. How do I submit a recipe?</h2>
+      <p>Currently, recipe submissions are not available. However, I’m working on a feature that will allow users to contribute original recipes.</p>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">3. Can I use the Meal Prep Codex API?</h2>
+      <p>Yes! This project includes an API that provides a large collection of recipes. If you're a developer and want to integrate the API into your own app, feel free to <a href="{% url 'contact' %}" class="text-blue-600 hover:underline">contact me</a> for more details.</p>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">4. Are the recipes original?</h2>
+      <p>Some recipes are sourced using web scraping techniques, but I also focus on providing unique and original dishes. My goal is to create a collection of diverse and accessible recipes.</p>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">5. Can I request a specific recipe?</h2>
+      <p>At the moment, I don’t have a request feature, but I’m open to suggestions! Feel free to reach out if there’s a dish you’d like to see added.</p>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">6. What technology powers this platform?</h2>
+      <p>Meal Prep Codex is built using <strong>Django</strong> for the backend, with <strong>APIs and Web Scraping</strong> to provide a wide variety of recipes. The project started as a learning experience and evolved into a useful tool for recipe lovers.</p>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">7. Who created Meal Prep Codex?</h2>
+      <p>This is a <strong>solo project</strong>, developed out of a passion for coding and cooking. I built it as a way to learn modern web technologies while providing a useful free service.</p>
+    </div>
+
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold">8. How can I report a bug or give feedback?</h2>
+      <p>Since this is a one-person project, I really appreciate feedback! If you find any issues or have suggestions, please <a href="{% url 'contact' %}" class="text-blue-600 hover:underline">contact me</a>.</p>
+    </div>
+
+    <p class="text-center text-sm text-gray-600 mt-6">
+      &copy; 2025 Meal Prep Codex. Built with passion and curiosity.
+    </p>
+  </div>
+{% endblock %}

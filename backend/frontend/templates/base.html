@@ -12,36 +12,38 @@
 
     {% comment %} Favicon {% endcomment %}
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
-<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
-<link rel="icon" type="image/png" href="{% static 'favicon/favicon.ico' %}" />
-<link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}" />
-<link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+    <link rel="icon" type="image/png" href="{% static 'favicon/favicon.ico' %}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}" />
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
 
     {% comment %} Google Fonts {% endcomment %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Ruslan+Display&display=swap" rel="stylesheet"></head>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Ruslan+Display&display=swap" rel="stylesheet" />
+  </head>
   <body>
     <!-- Header -->
     <header class="text-normal">
       <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center border-b border-gray-300">
         <!-- Logo -->
-    <!-- Logo (Favicon Image) -->
-    <a href="/" class="hover:text-gray-800 transition flex items-center">
-      <img src="{% static 'favicon/logo.png' %}" alt="Meal Prep Codex Logo" class="h-20 w-20 mr-3">
-      <div class="text-left leading-tight font-bold text-xl ruslan-display space-y-0">
-        <span class="block">MEAL</span>
-        <span class="block">PREP</span>
-        <span class="block">CODEX</span>
-      </div>
+        <!-- Logo (Favicon Image) -->
+        <a href="/" class="hover:text-gray-800 transition flex items-center">
+          <img src="{% static 'favicon/logo.png' %}" alt="Meal Prep Codex Logo" class="h-20 w-20 mr-3" />
+          <div class="text-left leading-tight font-bold text-xl ruslan-display space-y-0">
+            <span class="block">MEAL</span>
+            <span class="block">PREP</span>
+            <span class="block">CODEX</span>
+          </div>
 
-      {% comment %} <div class="text-left leading-tight font-bold rock-salt space-y-2">
-        <span class="block">MEAL</span>
-        <span class="block">PREP</span>
-        <span class="block">CODEX</span>
-      </div> {% endcomment %}
-    </a>
-
+          {% comment %}
+          <div class="text-left leading-tight font-bold rock-salt space-y-2">
+            <span class="block">MEAL</span>
+            <span class="block">PREP</span>
+            <span class="block">CODEX</span>
+          </div>
+          {% endcomment %}
+        </a>
 
         <!-- Search Form -->
         <form method="get" action="{% url 'search_recipes' %}" class="w-full md:w-auto flex items-center bg-sepia-100 rounded-full px-4 py-2 focus-within:ring-2 ring-sepia-500 transition-shadow mb-4 md:mb-0">
@@ -81,19 +83,50 @@
     <main class="max-w-7xl mx-auto px-4 py-6">{% block content %} {% endblock %}</main>
 
     <!-- Footer -->
-    <footer class="bg-sepia text-normal py-4 text-center items-center">
-      <!-- Donation Buttons -->
-      <div class="flex justify-center space-x-4 mt-10 mb-4 px-4">
-        <a href="https://www.paypal.com/donate/?hosted_button_id=P49L3AK8RDVMN" target="_blank" class="flex items-center px-6 py-2 bg-sepia-600 text-black shadow-md hover:shadow-lg font-semibold rounded-lg transform transition-transform hover:scale-105 transition-colors duration-300">
-          <i class="fab fa-paypal mr-2"></i>
-          Support via PayPal
-        </a>
-        <a href="https://www.buymeacoffee.com/shoky" target="_blank" class="flex items-center px-6 py-2 bg-sepia-700 text-black shadow-md hover:shadow-lg font-semibold rounded-lg transform transition-transform hover:scale-105 transition-colors duration-300">
-          <i class="fas fa-coffee mr-2"></i>
-          Buy Me a Coffee
-        </a>
+    <footer class="bg-sepia text-normal py-4">
+      <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+
+        <!-- Right: Donation Links -->
+        {% comment %} <div class="flex space-x-4">
+          <a href="https://www.paypal.com/donate/?hosted_button_id=P49L3AK8RDVMN" target="_blank" class="flex items-center px-4 py-2 bg-sepia-600 text-black shadow-md hover:shadow-lg font-semibold rounded-lg transition-transform hover:scale-105"> <i class="fab fa-paypal mr-2"></i> Support </a>
+          <a href="https://www.buymeacoffee.com/shoky" target="_blank" class="flex items-center px-4 py-2 bg-sepia-700 text-black shadow-md hover:shadow-lg font-semibold rounded-lg transition-transform hover:scale-105"> <i class="fas fa-coffee mr-2"></i> Buy Me a Coffee </a>
+        </div> {% endcomment %}
+      <div class="flex space-x-4">
+        <button title="Visit my LinkedIn" class="text-gray-500 font-semibold hover:text-black border-2 inline-flex items-center p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:shadow-button-flat-pressed font-medium rounded-full text-xl text-center">
+          <a href="https://www.linkedin.com/in/mohamed-el-mourabit-agharbi/" class="hover:text-gray-800 font-medium transition" target="_blank" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </button>
+  
+  
+        <!-- Portfolio -->
+        <button title="Visit my Portfolio" class="text-gray-500 font-semibold hover:text-black border-2 inline-flex items-center p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:shadow-button-flat-pressed font-medium rounded-full text-xl text-center">
+          <a href="https://mohamed-elmourabit.netlify.app/home" class="text-sepia-light hover:text-gray-800 font-medium transition" target="_blank" title="Portfolio">
+            <i class="fas fa-globe"></i>
+          </a>
+        </button>
+  
+        <!-- Email -->
+        <button title="Send me an email" class="text-gray-500 font-semibold hover:text-black border-2 inline-flex items-center p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:shadow-button-flat-pressed font-medium rounded-full text-xl text-center">
+          <a href="mailto:mohamed.elmoag+mealprepcodex@gmail.com" class="hover:text-gray-800 font-medium transition" title="Email">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </button>
       </div>
-      <p>&copy; 2024 My Recipe App. All rights reserved.</p>
+        
+
+        <!-- Center: Copyright -->
+        <p class="text-gray-500 text-center flex-grow">&copy; 2025 Meal Prep Codex. Built with passion and curiosity.</p>
+
+        <!-- Left: Navigation Links -->
+        <div class="flex space-x-4">
+          <a href="{% url 'contact' %}" class="text-gray-500 font-semibold hover:text-black border-2 inline-flex items-center p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:shadow-button-flat-pressed font-medium rounded-full  text-center">Contact</a>
+          <a href="{% url 'faq' %}" class="text-gray-500 font-semibold hover:text-black border-2 inline-flex items-center p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:shadow-button-flat-pressed font-medium rounded-full  text-center">FAQ</a>
+          <a href="{% url 'about' %}" class="text-gray-500 font-semibold hover:text-black border-2 inline-flex items-center p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:shadow-button-flat-pressed font-medium rounded-full text-center">About</a>
+        </div>
+
+
+      </div>
     </footer>
   </body>
 </html>

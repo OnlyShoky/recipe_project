@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import include, path
 from ingredients.views import IngredientAPIView, IngredientDetailAPIView
-from recipes.views import RecipeAPIView, RecipeDetailAPIView, RecipeSearchAPIView
+from recipes.views import RecipeAPIView, RecipeDetailAPIView, RecipeSearchAPIView ,contact_view, faq_view, about_view
 
 # Registering API routes with the DefaultRouter if needed
 router = routers.DefaultRouter()
@@ -20,6 +20,10 @@ urlpatterns = [
     
     # ### Frontend Routes ###
     path('', views.home, name='home'),
+    path('contact/', contact_view, name='contact'),
+    path('faq/', faq_view, name='faq'),
+    path('about/', about_view, name='about'),
+    
     path('recipes/', views.recipe_list, name='recipe_list'),
     path('recipes/<uuid:id>/', views.recipe_detail, name='recipe_detail'),
     path('search/', views.search_recipes, name='search_recipes'),
