@@ -93,20 +93,8 @@ h1 {
 
 /* Font styles */
 
-/* Rock Salt Font */
-.rock-salt {
-  font-family: 'Rock Salt', cursive;
-  font-weight: 400; /* Default weight for Rock Salt */
-}
-
 /* Ruslan Display Font */
 .ruslan-display {
   font-family: 'Ruslan Display', cursive;
   font-weight: 400; /* Default weight for Ruslan Display */
-}
-
-/* Example with the existing .roboto class (if needed) */
-.roboto {
-  font-family: 'Permanent Marker', cursive;
-  font-weight: 700;
 }
