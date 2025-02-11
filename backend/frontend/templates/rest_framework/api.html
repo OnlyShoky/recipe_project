@@ -2,12 +2,23 @@
 {% load static %}
 {% load i18n %}
 {% load rest_framework %}
+
+
+
 {% block navbar %}
 <div class="header">
   <!-- Logo -->
-  <h1 class="text-2xl font-bold ">
-    <a href="/" class="hover:text-gray-800 transition text-black">My Recipe App</a>
-  </h1>
+    <!-- Logo (Favicon Image) -->
+<!-- Logo (Favicon Image) -->
+<a href="/" class="logo-link">
+  <img src="{% static 'favicon/logo.png' %}" alt="Meal Prep Codex Logo" class="logo-image" />
+  <div class="logo-text">
+    <span class="logo-block">MEAL</span>
+    <span class="logo-block">PREP</span>
+    <span class="logo-block">CODEX</span>
+  </div>
+</a>
+
 
 
   <!-- Navigation -->
@@ -129,9 +140,43 @@
   {% endif %}
 
 <!-- Footer -->
-<footer class="bg-sepia text-sepia-light py-4 text-center items-center">
-  <p>&copy; 2024 My Recipe App. All rights reserved.</p>
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+      
+      <!-- Right: Social & Contact Buttons -->
+      <div class="footer-buttons">
+          <button title="Visit my LinkedIn" class="footer-button">
+              <a href="https://www.linkedin.com/in/mohamed-el-mourabit-agharbi/" target="_blank">
+                  <i class="fab fa-linkedin"></i>
+              </a>
+          </button>
+
+          <button title="Visit my Portfolio" class="footer-button">
+              <a href="https://mohamed-elmourabit.netlify.app/home" target="_blank">
+                  <i class="fas fa-globe"></i>
+              </a>
+          </button>
+
+          <button title="Send me an email" class="footer-button">
+              <a href="mailto:mohamed.elmoag+mealprepcodex@gmail.com">
+                  <i class="fas fa-envelope"></i>
+              </a>
+          </button>
+      </div>
+
+      <!-- Center: Copyright -->
+      <p class="footer-copyright">&copy; 2025 Meal Prep Codex. Built with passion and curiosity.</p>
+
+      <!-- Left: Navigation Links -->
+      <div class="footer-links">
+          <a href="{% url 'contact' %}" class="footer-link">Contact</a>
+          <a href="{% url 'faq' %}" class="footer-link">FAQ</a>
+          <a href="{% url 'about' %}" class="footer-link">About</a>
+      </div>
+  </div>
 </footer>
+
   
 {% endblock %}
 
@@ -140,10 +185,22 @@
 
 
 {% block style %} 
+    {% comment %} Favicon {% endcomment %}
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}" />
+    <link rel="icon" type="image/png" href="{% static 'favicon/favicon.ico' %}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}" />
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}" />
 {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
 
 <link rel="stylesheet" type="text/css" href="/static/custom.css" />
+
+    {% comment %} Google Fonts {% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Ruslan+Display&display=swap" rel="stylesheet" />
 {{ block.super }}
 
 {% endblock %}

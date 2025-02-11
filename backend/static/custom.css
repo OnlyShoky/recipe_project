@@ -152,6 +152,40 @@ h1 {
 
 /* RECIP API CSS STYLE */
 
+/* Logo Link */
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.logo-link:hover {
+  color: #2d3748; /* Equivalent to Tailwind's text-gray-800 */
+}
+
+/* Logo Image */
+.logo-image {
+  height: 80px; /* Equivalent to h-20 */
+  width: 80px; /* Equivalent to w-20 */
+  margin-right: 12px; /* Equivalent to mr-3 */
+}
+
+/* Logo Text */
+.logo-text {
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.25rem; /* Equivalent to text-xl */
+  font-family: 'Ruslan Display', sans-serif; /* Assuming this is a custom font */
+  line-height: 1.1; /* Equivalent to leading-tight */
+}
+
+/* Blocks for each word */
+.logo-block {
+  display: block;
+}
+
+
 .api-doc-container {
     margin: 0 auto;
     font-family: Arial, sans-serif;
@@ -216,4 +250,87 @@ h1 {
     color: oklch(0.551 0.027 264.364);
     font-weight: bold;
     font-size: 0.7rem;
+}
+
+
+
+/* footer style */
+
+/* Footer */
+.footer {
+  padding: 1rem 0;
+}
+
+.footer-container {
+  max-width: 1280px; /* Equivalent to max-w-7xl */
+  margin: 0 auto;
+  padding: 0 1rem; /* Equivalent to px-4 */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #d1d5db;
+
+}
+
+.footer-buttons {
+  display: flex;
+  gap: 1rem; /* Equivalent to space-x-4 */
+}
+
+/* Buttons */
+.footer-button {
+  color: #6b7280; /* Gray-500 */
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.625rem;
+  border-radius: 50%;
+  font-size: 1.25rem; /* Equivalent to text-xl */
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.footer-button:hover {
+  color: #000;
+}
+
+.footer-button a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer-button a:hover {
+  color: #333; /* Darker gray */
+}
+
+/* Copyright */
+.footer-copyright {
+  color: #6b7280; /* Gray-500 */
+  text-align: center;
+  flex-grow: 1;
+  margin-top: 1rem;
+  border: none;
+}
+
+/* Links */
+.footer-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-link {
+  color: #6b7280;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.625rem;
+  border: 2px solid transparent;
+  border-radius: 50px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #000;
 }
