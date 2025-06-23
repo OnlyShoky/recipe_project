@@ -113,12 +113,12 @@ WSGI_APPLICATION = "recipe_project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 # DATABASES = {
 #     'default': {
@@ -132,12 +132,12 @@ WSGI_APPLICATION = "recipe_project.wsgi.application"
 # }
 # Use django-environ to parse the connection string
 
-DATABASES = {"default": env.db()}
+# DATABASES = {"default": env.db()}
 
-# If the flag as been set, configure to use proxy
-if env('USE_CLOUD_SQL_AUTH_PROXY') == "True" :
-    DATABASES["default"]["HOST"] = "127.0.0.1"
-    DATABASES["default"]["PORT"] = 5432
+# # If the flag as been set, configure to use proxy
+# if env('USE_CLOUD_SQL_AUTH_PROXY') == "True" :
+#     DATABASES["default"]["HOST"] = "127.0.0.1"
+#     DATABASES["default"]["PORT"] = 5432
 
 
 # Password validation

@@ -193,7 +193,7 @@ def generate_recipes_from_json(json_data):
             
             success_count += 1
         except Exception as e:
-            print(f"Error processing recipe: {e}")
+            print(f"Error processing recipe: {e} - {recipe_data['data']['attributes']['title']}")
             failure_count += 1
     
     print(f"Import finished: {success_count} successful, {failure_count} failed.")
