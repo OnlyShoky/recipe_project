@@ -191,6 +191,7 @@
         <div>
           <button class="btn secondary">⚙ Preferences</button>
           <button class="btn">💾 Save Plan</button>
+          <button class="btn secondary" onclick="openProfileModal()">🧍 Set Profile</button>
         </div>
       </div>
 
@@ -257,7 +258,7 @@
         </div>
         <div class="meal-slot reused-meal" data-source-day="Monday">
           <div class="meal-time">Lunch <span class="source-tag">(from Monday)</span></div>
-          <div class="meal-content">🔁 Chicken Caesar salad </div>
+          <div class="meal-content">🔁 Chicken Caesar salad</div>
           <button class="add-meal">✏️ Edit</button>
         </div>
 
@@ -426,7 +427,69 @@
       <button class="btn" style="width: 100%; margin-top: 15px">Print List</button>
     </div>
 
+    <div id="profile-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeProfileModal()">×</span>
+        <h2>Daily Calorie Intake Calculator</h2>
+        <p>For accurate calculation, we need some basic info about you</p>
+
+        <form id="profile-form">
+          <label>1. What is your sex?</label><br />
+          <label><input type="radio" name="sex" value="male" required /> Male</label>
+          <label><input type="radio" name="sex" value="female" /> Female</label><br /><br />
+
+          <label>2. How old are you?</label><br />
+          <input type="number" name="age" required /> years<br /><br />
+
+          <label>3. How tall are you?</label><br />
+          <input type="number" name="height" required /> cm<br /><br />
+
+          <label>4. How much do you weigh?</label><br />
+          <input type="number" name="weight" required /> kg<br /><br />
+
+          <label>5. How active are you on a daily basis?</label><br />
+          <select name="activity" required>
+            <option value="1.2">Lightly active (mostly sitting)</option>
+            <option value="1.375">Moderately active (mostly standing)</option>
+            <option value="1.55">Active (mostly walking)</option>
+            <option value="1.725">Very active (physically demanding)</option></select
+          ><br /><br />
+
+          <button type="submit" class="btn">Calculate Calories</button>
+        </form>
+
+        <div id="calorie-result" style="margin-top: 20px; font-weight: bold"></div>
+      </div>
+    </div>
+
     <script>
+      function openProfileModal() {
+        document.getElementById("profile-modal").style.display = "flex";
+      }
+
+      function closeProfileModal() {
+        document.getElementById("profile-modal").style.display = "none";
+      }
+
+      document.getElementById("profile-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const sex = this.sex.value;
+        const age = parseFloat(this.age.value);
+        const height = parseFloat(this.height.value);
+        const weight = parseFloat(this.weight.value);
+        const activity = parseFloat(this.activity.value);
+
+        let bmr;
+        if (sex === "male") {
+          bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+        } else {
+          bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+        }
+
+        const calorieIntake = Math.round(bmr * activity);
+        document.getElementById("calorie-result").textContent = "Estimated Daily Calorie Intake: " + calorieIntake + " kcal";
+      });
       // Simple script to show/hide modals (non-functional prototype)
       document.querySelectorAll(".add-meal").forEach((btn) => {
         btn.addEventListener("click", () => {
