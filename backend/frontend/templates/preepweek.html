@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Meal Planner</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f7fa;
+        color: #333;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      .prep-options {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #e3f2fd;
+        border-radius: 8px;
+      }
+      .prep-option {
+        padding: 8px 15px;
+        background-color: #bbdefb;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .prep-option.active {
+        background-color: #2196f3;
+        color: white;
+      }
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+      .day-header {
+        text-align: center;
+        font-weight: bold;
+        padding: 10px;
+        background-color: #e0e0e0;
+        border-radius: 5px 5px 0 0;
+      }
+      .meal-slot {
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 10px;
+        min-height: 80px;
+        position: relative;
+        border-radius: 5px;
+      }
+      .meal-slot.empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #999;
+      }
+      .meal-time {
+        font-size: 0.8em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+      .meal-content {
+        font-size: 0.9em;
+      }
+      .add-meal {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        color: #2196f3;
+        cursor: pointer;
+        font-size: 0.8em;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .btn {
+        padding: 10px 15px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .btn.secondary {
+        background-color: #e0e0e0;
+        color: #333;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .meal-types {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 15px 0;
+      }
+      .meal-type {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+      }
+      .meal-type:hover {
+        background-color: #e3f2fd;
+      }
+      .close-modal {
+        float: right;
+        cursor: pointer;
+        font-size: 1.2em;
+      }
+      .grocery-sidebar {
+        display: none;
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 300px;
+        height: 100%;
+        background-color: white;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .grocery-category {
+        margin-bottom: 15px;
+      }
+      .grocery-category h3 {
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #eee;
+      }
+      .grocery-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .reused-meal {
+        background-color: #e8f5e9; /* soft green */
+        border-left: 5px solid #66bb6a;
+      }
+      .source-tag {
+        font-size: 0.75em;
+        color: #4caf50;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Weekly Meal Planner</h1>
+        <div>
+          <button class="btn secondary">⚙ Preferences</button>
+          <button class="btn">💾 Save Plan</button>
+        </div>
+      </div>
+
+      <div class="prep-options">
+        <div class="prep-option active">🔁 Cook each day</div>
+        <div class="prep-option">📦 Prep for 2 days</div>
+        <div class="prep-option">🧊 Prep for whole week</div>
+        <button class="btn secondary" style="margin-left: auto">🕐 Show Prep Days</button>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn" id="generate-grocery">🧾 Generate Grocery List</button>
+        <button class="btn secondary">⏱ Copy to Next Day</button>
+        <button class="btn secondary">🧹 Clear All</button>
+        <button class="btn secondary">🖨 Print / PDF</button>
+      </div>
+
+      <div class="calendar">
+        <!-- Day headers -->
+        <div class="day-header">Monday</div>
+        <div class="day-header">Tuesday</div>
+        <div class="day-header">Wednesday</div>
+        <div class="day-header">Thursday</div>
+        <div class="day-header">Friday</div>
+        <div class="day-header">Saturday</div>
+        <div class="day-header">Sunday</div>
+
+        <!-- Breakfast slots -->
+        <div class="meal-slot">
+          <div class="meal-time">Breakfast</div>
+          <div class="meal-content">Scrambled eggs with toast</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Breakfast</div>
+          <div class="meal-content">Greek yogurt with granola</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Breakfast</div>
+          <div class="meal-content">Oatmeal with berries</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Breakfast</div>
+          <div class="meal-content">Pancakes</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+
+        <!-- Lunch slots -->
+        <div class="meal-slot">
+          <div class="meal-time">Lunch</div>
+          <div class="meal-content">Chicken Caesar salad</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot reused-meal" data-source-day="Monday">
+          <div class="meal-time">Lunch <span class="source-tag">(from Monday)</span></div>
+          <div class="meal-content">🔁 Chicken Caesar salad </div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+
+        <div class="meal-slot">
+          <div class="meal-time">Lunch</div>
+          <div class="meal-content">Turkey sandwich</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Lunch</div>
+          <div class="meal-content">Vegetable stir fry</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Lunch</div>
+          <div class="meal-content">Pasta salad</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+
+        <!-- Dinner slots -->
+        <div class="meal-slot">
+          <div class="meal-time">Dinner</div>
+          <div class="meal-content">Grilled salmon with veggies</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Dinner</div>
+          <div class="meal-content">Beef tacos</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Dinner</div>
+          <div class="meal-content">Chicken curry</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Dinner</div>
+          <div class="meal-content">Pizza night</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meal Selection Modal -->
+    <div class="modal" id="meal-modal">
+      <div class="modal-content">
+        <span class="close-modal">×</span>
+        <h2>Select a Meal</h2>
+
+        <div>
+          <label>Filter by:</label>
+          <select>
+            <option>All Types</option>
+            <option>🍗 Chicken</option>
+            <option>🥩 Beef</option>
+            <option>🐟 Fish</option>
+            <option>🥦 Vegan</option>
+            <option>🍝 Pasta</option>
+          </select>
+        </div>
+
+        <div class="meal-types">
+          <div class="meal-type">
+            <div>🍗</div>
+            <div>Grilled Chicken</div>
+            <div class="small">30 min • 450 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🥩</div>
+            <div>Beef Tacos</div>
+            <div class="small">25 min • 550 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🐟</div>
+            <div>Salmon Salad</div>
+            <div class="small">20 min • 400 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🥦</div>
+            <div>Veggie Stir Fry</div>
+            <div class="small">15 min • 350 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🍝</div>
+            <div>Pasta Alfredo</div>
+            <div class="small">35 min • 600 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🍗</div>
+            <div>Chicken Curry</div>
+            <div class="small">40 min • 500 cal</div>
+          </div>
+        </div>
+
+        <button class="btn" style="width: 100%; margin-top: 15px">View Recipe Details</button>
+      </div>
+    </div>
+
+    <!-- Grocery List Sidebar -->
+    <div class="grocery-sidebar" id="grocery-sidebar">
+      <h2>Grocery List</h2>
+
+      <div class="grocery-category">
+        <h3>Produce</h3>
+        <div class="grocery-item">
+          <span>Tomatoes</span>
+          <span>4</span>
+        </div>
+        <div class="grocery-item">
+          <span>Lettuce</span>
+          <span>1 head</span>
+        </div>
+        <div class="grocery-item">
+          <span>Bell peppers</span>
+          <span>3</span>
+        </div>
+      </div>
+
+      <div class="grocery-category">
+        <h3>Meat & Fish</h3>
+        <div class="grocery-item">
+          <span>Chicken breast</span>
+          <span>2 lbs</span>
+        </div>
+        <div class="grocery-item">
+          <span>Ground beef</span>
+          <span>1 lb</span>
+        </div>
+        <div class="grocery-item">
+          <span>Salmon fillet</span>
+          <span>1 lb</span>
+        </div>
+      </div>
+
+      <div class="grocery-category">
+        <h3>Dairy</h3>
+        <div class="grocery-item">
+          <span>Eggs</span>
+          <span>12</span>
+        </div>
+        <div class="grocery-item">
+          <span>Milk</span>
+          <span>1 gal</span>
+        </div>
+        <div class="grocery-item">
+          <span>Cheese</span>
+          <span>8 oz</span>
+        </div>
+      </div>
+
+      <button class="btn" style="width: 100%; margin-top: 15px">Print List</button>
+    </div>
+
+    <script>
+      // Simple script to show/hide modals (non-functional prototype)
+      document.querySelectorAll(".add-meal").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.getElementById("meal-modal").style.display = "flex";
+        });
+      });
+
+      document.querySelector(".close-modal").addEventListener("click", () => {
+        document.getElementById("meal-modal").style.display = "none";
+      });
+
+      document.getElementById("generate-grocery").addEventListener("click", () => {
+        document.getElementById("grocery-sidebar").style.display = "block";
+      });
+    </script>
+  </body>
+</html>

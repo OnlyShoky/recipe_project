@@ -24,6 +24,9 @@ def faq_view(request):
 def about_view(request):
     return render(request, 'about.html')
 
+def preepweek_view(request):
+    return render(request, 'preepweek.html')
+
 
 def search_recipes(request):
     query = request.GET.get('q')  # Get the search query from the request

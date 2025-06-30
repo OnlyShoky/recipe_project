@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import include, path
 from ingredients.views import IngredientAPIView, IngredientDetailAPIView
-from recipes.views import RecipeAPIView, RecipeDetailAPIView, RecipeSearchAPIView ,contact_view, faq_view, about_view
+from recipes.views import RecipeAPIView, RecipeDetailAPIView, RecipeSearchAPIView ,contact_view, faq_view, about_view,preepweek_view
 
 # Registering API routes with the DefaultRouter if needed
 router = routers.DefaultRouter()
@@ -27,6 +27,8 @@ urlpatterns = [
     path('recipes/', views.recipe_list, name='recipe_list'),
     path('recipes/<uuid:id>/', views.recipe_detail, name='recipe_detail'),
     path('search/', views.search_recipes, name='search_recipes'),
+    
+    path('preepweek/', preepweek_view, name='preepweek'),
     
     
     # ### Backend Routes ###
