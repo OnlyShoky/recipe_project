@@ -256,6 +256,65 @@
         color: #6d2323;
         font-weight: bold;
       }
+
+      /* Nutrient Tracking Styles */
+      .nutrient-summary-container {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #fffcf6;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .nutrient-days {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding: 10px 0;
+      }
+
+      .nutrient-day {
+        min-width: 200px;
+        padding: 15px;
+        background-color: #fff5e4;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .nutrient-day h3 {
+        margin-top: 0;
+        color: #6d2323;
+        border-bottom: 1px solid #dbc0a1;
+        padding-bottom: 5px;
+      }
+
+      .nutrient-item {
+        margin-bottom: 8px;
+      }
+
+      .nutrient-bar {
+        height: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        margin-top: 3px;
+        overflow: hidden;
+      }
+
+      .nutrient-progress {
+        height: 100%;
+        border-radius: 5px;
+      }
+
+      /* Color coding for nutrient levels */
+      .nutrient-optimal {
+        background-color: #4caf50; /* Green */
+      }
+      .nutrient-warning {
+        background-color: #ffc107; /* Yellow */
+      }
+      .nutrient-danger {
+        background-color: #f44336; /* Red */
+      }
     </style>
   </head>
   <body>
@@ -388,7 +447,17 @@
         <div class="meal-slot empty">
           <button class="add-meal">+ Add Meal</button>
         </div>
+
+        
       </div>
+
+      <!-- Daily Nutrient Summary -->
+        <div class="nutrient-summary-container">
+          <h2>Daily Nutrient Intake</h2>
+          <div class="nutrient-days">
+            <!-- This will be populated by JavaScript -->
+          </div>
+        </div>
     </div>
 
     <!-- Meal Selection Modal -->
@@ -624,6 +693,18 @@
 
         const calorieIntake = Math.round(bmr * activity);
         document.getElementById("calorie-result").textContent = "Estimated Daily Calorie Intake: " + calorieIntake + " kcal";
+
+        // Store nutrient targets based on profile
+        const nutrientTargets = {
+          calories: calorieIntake,
+          protein: { target: Math.round(weight * 1.6), max: Math.round(weight * 2) }, // 1.6-2g per kg of body weight
+          carbs: { target: Math.round((calorieIntake * 0.5) / 4), max: Math.round((calorieIntake * 0.6) / 4) }, // 50-60% of calories
+          fat: { target: Math.round((calorieIntake * 0.25) / 9), max: Math.round((calorieIntake * 0.35) / 9) }, // 25-35% of calories
+          fiber: { target: 25, max: 40 },
+        };
+
+        localStorage.setItem("nutrientTargets", JSON.stringify(nutrientTargets));
+        updateNutrientSummary();
       });
       // Simple script to show/hide modals (non-functional prototype)
       document.querySelectorAll(".add-meal").forEach((btn) => {
@@ -723,6 +804,84 @@
           }
         });
       }
+
+      // Nutrient tracking functions
+      function updateNutrientSummary() {
+        const nutrientDays = document.querySelector(".nutrient-days");
+        nutrientDays.innerHTML = "";
+
+        // Get the user's daily targets from profile (example values)
+        const dailyTargets = {
+          calories: 2000,
+          protein: { target: 50, max: 100 }, // in grams
+          carbs: { target: 250, max: 300 },
+          fat: { target: 65, max: 80 },
+          fiber: { target: 25, max: 40 },
+        };
+
+        // For each day in the week
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        days.forEach((day) => {
+          // Calculate nutrients for the day (example calculation - replace with your actual meal data)
+          const dayNutrients = calculateDayNutrients(day);
+
+          // Create day element
+          const dayEl = document.createElement("div");
+          dayEl.className = "nutrient-day";
+          dayEl.innerHTML = `
+      <h3>${day}</h3>
+      ${createNutrientItem("Calories", dayNutrients.calories, dailyTargets.calories, "kcal")}
+      ${createNutrientItem("Protein", dayNutrients.protein, dailyTargets.protein, "g")}
+      ${createNutrientItem("Carbs", dayNutrients.carbs, dailyTargets.carbs, "g")}
+      ${createNutrientItem("Fat", dayNutrients.fat, dailyTargets.fat, "g")}
+      ${createNutrientItem("Fiber", dayNutrients.fiber, dailyTargets.fiber, "g")}
+    `;
+          nutrientDays.appendChild(dayEl);
+        });
+      }
+
+      function calculateDayNutrients(day) {
+        // This is a placeholder - replace with actual calculation based on meals
+        // You would sum up nutrients from all meals for the day
+        return {
+          calories: Math.floor(Math.random() * 500) + 1500, // Random between 1500-2000
+          protein: Math.floor(Math.random() * 30) + 40, // Random between 40-70g
+          carbs: Math.floor(Math.random() * 100) + 150, // Random between 150-250g
+          fat: Math.floor(Math.random() * 30) + 40, // Random between 40-70g
+          fiber: Math.floor(Math.random() * 15) + 10, // Random between 10-25g
+        };
+      }
+
+      function createNutrientItem(name, value, target, unit) {
+        let progressClass = "";
+        let progressWidth = 0;
+
+        if (typeof target === "object") {
+          // For nutrients with target and max (like protein)
+          progressWidth = Math.min(100, (value / target.max) * 100);
+          if (value < target.target * 0.8) progressClass = "nutrient-warning";
+          else if (value > target.max) progressClass = "nutrient-danger";
+          else progressClass = "nutrient-optimal";
+        } else {
+          // For simple targets (like calories)
+          progressWidth = Math.min(100, (value / target) * 100);
+          if (value < target * 0.8) progressClass = "nutrient-warning";
+          else if (value > target * 1.2) progressClass = "nutrient-danger";
+          else progressClass = "nutrient-optimal";
+        }
+
+        return `
+    <div class="nutrient-item">
+      <div>${name}: ${value}${unit}</div>
+      <div class="nutrient-bar">
+        <div class="nutrient-progress ${progressClass}" style="width: ${progressWidth}%"></div>
+      </div>
+    </div>
+  `;
+      }
+
+      // Call this function whenever meals are updated
+      updateNutrientSummary();
     </script>
   </body>
 </html>
