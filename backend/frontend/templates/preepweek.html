@@ -148,6 +148,13 @@
         cursor: pointer;
         font-size: 1.2em;
       }
+
+      .close-sidebar {
+        float: right;
+        cursor: pointer;
+        font-size: 1.2em;
+      }
+
       .grocery-sidebar {
         display: none;
         position: fixed;
@@ -174,13 +181,80 @@
         margin-bottom: 5px;
       }
 
-      .reused-meal {
-        background-color: #e8f5e9; /* soft green */
-        border-left: 5px solid #66bb6a;
+      .meal-slot.connected {
+        background-color: #c6f4d6; /* light green */
+        border-left: 5px solid #34c759; /* green sidebar */
       }
+
+      .meal-slot.connected.reused-meal {
+        background-color: #c6f4d6; /* soft green */
+        border-left: none;
+      }
+
       .source-tag {
         font-size: 0.75em;
         color: #4caf50;
+      }
+
+      .preference-section {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #dbc0a1;
+      }
+
+      .preference-section h3 {
+        margin-bottom: 10px;
+        color: #6d2323;
+      }
+
+      .preference-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .preference-options label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        background-color: #fff5e4;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      .banned-ingredients-input {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .banned-ingredients-input input {
+        flex-grow: 1;
+        padding: 8px;
+        border: 1px solid #dbc0a1;
+        border-radius: 4px;
+      }
+
+      .banned-ingredients-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .banned-ingredient-item {
+        padding: 5px 10px;
+        background-color: #fff5e4;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .remove-ingredient {
+        cursor: pointer;
+        color: #6d2323;
+        font-weight: bold;
       }
     </style>
   </head>
@@ -189,7 +263,6 @@
       <div class="header">
         <h1>Weekly Meal Planner</h1>
         <div>
-          <button class="btn secondary">⚙ Preferences</button>
           <button class="btn">💾 Save Plan</button>
           <button class="btn secondary" onclick="openProfileModal()">🧍 Set Profile</button>
         </div>
@@ -203,6 +276,7 @@
       </div>
 
       <div class="action-buttons">
+        <button class="btn secondary" onclick="openPreferencesModal()">⚙ Preferences</button>
         <button class="btn" id="generate-grocery">🧾 Generate Grocery List</button>
         <button class="btn secondary">⏱ Copy to Next Day</button>
         <button class="btn secondary">🧹 Clear All</button>
@@ -251,14 +325,14 @@
         </div>
 
         <!-- Lunch slots -->
-        <div class="meal-slot">
+        <div class="meal-slot connected">
           <div class="meal-time">Lunch</div>
           <div class="meal-content">Chicken Caesar salad</div>
           <button class="add-meal">✏️ Edit</button>
         </div>
-        <div class="meal-slot reused-meal" data-source-day="Monday">
+        <div class="meal-slot connected reused-meal" data-source-day="Monday">
           <div class="meal-time">Lunch <span class="source-tag">(from Monday)</span></div>
-          <div class="meal-content">🔁 Chicken Caesar salad</div>
+          <div class="meal-content">Chicken Caesar salad</div>
           <button class="add-meal">✏️ Edit</button>
         </div>
 
@@ -374,6 +448,7 @@
 
     <!-- Grocery List Sidebar -->
     <div class="grocery-sidebar" id="grocery-sidebar">
+      <span class="close-modal" onclick="closeGrocerySidebar()">×</span>
       <h2>Grocery List</h2>
 
       <div class="grocery-category">
@@ -462,6 +537,62 @@
       </div>
     </div>
 
+    <div class="modal" id="preferences-modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closePreferencesModal()">×</span>
+        <h2>Meal Preferences</h2>
+
+        <div class="preference-section">
+          <h3>Protein Preferences</h3>
+          <div class="preference-options">
+            <label><input type="checkbox" name="protein" value="chicken" checked /> 🍗 Chicken</label>
+            <label><input type="checkbox" name="protein" value="beef" checked /> 🥩 Beef</label>
+            <label><input type="checkbox" name="protein" value="fish" checked /> 🐟 Fish</label>
+            <label><input type="checkbox" name="protein" value="pork" checked /> 🐖 Pork</label>
+            <label><input type="checkbox" name="protein" value="vegan" /> 🥦 Vegan</label>
+            <label><input type="checkbox" name="protein" value="vegetarian" /> 🥬 Vegetarian</label>
+          </div>
+        </div>
+
+        <div class="preference-section">
+          <h3>Carb Preferences</h3>
+          <div class="preference-options">
+            <label><input type="checkbox" name="carb" value="rice" checked /> 🍚 Rice</label>
+            <label><input type="checkbox" name="carb" value="pasta" checked /> 🍝 Pasta</label>
+            <label><input type="checkbox" name="carb" value="potato" checked /> 🥔 Potato</label>
+            <label><input type="checkbox" name="carb" value="bread" checked /> 🍞 Bread</label>
+            <label><input type="checkbox" name="carb" value="quinoa" /> 🌾 Quinoa</label>
+          </div>
+        </div>
+
+        <div class="preference-section">
+          <h3>Banned Ingredients</h3>
+          <div class="preference-options">
+            <div class="banned-ingredients-input">
+              <input type="text" id="new-banned-ingredient" placeholder="Add ingredient to ban" />
+              <button class="btn secondary" onclick="addBannedIngredient()">Add</button>
+            </div>
+            <div id="banned-ingredients-list" class="banned-ingredients-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <div class="preference-section">
+          <h3>Other Preferences</h3>
+          <div class="preference-options">
+            <label><input type="checkbox" name="preference" value="quick" /> ⏱ Quick meals only (&lt;30 min)</label>
+            <label><input type="checkbox" name="preference" value="low-carb" /> 🍃 Low-carb options</label>
+            <label><input type="checkbox" name="preference" value="high-protein" /> 💪 High-protein</label>
+            <label><input type="checkbox" name="preference" value="gluten-free" /> 🌾 Gluten-free</label>
+            <label><input type="checkbox" name="preference" value="dairy-free" /> 🥛 Dairy-free</label>
+          </div>
+        </div>
+
+        <button class="btn" onclick="savePreferences()" style="margin-top: 20px">Save Preferences</button>
+      </div>
+    </div>
+
     <script>
       function openProfileModal() {
         document.getElementById("profile-modal").style.display = "flex";
@@ -469,6 +600,10 @@
 
       function closeProfileModal() {
         document.getElementById("profile-modal").style.display = "none";
+      }
+
+      function closeGrocerySidebar() {
+        document.getElementById("grocery-sidebar").style.display = "none";
       }
 
       document.getElementById("profile-form").addEventListener("submit", function (e) {
@@ -504,6 +639,90 @@
       document.getElementById("generate-grocery").addEventListener("click", () => {
         document.getElementById("grocery-sidebar").style.display = "block";
       });
+
+      // Add these functions to your existing script section
+      function openPreferencesModal() {
+        document.getElementById("preferences-modal").style.display = "flex";
+        loadPreferences();
+      }
+
+      function closePreferencesModal() {
+        document.getElementById("preferences-modal").style.display = "none";
+      }
+
+      function loadPreferences() {
+        // Load saved preferences from localStorage if available
+        const savedPrefs = JSON.parse(localStorage.getItem("mealPreferences")) || {};
+
+        // Set protein preferences
+        document.querySelectorAll('input[name="protein"]').forEach((checkbox) => {
+          checkbox.checked = savedPrefs.proteins ? savedPrefs.proteins.includes(checkbox.value) : checkbox.checked;
+        });
+
+        // Set carb preferences
+        document.querySelectorAll('input[name="carb"]').forEach((checkbox) => {
+          checkbox.checked = savedPrefs.carbs ? savedPrefs.carbs.includes(checkbox.value) : checkbox.checked;
+        });
+
+        // Set other preferences
+        document.querySelectorAll('input[name="preference"]').forEach((checkbox) => {
+          checkbox.checked = savedPrefs.other ? savedPrefs.other.includes(checkbox.value) : false;
+        });
+
+        // Load banned ingredients
+        const bannedList = document.getElementById("banned-ingredients-list");
+        bannedList.innerHTML = "";
+        if (savedPrefs.bannedIngredients) {
+          savedPrefs.bannedIngredients.forEach((ingredient) => {
+            const item = document.createElement("div");
+            item.className = "banned-ingredient-item";
+            item.innerHTML = `
+          ${ingredient}
+          <span class="remove-ingredient" onclick="removeBannedIngredient('${ingredient}')">×</span>
+        `;
+            bannedList.appendChild(item);
+          });
+        }
+      }
+
+      function savePreferences() {
+        const preferences = {
+          proteins: Array.from(document.querySelectorAll('input[name="protein"]:checked')).map((c) => c.value),
+          carbs: Array.from(document.querySelectorAll('input[name="carb"]:checked')).map((c) => c.value),
+          other: Array.from(document.querySelectorAll('input[name="preference"]:checked')).map((c) => c.value),
+          bannedIngredients: Array.from(document.querySelectorAll(".banned-ingredient-item")).map((item) => item.textContent.replace("×", "").trim()),
+        };
+
+        localStorage.setItem("mealPreferences", JSON.stringify(preferences));
+        closePreferencesModal();
+        alert("Preferences saved! These will be used when generating your meal plan.");
+      }
+
+      function addBannedIngredient() {
+        const input = document.getElementById("new-banned-ingredient");
+        const ingredient = input.value.trim();
+
+        if (ingredient) {
+          const bannedList = document.getElementById("banned-ingredients-list");
+          const item = document.createElement("div");
+          item.className = "banned-ingredient-item";
+          item.innerHTML = `
+        ${ingredient}
+        <span class="remove-ingredient" onclick="removeBannedIngredient('${ingredient}')">×</span>
+      `;
+          bannedList.appendChild(item);
+          input.value = "";
+        }
+      }
+
+      function removeBannedIngredient(ingredient) {
+        const items = document.querySelectorAll(".banned-ingredient-item");
+        items.forEach((item) => {
+          if (item.textContent.replace("×", "").trim() === ingredient) {
+            item.remove();
+          }
+        });
+      }
     </script>
   </body>
 </html>
