@@ -4,7 +4,7 @@
 
 <div class="container">
   <div class="header">
-    <h1>Weekly Meal Planner</h1>
+    <h1 class="text-3xl font-bold">Weekly Meal Planner</h1>
     <div>
       <button class="btn">💾 Save Plan</button>
       <button class="btn secondary" onclick="openProfileModal()">🧍 Set Profile</button>
@@ -306,37 +306,55 @@
 </div>
 
 <div id="profile-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeProfileModal()">×</span>
-    <h2>Daily Calorie Intake Calculator</h2>
-    <p>For accurate calculation, we need some basic info about you</p>
+  <div class="modal-content bg-white rounded-lg shadow-lg overflow-hidden">
+    <span class="close-modal top-0 right-0 p-4" onclick="closeProfileModal()">×</span>
+    <h2 class="text-2xl font-bold text-center">Daily Calorie Intake Calculator</h2>
+    <p class="text-center">For accurate calculation, we need some basic info about you</p>
 
-    <form id="profile-form">
-      <label>1. What is your sex?</label><br />
-      <label><input type="radio" name="sex" value="male" required /> Male</label>
-      <label><input type="radio" name="sex" value="female" /> Female</label><br /><br />
+    <form id="profile-form" class="space-y-4 p-4">
+      <label class="block">
+        1. What is your sex?
+      </label>
+      <div class="flex space-x-4">
+        <label class="flex items-center">
+          <input type="radio" name="sex" value="male" required class="mr-2" />
+          Male
+        </label>
+        <label class="flex items-center">
+          <input type="radio" name="sex" value="female" class="mr-2" />
+          Female
+        </label>
+      </div>
 
-      <label>2. How old are you?</label><br />
-      <input type="number" name="age" required /> years<br /><br />
+      <label class="block">
+        2. How old are you?
+      </label>
+      <input type="number" name="age" required class="w-full px-4 py-2 border rounded-md" />
 
-      <label>3. How tall are you?</label><br />
-      <input type="number" name="height" required /> cm<br /><br />
+      <label class="block">
+        3. How tall are you?
+      </label>
+      <input type="number" name="height" required class="w-full px-4 py-2 border rounded-md" />
 
-      <label>4. How much do you weigh?</label><br />
-      <input type="number" name="weight" required /> kg<br /><br />
+      <label class="block">
+        4. How much do you weigh?
+      </label>
+      <input type="number" name="weight" required class="w-full px-4 py-2 border rounded-md" />
 
-      <label>5. How active are you on a daily basis?</label><br />
-      <select name="activity" required>
+      <label class="block">
+        5. How active are you on a daily basis?
+      </label>
+      <select name="activity" required class="w-full px-4 py-2 border rounded-md">
         <option value="1.2">Lightly active (mostly sitting)</option>
         <option value="1.375">Moderately active (mostly standing)</option>
         <option value="1.55">Active (mostly walking)</option>
-        <option value="1.725">Very active (physically demanding)</option></select
-      ><br /><br />
+        <option value="1.725">Very active (physically demanding)</option>
+      </select>
 
-      <button type="submit" class="btn">Calculate Calories</button>
+      <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white rounded-md">Calculate Calories</button>
     </form>
 
-    <div id="calorie-result" style="margin-top: 20px; font-weight: bold"></div>
+    <div id="calorie-result" class="p-4 text-xl font-bold text-center"></div>
   </div>
 </div>
 
