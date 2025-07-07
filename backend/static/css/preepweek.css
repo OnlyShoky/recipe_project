@@ -1,0 +1,282 @@
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+.prep-options {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #e3f2fd;
+  border-radius: 8px;
+}
+.prep-option {
+  padding: 8px 15px;
+  background-color: #bbdefb;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.prep-option.active {
+  background-color: #2196f3;
+  color: white;
+}
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-bottom: 30px;
+}
+.day-header {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px 5px 0 0;
+}
+.meal-slot {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  min-height: 80px;
+  position: relative;
+  border-radius: 5px;
+}
+.meal-slot.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+}
+.meal-time {
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 5px;
+}
+.meal-content {
+  font-size: 0.9em;
+}
+.add-meal {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  color: #2196f3;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.btn {
+  padding: 10px 15px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn.secondary {
+  background-color: #e0e0e0;
+  color: #333;
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.meal-types {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 15px 0;
+}
+.meal-type {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+.meal-type:hover {
+  background-color: #e3f2fd;
+}
+.close-modal {
+  float: right;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.close-sidebar {
+  float: right;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.grocery-sidebar {
+  display: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 300px;
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto;
+}
+.grocery-category {
+  margin-bottom: 15px;
+}
+.grocery-category h3 {
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+}
+.grocery-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.meal-slot.connected {
+  background-color: #c6f4d6; /* light green */
+  border-left: 5px solid #34c759; /* green sidebar */
+}
+
+.meal-slot.connected.reused-meal {
+  background-color: #c6f4d6; /* soft green */
+  border-left: none;
+}
+
+.source-tag {
+  font-size: 0.75em;
+  color: #4caf50;
+}
+
+.preference-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #dbc0a1;
+}
+
+.preference-section h3 {
+  margin-bottom: 10px;
+  color: #6d2323;
+}
+
+.preference-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.preference-options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background-color: #fff5e4;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.banned-ingredients-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.banned-ingredients-input input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #dbc0a1;
+  border-radius: 4px;
+}
+
+.banned-ingredients-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.banned-ingredient-item {
+  padding: 5px 10px;
+  background-color: #fff5e4;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.remove-ingredient {
+  cursor: pointer;
+  color: #6d2323;
+  font-weight: bold;
+}
+
+/* Nutrient Tracking Styles */
+/* Nutrient Summary Styles */
+.meal-slot.nutrient-summary {
+  background-color: #f8f9fa;
+  padding: 5px;
+}
+
+.nutrient-day {
+  font-size: 0.8em;
+}
+
+.nutrient-item {
+  margin-bottom: 3px;
+}
+
+.nutrient-bar {
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.nutrient-progress {
+  height: 100%;
+}
+
+/* Color coding for nutrient levels */
+.nutrient-optimal {
+  background-color: #28a745; /* Green */
+}
+.nutrient-warning {
+  background-color: #ffc107; /* Yellow */
+}
+.nutrient-danger {
+  background-color: #dc3545; /* Red */
+}

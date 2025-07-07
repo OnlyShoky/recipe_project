@@ -21,6 +21,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Ruslan+Display&display=swap" rel="stylesheet" />
+
+      <!-- Then your custom CSS -->
+  {% block extra_css %}{% endblock %}
   </head>
   <body>
     <!-- Header -->
@@ -49,6 +52,9 @@
         <nav class="flex space-x-2 items-center">
           <div class="flex w-fit shadow-box-up rounded-xl dark:bg-box-dark dark:shadow-box-dark-out">
             <div class="dark:shadow-buttons-box-dark rounded-2xl w-full">
+              <button title="Go to post list page" class="text-gray-500 font-semibold hover:text-black border-2 inline-flex items-center last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center">
+                <a href="{% url 'preepweek' %}"> Preepweek </a>
+              </button>
               <button title="Go to post list page" class="text-gray-500 font-semibold hover:text-black border-2 inline-flex items-center last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center">
                 <a href="{% url 'recipe_list' %}"> Recipes </a>
               </button>
@@ -120,5 +126,7 @@
 
       </div>
     </footer>
+
+        {% block extra_js %}{% endblock %}
   </body>
 </html>

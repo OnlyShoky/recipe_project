@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Meal Planner</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f7fa;
+        color: #333;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      .prep-options {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #e3f2fd;
+        border-radius: 8px;
+      }
+      .prep-option {
+        padding: 8px 15px;
+        background-color: #bbdefb;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .prep-option.active {
+        background-color: #2196f3;
+        color: white;
+      }
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+      .day-header {
+        text-align: center;
+        font-weight: bold;
+        padding: 10px;
+        background-color: #e0e0e0;
+        border-radius: 5px 5px 0 0;
+      }
+      .meal-slot {
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 10px;
+        min-height: 80px;
+        position: relative;
+        border-radius: 5px;
+      }
+      .meal-slot.empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #999;
+      }
+      .meal-time {
+        font-size: 0.8em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+      .meal-content {
+        font-size: 0.9em;
+      }
+      .add-meal {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        color: #2196f3;
+        cursor: pointer;
+        font-size: 0.8em;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .btn {
+        padding: 10px 15px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .btn.secondary {
+        background-color: #e0e0e0;
+        color: #333;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .meal-types {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 15px 0;
+      }
+      .meal-type {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+      }
+      .meal-type:hover {
+        background-color: #e3f2fd;
+      }
+      .close-modal {
+        float: right;
+        cursor: pointer;
+        font-size: 1.2em;
+      }
+
+      .close-sidebar {
+        float: right;
+        cursor: pointer;
+        font-size: 1.2em;
+      }
+
+      .grocery-sidebar {
+        display: none;
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 300px;
+        height: 100%;
+        background-color: white;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .grocery-category {
+        margin-bottom: 15px;
+      }
+      .grocery-category h3 {
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #eee;
+      }
+      .grocery-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .meal-slot.connected {
+        background-color: #c6f4d6; /* light green */
+        border-left: 5px solid #34c759; /* green sidebar */
+      }
+
+      .meal-slot.connected.reused-meal {
+        background-color: #c6f4d6; /* soft green */
+        border-left: none;
+      }
+
+      .source-tag {
+        font-size: 0.75em;
+        color: #4caf50;
+      }
+
+      .preference-section {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #dbc0a1;
+      }
+
+      .preference-section h3 {
+        margin-bottom: 10px;
+        color: #6d2323;
+      }
+
+      .preference-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .preference-options label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        background-color: #fff5e4;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      .banned-ingredients-input {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .banned-ingredients-input input {
+        flex-grow: 1;
+        padding: 8px;
+        border: 1px solid #dbc0a1;
+        border-radius: 4px;
+      }
+
+      .banned-ingredients-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .banned-ingredient-item {
+        padding: 5px 10px;
+        background-color: #fff5e4;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .remove-ingredient {
+        cursor: pointer;
+        color: #6d2323;
+        font-weight: bold;
+      }
+
+      /* Nutrient Tracking Styles */
+      .nutrient-summary-container {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #fffcf6;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .nutrient-days {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding: 10px 0;
+      }
+
+      .nutrient-day {
+        min-width: 200px;
+        padding: 15px;
+        background-color: #fff5e4;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .nutrient-day h3 {
+        margin-top: 0;
+        color: #6d2323;
+        border-bottom: 1px solid #dbc0a1;
+        padding-bottom: 5px;
+      }
+
+      .nutrient-item {
+        margin-bottom: 8px;
+      }
+
+      .nutrient-bar {
+        height: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        margin-top: 3px;
+        overflow: hidden;
+      }
+
+      .nutrient-progress {
+        height: 100%;
+        border-radius: 5px;
+      }
+
+      /* Color coding for nutrient levels */
+      .nutrient-optimal {
+        background-color: #4caf50; /* Green */
+      }
+      .nutrient-warning {
+        background-color: #ffc107; /* Yellow */
+      }
+      .nutrient-danger {
+        background-color: #f44336; /* Red */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Weekly Meal Planner</h1>
+        <div>
+          <button class="btn">💾 Save Plan</button>
+          <button class="btn secondary" onclick="openProfileModal()">🧍 Set Profile</button>
+        </div>
+      </div>
+
+      <div class="prep-options">
+        <div class="prep-option active">🔁 Cook each day</div>
+        <div class="prep-option">📦 Prep for 2 days</div>
+        <div class="prep-option">🧊 Prep for whole week</div>
+        <button class="btn secondary" style="margin-left: auto">🕐 Show Prep Days</button>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn secondary" onclick="openPreferencesModal()">⚙ Preferences</button>
+        <button class="btn" id="generate-grocery">🧾 Generate Grocery List</button>
+        <button class="btn secondary">⏱ Copy to Next Day</button>
+        <button class="btn secondary">🧹 Clear All</button>
+        <button class="btn secondary">🖨 Print / PDF</button>
+      </div>
+
+      <div class="calendar">
+        <!-- Day headers -->
+        <div class="day-header">Monday</div>
+        <div class="day-header">Tuesday</div>
+        <div class="day-header">Wednesday</div>
+        <div class="day-header">Thursday</div>
+        <div class="day-header">Friday</div>
+        <div class="day-header">Saturday</div>
+        <div class="day-header">Sunday</div>
+
+        <!-- Breakfast slots -->
+        <div class="meal-slot">
+          <div class="meal-time">Breakfast</div>
+          <div class="meal-content">Scrambled eggs with toast</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Breakfast</div>
+          <div class="meal-content">Greek yogurt with granola</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Breakfast</div>
+          <div class="meal-content">Oatmeal with berries</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Breakfast</div>
+          <div class="meal-content">Pancakes</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+
+        <!-- Lunch slots -->
+        <div class="meal-slot connected">
+          <div class="meal-time">Lunch</div>
+          <div class="meal-content">Chicken Caesar salad</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot connected reused-meal" data-source-day="Monday">
+          <div class="meal-time">Lunch <span class="source-tag">(from Monday)</span></div>
+          <div class="meal-content">Chicken Caesar salad</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+
+        <div class="meal-slot">
+          <div class="meal-time">Lunch</div>
+          <div class="meal-content">Turkey sandwich</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Lunch</div>
+          <div class="meal-content">Vegetable stir fry</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Lunch</div>
+          <div class="meal-content">Pasta salad</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+
+        <!-- Dinner slots -->
+        <div class="meal-slot">
+          <div class="meal-time">Dinner</div>
+          <div class="meal-content">Grilled salmon with veggies</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Dinner</div>
+          <div class="meal-content">Beef tacos</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Dinner</div>
+          <div class="meal-content">Chicken curry</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+        <div class="meal-slot">
+          <div class="meal-time">Dinner</div>
+          <div class="meal-content">Pizza night</div>
+          <button class="add-meal">✏️ Edit</button>
+        </div>
+        <div class="meal-slot empty">
+          <button class="add-meal">+ Add Meal</button>
+        </div>
+
+        
+      </div>
+
+      <!-- Daily Nutrient Summary -->
+          <div class="nutrient-days">
+            <!-- This will be populated by JavaScript -->
+          </div>
+    </div>
+
+    <!-- Meal Selection Modal -->
+    <div class="modal" id="meal-modal">
+      <div class="modal-content">
+        <span class="close-modal">×</span>
+        <h2>Select a Meal</h2>
+
+        <div>
+          <label>Filter by:</label>
+          <select>
+            <option>All Types</option>
+            <option>🍗 Chicken</option>
+            <option>🥩 Beef</option>
+            <option>🐟 Fish</option>
+            <option>🥦 Vegan</option>
+            <option>🍝 Pasta</option>
+          </select>
+        </div>
+
+        <div class="meal-types">
+          <div class="meal-type">
+            <div>🍗</div>
+            <div>Grilled Chicken</div>
+            <div class="small">30 min • 450 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🥩</div>
+            <div>Beef Tacos</div>
+            <div class="small">25 min • 550 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🐟</div>
+            <div>Salmon Salad</div>
+            <div class="small">20 min • 400 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🥦</div>
+            <div>Veggie Stir Fry</div>
+            <div class="small">15 min • 350 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🍝</div>
+            <div>Pasta Alfredo</div>
+            <div class="small">35 min • 600 cal</div>
+          </div>
+          <div class="meal-type">
+            <div>🍗</div>
+            <div>Chicken Curry</div>
+            <div class="small">40 min • 500 cal</div>
+          </div>
+        </div>
+
+        <button class="btn" style="width: 100%; margin-top: 15px">View Recipe Details</button>
+      </div>
+    </div>
+
+    <!-- Grocery List Sidebar -->
+    <div class="grocery-sidebar" id="grocery-sidebar">
+      <span class="close-modal" onclick="closeGrocerySidebar()">×</span>
+      <h2>Grocery List</h2>
+
+      <div class="grocery-category">
+        <h3>Produce</h3>
+        <div class="grocery-item">
+          <span>Tomatoes</span>
+          <span>4</span>
+        </div>
+        <div class="grocery-item">
+          <span>Lettuce</span>
+          <span>1 head</span>
+        </div>
+        <div class="grocery-item">
+          <span>Bell peppers</span>
+          <span>3</span>
+        </div>
+      </div>
+
+      <div class="grocery-category">
+        <h3>Meat & Fish</h3>
+        <div class="grocery-item">
+          <span>Chicken breast</span>
+          <span>2 lbs</span>
+        </div>
+        <div class="grocery-item">
+          <span>Ground beef</span>
+          <span>1 lb</span>
+        </div>
+        <div class="grocery-item">
+          <span>Salmon fillet</span>
+          <span>1 lb</span>
+        </div>
+      </div>
+
+      <div class="grocery-category">
+        <h3>Dairy</h3>
+        <div class="grocery-item">
+          <span>Eggs</span>
+          <span>12</span>
+        </div>
+        <div class="grocery-item">
+          <span>Milk</span>
+          <span>1 gal</span>
+        </div>
+        <div class="grocery-item">
+          <span>Cheese</span>
+          <span>8 oz</span>
+        </div>
+      </div>
+
+      <button class="btn" style="width: 100%; margin-top: 15px">Print List</button>
+    </div>
+
+    <div id="profile-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closeProfileModal()">×</span>
+        <h2>Daily Calorie Intake Calculator</h2>
+        <p>For accurate calculation, we need some basic info about you</p>
+
+        <form id="profile-form">
+          <label>1. What is your sex?</label><br />
+          <label><input type="radio" name="sex" value="male" required /> Male</label>
+          <label><input type="radio" name="sex" value="female" /> Female</label><br /><br />
+
+          <label>2. How old are you?</label><br />
+          <input type="number" name="age" required /> years<br /><br />
+
+          <label>3. How tall are you?</label><br />
+          <input type="number" name="height" required /> cm<br /><br />
+
+          <label>4. How much do you weigh?</label><br />
+          <input type="number" name="weight" required /> kg<br /><br />
+
+          <label>5. How active are you on a daily basis?</label><br />
+          <select name="activity" required>
+            <option value="1.2">Lightly active (mostly sitting)</option>
+            <option value="1.375">Moderately active (mostly standing)</option>
+            <option value="1.55">Active (mostly walking)</option>
+            <option value="1.725">Very active (physically demanding)</option></select
+          ><br /><br />
+
+          <button type="submit" class="btn">Calculate Calories</button>
+        </form>
+
+        <div id="calorie-result" style="margin-top: 20px; font-weight: bold"></div>
+      </div>
+    </div>
+
+    <div class="modal" id="preferences-modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="closePreferencesModal()">×</span>
+        <h2>Meal Preferences</h2>
+
+        <div class="preference-section">
+          <h3>Protein Preferences</h3>
+          <div class="preference-options">
+            <label><input type="checkbox" name="protein" value="chicken" checked /> 🍗 Chicken</label>
+            <label><input type="checkbox" name="protein" value="beef" checked /> 🥩 Beef</label>
+            <label><input type="checkbox" name="protein" value="fish" checked /> 🐟 Fish</label>
+            <label><input type="checkbox" name="protein" value="pork" checked /> 🐖 Pork</label>
+            <label><input type="checkbox" name="protein" value="vegan" /> 🥦 Vegan</label>
+            <label><input type="checkbox" name="protein" value="vegetarian" /> 🥬 Vegetarian</label>
+          </div>
+        </div>
+
+        <div class="preference-section">
+          <h3>Carb Preferences</h3>
+          <div class="preference-options">
+            <label><input type="checkbox" name="carb" value="rice" checked /> 🍚 Rice</label>
+            <label><input type="checkbox" name="carb" value="pasta" checked /> 🍝 Pasta</label>
+            <label><input type="checkbox" name="carb" value="potato" checked /> 🥔 Potato</label>
+            <label><input type="checkbox" name="carb" value="bread" checked /> 🍞 Bread</label>
+            <label><input type="checkbox" name="carb" value="quinoa" /> 🌾 Quinoa</label>
+          </div>
+        </div>
+
+        <div class="preference-section">
+          <h3>Banned Ingredients</h3>
+          <div class="preference-options">
+            <div class="banned-ingredients-input">
+              <input type="text" id="new-banned-ingredient" placeholder="Add ingredient to ban" />
+              <button class="btn secondary" onclick="addBannedIngredient()">Add</button>
+            </div>
+            <div id="banned-ingredients-list" class="banned-ingredients-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <div class="preference-section">
+          <h3>Other Preferences</h3>
+          <div class="preference-options">
+            <label><input type="checkbox" name="preference" value="quick" /> ⏱ Quick meals only (&lt;30 min)</label>
+            <label><input type="checkbox" name="preference" value="low-carb" /> 🍃 Low-carb options</label>
+            <label><input type="checkbox" name="preference" value="high-protein" /> 💪 High-protein</label>
+            <label><input type="checkbox" name="preference" value="gluten-free" /> 🌾 Gluten-free</label>
+            <label><input type="checkbox" name="preference" value="dairy-free" /> 🥛 Dairy-free</label>
+          </div>
+        </div>
+
+        <button class="btn" onclick="savePreferences()" style="margin-top: 20px">Save Preferences</button>
+      </div>
+    </div>
+
+    <script>
+      function openProfileModal() {
+        document.getElementById("profile-modal").style.display = "flex";
+      }
+
+      function closeProfileModal() {
+        document.getElementById("profile-modal").style.display = "none";
+      }
+
+      function closeGrocerySidebar() {
+        document.getElementById("grocery-sidebar").style.display = "none";
+      }
+
+      document.getElementById("profile-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const sex = this.sex.value;
+        const age = parseFloat(this.age.value);
+        const height = parseFloat(this.height.value);
+        const weight = parseFloat(this.weight.value);
+        const activity = parseFloat(this.activity.value);
+
+        let bmr;
+        if (sex === "male") {
+          bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+        } else {
+          bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+        }
+
+        const calorieIntake = Math.round(bmr * activity);
+        document.getElementById("calorie-result").textContent = "Estimated Daily Calorie Intake: " + calorieIntake + " kcal";
+
+        // Store nutrient targets based on profile
+        const nutrientTargets = {
+          calories: calorieIntake,
+          protein: { target: Math.round(weight * 1.6), max: Math.round(weight * 2) }, // 1.6-2g per kg of body weight
+          carbs: { target: Math.round((calorieIntake * 0.5) / 4), max: Math.round((calorieIntake * 0.6) / 4) }, // 50-60% of calories
+          fat: { target: Math.round((calorieIntake * 0.25) / 9), max: Math.round((calorieIntake * 0.35) / 9) }, // 25-35% of calories
+          fiber: { target: 25, max: 40 },
+        };
+
+        localStorage.setItem("nutrientTargets", JSON.stringify(nutrientTargets));
+        updateNutrientSummary();
+      });
+      // Simple script to show/hide modals (non-functional prototype)
+      document.querySelectorAll(".add-meal").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.getElementById("meal-modal").style.display = "flex";
+        });
+      });
+
+      document.querySelector(".close-modal").addEventListener("click", () => {
+        document.getElementById("meal-modal").style.display = "none";
+      });
+
+      document.getElementById("generate-grocery").addEventListener("click", () => {
+        document.getElementById("grocery-sidebar").style.display = "block";
+      });
+
+      // Add these functions to your existing script section
+      function openPreferencesModal() {
+        document.getElementById("preferences-modal").style.display = "flex";
+        loadPreferences();
+      }
+
+      function closePreferencesModal() {
+        document.getElementById("preferences-modal").style.display = "none";
+      }
+
+      function loadPreferences() {
+        // Load saved preferences from localStorage if available
+        const savedPrefs = JSON.parse(localStorage.getItem("mealPreferences")) || {};
+
+        // Set protein preferences
+        document.querySelectorAll('input[name="protein"]').forEach((checkbox) => {
+          checkbox.checked = savedPrefs.proteins ? savedPrefs.proteins.includes(checkbox.value) : checkbox.checked;
+        });
+
+        // Set carb preferences
+        document.querySelectorAll('input[name="carb"]').forEach((checkbox) => {
+          checkbox.checked = savedPrefs.carbs ? savedPrefs.carbs.includes(checkbox.value) : checkbox.checked;
+        });
+
+        // Set other preferences
+        document.querySelectorAll('input[name="preference"]').forEach((checkbox) => {
+          checkbox.checked = savedPrefs.other ? savedPrefs.other.includes(checkbox.value) : false;
+        });
+
+        // Load banned ingredients
+        const bannedList = document.getElementById("banned-ingredients-list");
+        bannedList.innerHTML = "";
+        if (savedPrefs.bannedIngredients) {
+          savedPrefs.bannedIngredients.forEach((ingredient) => {
+            const item = document.createElement("div");
+            item.className = "banned-ingredient-item";
+            item.innerHTML = `
+          ${ingredient}
+          <span class="remove-ingredient" onclick="removeBannedIngredient('${ingredient}')">×</span>
+        `;
+            bannedList.appendChild(item);
+          });
+        }
+      }
+
+      function savePreferences() {
+        const preferences = {
+          proteins: Array.from(document.querySelectorAll('input[name="protein"]:checked')).map((c) => c.value),
+          carbs: Array.from(document.querySelectorAll('input[name="carb"]:checked')).map((c) => c.value),
+          other: Array.from(document.querySelectorAll('input[name="preference"]:checked')).map((c) => c.value),
+          bannedIngredients: Array.from(document.querySelectorAll(".banned-ingredient-item")).map((item) => item.textContent.replace("×", "").trim()),
+        };
+
+        localStorage.setItem("mealPreferences", JSON.stringify(preferences));
+        closePreferencesModal();
+        alert("Preferences saved! These will be used when generating your meal plan.");
+      }
+
+      function addBannedIngredient() {
+        const input = document.getElementById("new-banned-ingredient");
+        const ingredient = input.value.trim();
+
+        if (ingredient) {
+          const bannedList = document.getElementById("banned-ingredients-list");
+          const item = document.createElement("div");
+          item.className = "banned-ingredient-item";
+          item.innerHTML = `
+        ${ingredient}
+        <span class="remove-ingredient" onclick="removeBannedIngredient('${ingredient}')">×</span>
+      `;
+          bannedList.appendChild(item);
+          input.value = "";
+        }
+      }
+
+      function removeBannedIngredient(ingredient) {
+        const items = document.querySelectorAll(".banned-ingredient-item");
+        items.forEach((item) => {
+          if (item.textContent.replace("×", "").trim() === ingredient) {
+            item.remove();
+          }
+        });
+      }
+
+      // Nutrient tracking functions
+      function updateNutrientSummary() {
+        const nutrientDays = document.querySelector(".nutrient-days");
+        nutrientDays.innerHTML = "";
+
+        // Get the user's daily targets from profile (example values)
+        const dailyTargets = {
+          calories: 2000,
+          protein: { target: 50, max: 100 }, // in grams
+          carbs: { target: 250, max: 300 },
+          fat: { target: 65, max: 80 },
+          fiber: { target: 25, max: 40 },
+        };
+
+        // For each day in the week
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        days.forEach((day) => {
+          // Calculate nutrients for the day (example calculation - replace with your actual meal data)
+          const dayNutrients = calculateDayNutrients(day);
+
+          // Create day element
+          const dayEl = document.createElement("div");
+          dayEl.className = "nutrient-day";
+          dayEl.innerHTML = `
+      <h3>${day}</h3>
+      ${createNutrientItem("Calories", dayNutrients.calories, dailyTargets.calories, "kcal")}
+      ${createNutrientItem("Protein", dayNutrients.protein, dailyTargets.protein, "g")}
+      ${createNutrientItem("Carbs", dayNutrients.carbs, dailyTargets.carbs, "g")}
+      ${createNutrientItem("Fat", dayNutrients.fat, dailyTargets.fat, "g")}
+      ${createNutrientItem("Fiber", dayNutrients.fiber, dailyTargets.fiber, "g")}
+    `;
+          nutrientDays.appendChild(dayEl);
+        });
+      }
+
+      function calculateDayNutrients(day) {
+        // This is a placeholder - replace with actual calculation based on meals
+        // You would sum up nutrients from all meals for the day
+        return {
+          calories: Math.floor(Math.random() * 500) + 1500, // Random between 1500-2000
+          protein: Math.floor(Math.random() * 30) + 40, // Random between 40-70g
+          carbs: Math.floor(Math.random() * 100) + 150, // Random between 150-250g
+          fat: Math.floor(Math.random() * 30) + 40, // Random between 40-70g
+          fiber: Math.floor(Math.random() * 15) + 10, // Random between 10-25g
+        };
+      }
+
+      function createNutrientItem(name, value, target, unit) {
+        let progressClass = "";
+        let progressWidth = 0;
+
+        if (typeof target === "object") {
+          // For nutrients with target and max (like protein)
+          progressWidth = Math.min(100, (value / target.max) * 100);
+          if (value < target.target * 0.8) progressClass = "nutrient-warning";
+          else if (value > target.max) progressClass = "nutrient-danger";
+          else progressClass = "nutrient-optimal";
+        } else {
+          // For simple targets (like calories)
+          progressWidth = Math.min(100, (value / target) * 100);
+          if (value < target * 0.8) progressClass = "nutrient-warning";
+          else if (value > target * 1.2) progressClass = "nutrient-danger";
+          else progressClass = "nutrient-optimal";
+        }
+
+        return `
+    <div class="nutrient-item">
+      <div>${name}: ${value}${unit}</div>
+      <div class="nutrient-bar">
+        <div class="nutrient-progress ${progressClass}" style="width: ${progressWidth}%"></div>
+      </div>
+    </div>
+  `;
+      }
+
+      // Call this function whenever meals are updated
+      updateNutrientSummary();
+    </script>
+  </body>
+</html>
