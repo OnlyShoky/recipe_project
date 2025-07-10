@@ -53,7 +53,6 @@ function updateMealSlot(slotId, meal) {
   slot.innerHTML = `
     <div class="meal-time">${getMealTime(slotId)}</div>
     <div class="meal-content">
-      <img src="${meal.image}" alt="${meal.title}" class="w-10 h-10 object-cover inline mr-2">
       ${meal.title}
     </div>
     <button class="add-meal">✏️ Edit</button>
@@ -71,8 +70,11 @@ function updateMealSlot(slotId, meal) {
 
 // Helper functions
 function getMealTime(slotId) {
+  if (slotId >= 1 && slotId <= 7) return 'Breakfast';
+  if (slotId >= 8 && slotId <= 14) return 'Lunch';
+  if (slotId >= 15 && slotId <= 21) return 'Dinner';
   // Customize based on your slot naming
-  return slotId.includes('lunch') ? 'Lunch' : 'Dinner';
+  return 'breakfast';
 }
 
 function saveToMealPlan(slotId, meal) {
