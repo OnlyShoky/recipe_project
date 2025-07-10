@@ -25,7 +25,10 @@ def about_view(request):
     return render(request, 'about.html')
 
 def preepweek_view(request):
-    return render(request, 'preepweek.html')
+    recipes = Recipe.objects.all().order_by('-created')[:8]
+
+    return render(request, 'preepweek.html', {'recipes': recipes })
+
 
 
 def search_recipes(request):

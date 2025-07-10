@@ -1,3 +1,124 @@
+function loadMeals(filter = "all") {
+  const savedMeals = JSON.parse(localStorage.getItem("currentRecipes")) || [];
+  const filteredMeals = filter === "all" ? savedMeals : savedMeals.filter((meal) => meal.type === filter);
+
+  const emptyMessage = document.getElementById("empty-meals-message");
+  const mealContainer = document.getElementById("meal-options");
+
+  // Toggle empty state
+  if (filteredMeals.length === 0) {
+    emptyMessage.style.display = "block";
+    mealContainer.style.display = "none";
+  } else {
+    emptyMessage.style.display = "none";
+    mealContainer.style.display = "grid"; // or your preferred layout
+  }
+
+  // Render meals
+  mealContainer.innerHTML = filteredMeals
+    .map(
+      (meal) => `
+    <div class="meal-type" data-id="${meal.id}">
+      <img src="${meal.image}" alt="${meal.title}" class="w-12 h-12 object-cover mx-auto" />
+      <div class="truncate ... sm:max-w-xs lg:max-w-sm">${meal.title}</div>
+      <div class="small">
+        ${formatTime(meal.total_time)} • ${Math.round(meal.nutrition?.calories || 0)} cal
+      </div>
+    </div>
+  `
+    )
+    .join("");
+
+  // Add this to your loadMeals function (after rendering meals)
+  mealContainer.querySelectorAll(".meal-type").forEach((mealEl) => {
+    mealEl.addEventListener("click", () => {
+      const mealId = mealEl.dataset.id;
+      const selectedMeal = filteredMeals.find((m) => m.id == mealId);
+      updateMealSlot(currentSlotId, selectedMeal);
+      modal.style.display = "none";
+    });
+  });
+  // ... rest of your existing click handlers ...
+  console.log(" Filtered Meals:", filteredMeals);
+}
+
+// New function to update the slot
+function updateMealSlot(slotId, meal) {
+  const slot = document.querySelector(`[data-slot-id="${slotId}"]`);
+  
+  // Remove 'empty' class if present
+  slot.classList.remove('empty');
+  
+  // Update slot content
+  slot.innerHTML = `
+    <div class="meal-time">${getMealTime(slotId)}</div>
+    <div class="meal-content">
+      <img src="${meal.image}" alt="${meal.title}" class="w-10 h-10 object-cover inline mr-2">
+      ${meal.title}
+    </div>
+    <button class="add-meal">✏️ Edit</button>
+  `;
+  
+  // Reattach click handler
+  slot.querySelector('.add-meal').addEventListener('click', (e) => {
+    currentSlotId = slotId;
+    modal.style.display = 'flex';
+  });
+  
+  // Update localStorage
+  saveToMealPlan(slotId, meal);
+}
+
+// Helper functions
+function getMealTime(slotId) {
+  // Customize based on your slot naming
+  return slotId.includes('lunch') ? 'Lunch' : 'Dinner';
+}
+
+function saveToMealPlan(slotId, meal) {
+  const mealPlan = JSON.parse(localStorage.getItem('mealPlan')) || {};
+  mealPlan[slotId] = meal;
+  localStorage.setItem('mealPlan', JSON.stringify(mealPlan));
+}
+
+
+const modal = document.getElementById("meal-modal");
+const modalObserver = new MutationObserver(() => {
+  if (modal.style.display === "flex") {
+    loadMeals();
+  }
+});
+modalObserver.observe(modal, { attributes: true });
+
+// Add this helper function (put it above your loadMeals function)
+function formatTime(time) {
+  // Handle null/undefined
+  if (time == null) return "Time not specified";
+
+  // If it's already a number in minutes (most common case)
+  if (typeof time === "number") {
+    if (time < 60) return `${time} min`;
+    const hours = Math.floor(time / 60);
+    const mins = time % 60;
+    return `${hours} hr${hours !== 1 ? "s" : ""}${mins > 0 ? ` ${mins} min` : ""}`;
+  }
+
+  // If it's a time string like "01:30:00"
+  if (typeof time === "string" && time.includes(":")) {
+    const parts = time.split(":");
+    const hours = parseInt(parts[0]);
+    const mins = parseInt(parts[1]);
+
+    if (hours > 0) {
+      return `${hours} hr${hours !== 1 ? "s" : ""}${mins > 0 ? ` ${mins} min` : ""}`;
+    }
+    return `${mins} min`;
+  }
+
+  // Fallback for unexpected formats
+  return "Time varies";
+}
+
 function openProfileModal() {
   document.getElementById("profile-modal").style.display = "flex";
 }
@@ -42,8 +163,12 @@ document.getElementById("profile-form").addEventListener("submit", function (e) 
   updateNutrientSummary();
 });
 // Simple script to show/hide modals (non-functional prototype)
+let currentSlotId = null; // Track which slot we're editing
+
+// Update your existing add-meal handler
 document.querySelectorAll(".add-meal").forEach((btn) => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (e) => {
+    currentSlotId = e.target.closest(".meal-slot").dataset.slotId;
     document.getElementById("meal-modal").style.display = "flex";
   });
 });

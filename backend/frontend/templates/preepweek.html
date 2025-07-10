@@ -37,98 +37,100 @@
     <div class="day-header">Sunday</div>
 
     <!-- Breakfast slots -->
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="1">
       <div class="meal-time">Breakfast</div>
-      <div class="meal-content">Scrambled eggs with toast</div>
+      <a href="{% url 'recipe_detail' recipes.1.id %}" class="transform transition-transform hover:scale-105">
+        <div class="meal-content">{{ recipes.1.title}}</div>
+      </a>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty">
+    <div class="meal-slot empty" data-slot-id="2">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="3">
       <div class="meal-time">Breakfast</div>
       <div class="meal-content">Greek yogurt with granola</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty">
+    <div class="meal-slot empty" data-slot-id="4">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="5">
       <div class="meal-time">Breakfast</div>
       <div class="meal-content">Oatmeal with berries</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="6">
       <div class="meal-time">Breakfast</div>
       <div class="meal-content">Pancakes</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty">
+    <div class="meal-slot empty" data-slot-id="7">
       <button class="add-meal">+ Add Meal</button>
     </div>
 
     <!-- Lunch slots -->
-    <div class="meal-slot connected">
+    <div class="meal-slot connected" data-slot-id="8">
       <div class="meal-time">Lunch</div>
       <div class="meal-content">Chicken Caesar salad</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot connected reused-meal" data-source-day="Monday">
+    <div class="meal-slot connected reused-meal" data-source-day="Monday" data-slot-id="9">
       <div class="meal-time">Lunch <span class="source-tag">(from Monday)</span></div>
       <div class="meal-content">Chicken Caesar salad</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
 
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="10">
       <div class="meal-time">Lunch</div>
       <div class="meal-content">Turkey sandwich</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="11">
       <div class="meal-time">Lunch</div>
       <div class="meal-content">Vegetable stir fry</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty">
+    <div class="meal-slot empty" data-slot-id="12">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="13">
       <div class="meal-time">Lunch</div>
       <div class="meal-content">Pasta salad</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty">
+    <div class="meal-slot empty" data-slot-id="14">
       <button class="add-meal">+ Add Meal</button>
     </div>
 
     <!-- Dinner slots -->
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="15">
       <div class="meal-time">Dinner</div>
       <div class="meal-content">Grilled salmon with veggies</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="16">
       <div class="meal-time">Dinner</div>
       <div class="meal-content">Beef tacos</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty">
+    <div class="meal-slot empty" data-slot-id="17">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="18">
       <div class="meal-time">Dinner</div>
       <div class="meal-content">Chicken curry</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty">
+    <div class="meal-slot empty" data-slot-id="19">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot">
+    <div class="meal-slot" data-slot-id="20">
       <div class="meal-time">Dinner</div>
       <div class="meal-content">Pizza night</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty">
+    <div class="meal-slot empty" data-slot-id="21">
       <button class="add-meal">+ Add Meal</button>
     </div>
 
@@ -195,57 +197,51 @@
 </div>
 
 <!-- Meal Selection Modal -->
-<div class="modal" id="meal-modal">
-  <div class="modal-content">
-    <span class="close-modal">×</span>
-    <h2>Select a Meal</h2>
-
-    <div>
-      <label>Filter by:</label>
-      <select>
-        <option>All Types</option>
-        <option>🍗 Chicken</option>
-        <option>🥩 Beef</option>
-        <option>🐟 Fish</option>
-        <option>🥦 Vegan</option>
-        <option>🍝 Pasta</option>
-      </select>
+<div id="meal-modal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center p-6 border-b">
+      <h2 class="text-2xl font-bold text-gray-800">Select a Meal</h2>
+      <button class="close-modal text-3xl text-gray-500 hover:text-gray-700">&times;</button>
     </div>
+    
+    <!-- Modal Body -->
+    <div class="p-6">
+      <!-- Filter -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Filter by:</label>
+        <select id="meal-filter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+          <option value="all">All Types</option>
+          <option value="chicken">🍗 Chicken</option>
+          <option value="beef">🥩 Beef</option>
+          <option value="fish">🐟 Fish</option>
+          <option value="vegan">🥦 Vegan</option>
+          <option value="pasta">🍝 Pasta</option>
+        </select>
+      </div>
 
-    <div class="meal-types">
-      <div class="meal-type">
-        <div>🍗</div>
-        <div>Grilled Chicken</div>
-        <div class="small">30 min • 450 cal</div>
+      <!-- Meal Options Grid -->
+      <div id="meal-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 hidden">
+        <!-- Dynamically populated from localStorage -->
       </div>
-      <div class="meal-type">
-        <div>🥩</div>
-        <div>Beef Tacos</div>
-        <div class="small">25 min • 550 cal</div>
-      </div>
-      <div class="meal-type">
-        <div>🐟</div>
-        <div>Salmon Salad</div>
-        <div class="small">20 min • 400 cal</div>
-      </div>
-      <div class="meal-type">
-        <div>🥦</div>
-        <div>Veggie Stir Fry</div>
-        <div class="small">15 min • 350 cal</div>
-      </div>
-      <div class="meal-type">
-        <div>🍝</div>
-        <div>Pasta Alfredo</div>
-        <div class="small">35 min • 600 cal</div>
-      </div>
-      <div class="meal-type">
-        <div>🍗</div>
-        <div>Chicken Curry</div>
-        <div class="small">40 min • 500 cal</div>
+
+      <!-- Empty State -->
+      <div id="empty-meals-message" class="text-center py-8 px-4 bg-gray-50 rounded-lg">
+        <div class="text-5xl mb-4">🍽️</div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Meal list is empty!</h3>
+        <p class="text-gray-600 mb-4">Go to recipes and add them to favorites</p>
+        <a href="{% url 'recipe_list' %}" class="inline-block px-6 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-colors">
+          Browse Recipes
+        </a>
       </div>
     </div>
-
-    <button class="btn" style="width: 100%; margin-top: 15px">View Recipe Details</button>
+    
+    <!-- Modal Footer -->
+    <div class="p-6 border-t">
+      <button class="w-full py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition-colors">
+        View Recipe Details
+      </button>
+    </div>
   </div>
 </div>
 
@@ -312,9 +308,7 @@
     <p class="text-center">For accurate calculation, we need some basic info about you</p>
 
     <form id="profile-form" class="space-y-4 p-4">
-      <label class="block">
-        1. What is your sex?
-      </label>
+      <label class="block"> 1. What is your sex? </label>
       <div class="flex space-x-4">
         <label class="flex items-center">
           <input type="radio" name="sex" value="male" required class="mr-2" />
@@ -326,24 +320,16 @@
         </label>
       </div>
 
-      <label class="block">
-        2. How old are you?
-      </label>
+      <label class="block"> 2. How old are you? </label>
       <input type="number" name="age" required class="w-full px-4 py-2 border rounded-md" />
 
-      <label class="block">
-        3. How tall are you?
-      </label>
+      <label class="block"> 3. How tall are you? </label>
       <input type="number" name="height" required class="w-full px-4 py-2 border rounded-md" />
 
-      <label class="block">
-        4. How much do you weigh?
-      </label>
+      <label class="block"> 4. How much do you weigh? </label>
       <input type="number" name="weight" required class="w-full px-4 py-2 border rounded-md" />
 
-      <label class="block">
-        5. How active are you on a daily basis?
-      </label>
+      <label class="block"> 5. How active are you on a daily basis? </label>
       <select name="activity" required class="w-full px-4 py-2 border rounded-md">
         <option value="1.2">Lightly active (mostly sitting)</option>
         <option value="1.375">Moderately active (mostly standing)</option>
@@ -414,6 +400,66 @@
   </div>
 </div>
 
+<h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">{{recipes.7.title}}</h2>
+
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <!-- Latest Recipes Section -->
+  <section class="mb-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Latest Recipes</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for recipe in recipes %}
+      <a href="{% url 'recipe_detail' recipe.id %}" class="transform transition-transform hover:scale-105">
+        <div class="bg-orange-50 shadow-lg rounded-lg overflow-hidden flex flex-col h-full">
+          <!-- Recipe Image -->
+          {% if recipe.image %}
+          <img src="{{ recipe.image_card.url }}" alt="{{ recipe.title }}" class="w-full h-32 sm:h-36 lg:h-40 object-cover" />
+          {% else %}
+          <div class="h-32 sm:h-36 lg:h-40 bg-gray-300 flex items-center justify-center">
+            <p class="text-gray-500">No Image Available</p>
+          </div>
+          {% endif %}
+
+          <!-- Recipe Details -->
+          <div class="p-4 flex-grow flex flex-col">
+            <h3 class="text-lg font-semibold text-gray-800 truncate">{{ recipe.title }}</h3>
+            <p class="text-sm text-gray-500 mb-2">{{ recipe.activate_date|date:"F d, Y" }}</p>
+            <p class="text-gray-700 mt-2 line-clamp-3">{{ recipe.description|truncatewords:20 }}</p>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
 {% endblock %} {% block extra_js %}
 <script src="{% static 'js/preepweek.js' %}"></script>
+
+<script>
+  // Convert Django template variable to JS and store
+  const recipesData = [
+    {% for recipe in recipes %}
+    {
+      title: "{{ recipe.title|escapejs }}",
+      id: "{{ recipe.id }}",
+      url: "{% url 'recipe_detail' recipe.id %}",
+      image: "{% if recipe.image %}{{ recipe.image_card.url|escapejs }}{% else %}null{% endif %}",
+      description: "{{ recipe.description|escapejs|truncatechars:100 }}",
+      prep_time: "{{ recipe.prep_time }}",
+      total_time: "{{ recipe.total_time }}",
+      nutrition: {
+        calories: "{{ recipe.nutrition.calories }}",
+        protein: "{{ recipe.nutrition.protein }}",
+        carbs: "{{ recipe.nutrition.carbs }}",
+        fat: "{{ recipe.nutrition.fat }}"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  // Save to localStorage
+  localStorage.setItem('currentRecipes', JSON.stringify(recipesData));
+
+  console.log(recipesData);
+</script>
 {% endblock %}
