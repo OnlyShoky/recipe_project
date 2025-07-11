@@ -434,32 +434,4 @@
 
 {% endblock %} {% block extra_js %}
 <script src="{% static 'js/preepweek.js' %}"></script>
-
-{% comment %} <script>
-  // Convert Django template variable to JS and store
-  const recipesData = [
-    {% for recipe in recipes %}
-    {
-      title: "{{ recipe.title|escapejs }}",
-      id: "{{ recipe.id }}",
-      url: "{% url 'recipe_detail' recipe.id %}",
-      image: "{% if recipe.image %}{{ recipe.image_card.url|escapejs }}{% else %}null{% endif %}",
-      description: "{{ recipe.description|escapejs|truncatechars:100 }}",
-      prep_time: "{{ recipe.prep_time }}",
-      total_time: "{{ recipe.total_time }}",
-      nutrition: {
-        calories: "{{ recipe.nutrition.calories }}",
-        protein: "{{ recipe.nutrition.protein }}",
-        carbs: "{{ recipe.nutrition.carbs }}",
-        fat: "{{ recipe.nutrition.fat }}"
-      }
-    }{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ];
-
-  // Save to localStorage
-  localStorage.setItem('currentRecipes', JSON.stringify(recipesData));
-
-  console.log(recipesData);
-</script> {% endcomment %}
 {% endblock %}
