@@ -38,8 +38,6 @@ function loadMeals(filter = "all") {
       modal.style.display = "none";
     });
   });
-  // ... rest of your existing click handlers ...
-  console.log(" Filtered Meals:", filteredMeals);
 }
 
 // New function to update the slot

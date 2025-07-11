@@ -435,7 +435,7 @@
 {% endblock %} {% block extra_js %}
 <script src="{% static 'js/preepweek.js' %}"></script>
 
-<script>
+{% comment %} <script>
   // Convert Django template variable to JS and store
   const recipesData = [
     {% for recipe in recipes %}
@@ -461,5 +461,5 @@
   localStorage.setItem('currentRecipes', JSON.stringify(recipesData));
 
   console.log(recipesData);
-</script>
+</script> {% endcomment %}
 {% endblock %}
