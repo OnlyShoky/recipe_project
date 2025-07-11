@@ -1,5 +1,5 @@
 function loadMeals(filter = "all") {
-  const savedMeals = JSON.parse(localStorage.getItem("currentRecipes")) || [];
+  const savedMeals = JSON.parse(localStorage.getItem("favoriteRecipes")) || [];
   const filteredMeals = filter === "all" ? savedMeals : savedMeals.filter((meal) => meal.type === filter);
 
   const emptyMessage = document.getElementById("empty-meals-message");
