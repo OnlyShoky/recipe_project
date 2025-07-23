@@ -356,3 +356,68 @@ function createNutrientItem(name, value, target, unit) {
 
 // Call this function whenever meals are updated
 updateNutrientSummary();
+
+
+
+
+// Generate Weekly Meals
+
+document.getElementById('generate-weekly-meals').addEventListener('click', async function() {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const mealTypes = ['breakfast', 'lunch', 'dinner'];
+
+    
+    
+    try {
+        // Generate meals for each day and meal type
+        const response = await fetch(`/generate-meals`);
+        const data = await response.json();
+        console.log(data.meals);
+        console.log(data.meals[0]);
+
+        let slotID = 0;
+
+        for (const day of days) {
+            for (const mealType of mealTypes) {
+                
+                if (data.meals && data.meals.length > 0) {
+                    // Find the corresponding slot in your HTML
+                    const slot = findMealSlot(day, mealType); // You'll need to implement this
+                    if (slot) {
+                        console.log('slot', slot);
+                        updateMealSlot(slot, data.meals[slotID]); // Update with first random meal
+                        slotID++;
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error generating meals:', error);
+    }
+});
+
+// Helper function - you need to implement based on your slot structure
+function findMealSlot(day, mealType) {
+    // This depends on how you structure your DOM
+    // Example: Find element with data-day="Monday" and data-meal="breakfast"
+    return document.querySelector(`[data-day="${day}"][data-meal-type="${mealType}"]`);
+}
+
+function updateMealSlot(slotElement, mealData) {
+    // Completely rebuild the slot HTML from scratch every time
+    slotElement.innerHTML = `
+        <div class="meal-time">${capitalizeFirstLetter(slotElement.dataset.mealType)}</div>
+        <a href="/recipes/${mealData.id}/" class="transform transition-transform hover:scale-105">
+            <div class="meal-content">${mealData.title}</div>
+        </a>
+        <button class="add-meal">✏️ Edit</button>
+    `;
+    
+    // Remove empty class if it exists
+    slotElement.classList.remove('empty');
+
+    // Helper function
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+}

@@ -10,6 +10,9 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
 
+from django.http import JsonResponse
+from random import sample
+
 
 from collections import Counter
 import re
@@ -170,9 +173,6 @@ def recipe_list(request):
     return render(request, 'recipes/recipe_list.html', context)
 
 
-
-
-
 def home(request):
     start = time.perf_counter()
     # Fetch the last 5 recipes ordered by the activate_date
@@ -195,11 +195,33 @@ def home(request):
     return render(request, 'home.html', {'recipes': recipes,   'cuisines': cuisines, 'tags': tags, 'courses': courses, 'ingredients': ingredients,  'total_recipes': total_recipes, 'total_ingredients': total_ingredients})
 
 
+## FUNCTION VIEWS
+def generate_random_meals(request):
+    """
+    Return a list of 7 random meals for the week, filtering by meal_type if provided.
+    """
+    if request.method == 'GET':
+        meal_type = request.GET.get('meal_type', None)  # 'breakfast', 'lunch', 'dinner'
+        
+        # Filter recipes by type if you have that field, or get all
+        if meal_type:
+            recipes = list(Recipe.objects.filter(meal_type=meal_type))
+        else:
+            recipes = list(Recipe.objects.all())
+        
+        # Get 7 random recipes (or adjust quantity as needed)
+        random_recipes = sample(recipes, min(21, len(recipes)))
+        
+        # Serialize the data
+        meal_data = [{
+            'id': recipe.id,
+            'title': recipe.title,
+            'meal_type': getattr(recipe, 'meal_type', 'general')
+        } for recipe in random_recipes]
+        
+        return JsonResponse({'meals': meal_data})
 
 ## API VIEWS
-
-
-
 class RecipeSearchAPIView(views.APIView):
     """
     APIView to retrieve a list of recipes with filtering options.

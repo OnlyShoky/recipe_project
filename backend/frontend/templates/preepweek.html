@@ -21,6 +21,7 @@
   <div class="action-buttons">
     <button class="btn secondary" onclick="openPreferencesModal()">⚙ Preferences</button>
     <button class="btn" id="generate-grocery">🧾 Generate Grocery List</button>
+    <button class="btn" id="generate-weekly-meals">🎲 Generate Weekly Meals</button>
     <button class="btn secondary">⏱ Copy to Next Day</button>
     <button class="btn secondary">🧹 Clear All</button>
     <button class="btn secondary">🖨 Print / PDF</button>
@@ -37,100 +38,100 @@
     <div class="day-header">Sunday</div>
 
     <!-- Breakfast slots -->
-    <div class="meal-slot" data-slot-id="1">
+    <div class="meal-slot" data-slot-id="1" data-day="Monday" data-meal-type="breakfast">
       <div class="meal-time">Breakfast</div>
       <a href="{% url 'recipe_detail' recipes.1.id %}" class="transform transition-transform hover:scale-105">
         <div class="meal-content">{{ recipes.1.title}}</div>
       </a>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty" data-slot-id="2">
+    <div class="meal-slot empty" data-slot-id="2" data-day="Tuesday" data-meal-type="breakfast">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot" data-slot-id="3">
+    <div class="meal-slot" data-slot-id="3" data-day="Wednesday" data-meal-type="breakfast">
       <div class="meal-time">Breakfast</div>
       <div class="meal-content">Greek yogurt with granola</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty" data-slot-id="4">
+    <div class="meal-slot empty" data-slot-id="4" data-day="Thursday" data-meal-type="breakfast">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot" data-slot-id="5">
+    <div class="meal-slot" data-slot-id="5" data-day="Friday" data-meal-type="breakfast">
       <div class="meal-time">Breakfast</div>
       <div class="meal-content">Oatmeal with berries</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot" data-slot-id="6">
+    <div class="meal-slot" data-slot-id="6" data-day="Saturday" data-meal-type="breakfast">
       <div class="meal-time">Breakfast</div>
       <div class="meal-content">Pancakes</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty" data-slot-id="7">
+    <div class="meal-slot empty" data-slot-id="7" data-day="Sunday" data-meal-type="breakfast">
       <button class="add-meal">+ Add Meal</button>
     </div>
 
     <!-- Lunch slots -->
-    <div class="meal-slot connected" data-slot-id="8">
+    <div class="meal-slot connected" data-slot-id="8" data-day="Monday" data-meal-type="lunch">
       <div class="meal-time">Lunch</div>
       <div class="meal-content">Chicken Caesar salad</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot connected reused-meal" data-source-day="Monday" data-slot-id="9">
+    <div class="meal-slot connected reused-meal" data-source-day="Monday" data-slot-id="9" data-day="Tuesday" data-meal-type="lunch">
       <div class="meal-time">Lunch <span class="source-tag">(from Monday)</span></div>
       <div class="meal-content">Chicken Caesar salad</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
 
-    <div class="meal-slot" data-slot-id="10">
+    <div class="meal-slot" data-slot-id="10" data-day="Wednesday" data-meal-type="lunch">
       <div class="meal-time">Lunch</div>
       <div class="meal-content">Turkey sandwich</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot" data-slot-id="11">
+    <div class="meal-slot" data-slot-id="11" data-day="Thursday" data-meal-type="lunch">
       <div class="meal-time">Lunch</div>
       <div class="meal-content">Vegetable stir fry</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty" data-slot-id="12">
+    <div class="meal-slot empty" data-slot-id="12" data-day="Friday" data-meal-type="lunch">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot" data-slot-id="13">
+    <div class="meal-slot" data-slot-id="13" data-day="Saturday" data-meal-type="lunch">
       <div class="meal-time">Lunch</div>
       <div class="meal-content">Pasta salad</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty" data-slot-id="14">
+    <div class="meal-slot empty" data-slot-id="14" data-day="Sunday" data-meal-type="lunch">
       <button class="add-meal">+ Add Meal</button>
     </div>
 
     <!-- Dinner slots -->
-    <div class="meal-slot" data-slot-id="15">
+    <div class="meal-slot" data-slot-id="15" data-day="Monday" data-meal-type="dinner">
       <div class="meal-time">Dinner</div>
       <div class="meal-content">Grilled salmon with veggies</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot" data-slot-id="16">
+    <div class="meal-slot" data-slot-id="16" data-day="Tuesday" data-meal-type="dinner">
       <div class="meal-time">Dinner</div>
       <div class="meal-content">Beef tacos</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty" data-slot-id="17">
+    <div class="meal-slot empty" data-slot-id="17" data-day="Wednesday" data-meal-type="dinner">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot" data-slot-id="18">
+    <div class="meal-slot" data-slot-id="18" data-day="Thursday" data-meal-type="dinner">
       <div class="meal-time">Dinner</div>
       <div class="meal-content">Chicken curry</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty" data-slot-id="19">
+    <div class="meal-slot empty" data-slot-id="19" data-day="Friday" data-meal-type="dinner">
       <button class="add-meal">+ Add Meal</button>
     </div>
-    <div class="meal-slot" data-slot-id="20">
+    <div class="meal-slot" data-slot-id="20" data-day="Saturday" data-meal-type="dinner">
       <div class="meal-time">Dinner</div>
       <div class="meal-content">Pizza night</div>
       <button class="add-meal">✏️ Edit</button>
     </div>
-    <div class="meal-slot empty" data-slot-id="21">
+    <div class="meal-slot empty" data-slot-id="21" data-day="Sunday" data-meal-type="dinner">
       <button class="add-meal">+ Add Meal</button>
     </div>
 
@@ -204,7 +205,7 @@
       <h2 class="text-2xl font-bold text-gray-800">Select a Meal</h2>
       <button class="close-modal text-3xl text-gray-500 hover:text-gray-700">&times;</button>
     </div>
-    
+
     <!-- Modal Body -->
     <div class="p-6">
       <!-- Filter -->
@@ -230,17 +231,13 @@
         <div class="text-5xl mb-4">🍽️</div>
         <h3 class="text-xl font-semibold text-gray-800 mb-2">Meal list is empty!</h3>
         <p class="text-gray-600 mb-4">Go to recipes and add them to favorites</p>
-        <a href="{% url 'recipe_list' %}" class="inline-block px-6 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-colors">
-          Browse Recipes
-        </a>
+        <a href="{% url 'recipe_list' %}" class="inline-block px-6 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-colors"> Browse Recipes </a>
       </div>
     </div>
-    
+
     <!-- Modal Footer -->
     <div class="p-6 border-t">
-      <button class="w-full py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition-colors">
-        View Recipe Details
-      </button>
+      <button class="w-full py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-lg transition-colors">View Recipe Details</button>
     </div>
   </div>
 </div>
