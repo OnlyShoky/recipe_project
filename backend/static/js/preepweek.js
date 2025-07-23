@@ -34,53 +34,52 @@ function loadMeals(filter = "all") {
     mealEl.addEventListener("click", () => {
       const mealId = mealEl.dataset.id;
       const selectedMeal = filteredMeals.find((m) => m.id == mealId);
-      updateMealSlot(currentSlotId, selectedMeal);
+      updateMealSlot(currentSlotID, selectedMeal);
       modal.style.display = "none";
     });
   });
 }
 
 // New function to update the slot
-function updateMealSlot(slotId, meal) {
-  const slot = document.querySelector(`[data-slot-id="${slotId}"]`);
-  
+function updateMealSlot(slotID, meal) {
+  const slot = document.querySelector(`[data-slot-id="${slotID}"]`);
+
   // Remove 'empty' class if present
-  slot.classList.remove('empty');
-  
+  slot.classList.remove("empty");
+
   // Update slot content
   slot.innerHTML = `
-    <div class="meal-time">${getMealTime(slotId)}</div>
-    <div class="meal-content">
-      ${meal.title}
-    </div>
-    <button class="add-meal">✏️ Edit</button>
-  `;
-  
+        <div class="meal-time">${getMealTime(slotID)}</div>
+        <a href="/recipes/${meal.id}/" class="transform transition-transform hover:scale-105">
+            <div class="meal-content">${meal.title}</div>
+        </a>
+        <button class="add-meal">✏️ Edit</button>
+    `;
+
   // Reattach click handler
-  slot.querySelector('.add-meal').addEventListener('click', (e) => {
-    currentSlotId = slotId;
-    modal.style.display = 'flex';
+  slot.querySelector(".add-meal").addEventListener("click", (e) => {
+    currentSlotID = slotID;
+    modal.style.display = "flex";
   });
-  
+
   // Update localStorage
-  saveToMealPlan(slotId, meal);
+  saveToMealPlan(slotID, meal);
 }
 
 // Helper functions
 function getMealTime(slotId) {
-  if (slotId >= 1 && slotId <= 7) return 'Breakfast';
-  if (slotId >= 8 && slotId <= 14) return 'Lunch';
-  if (slotId >= 15 && slotId <= 21) return 'Dinner';
+  if (slotId >= 1 && slotId <= 7) return "Breakfast";
+  if (slotId >= 8 && slotId <= 14) return "Lunch";
+  if (slotId >= 15 && slotId <= 21) return "Dinner";
   // Customize based on your slot naming
-  return 'breakfast';
+  return "breakfast";
 }
 
 function saveToMealPlan(slotId, meal) {
-  const mealPlan = JSON.parse(localStorage.getItem('mealPlan')) || {};
+  const mealPlan = JSON.parse(localStorage.getItem("mealPlan")) || {};
   mealPlan[slotId] = meal;
-  localStorage.setItem('mealPlan', JSON.stringify(mealPlan));
+  localStorage.setItem("mealPlan", JSON.stringify(mealPlan));
 }
-
 
 const modal = document.getElementById("meal-modal");
 const modalObserver = new MutationObserver(() => {
@@ -163,12 +162,12 @@ document.getElementById("profile-form").addEventListener("submit", function (e) 
   updateNutrientSummary();
 });
 // Simple script to show/hide modals (non-functional prototype)
-let currentSlotId = null; // Track which slot we're editing
+let currentSlotID = null; // Track which slot we're editing
 
 // Update your existing add-meal handler
 document.querySelectorAll(".add-meal").forEach((btn) => {
   btn.addEventListener("click", (e) => {
-    currentSlotId = e.target.closest(".meal-slot").dataset.slotId;
+    currentSlotID = e.target.closest(".meal-slot").dataset.slotId;
     document.getElementById("meal-modal").style.display = "flex";
   });
 });
@@ -357,67 +356,64 @@ function createNutrientItem(name, value, target, unit) {
 // Call this function whenever meals are updated
 updateNutrientSummary();
 
-
-
-
 // Generate Weekly Meals
 
-document.getElementById('generate-weekly-meals').addEventListener('click', async function() {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const mealTypes = ['breakfast', 'lunch', 'dinner'];
+document.getElementById("generate-weekly-meals").addEventListener("click", async function () {
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const mealTypes = ["breakfast", "lunch", "dinner"];
 
-    
-    
-    try {
-        // Generate meals for each day and meal type
-        const response = await fetch(`/generate-meals`);
-        const data = await response.json();
-        console.log(data.meals);
-        console.log(data.meals[0]);
+  try {
+    // Generate meals for each day and meal type
+    const response = await fetch(`/generate-meals`);
+    const data = await response.json();
 
-        let slotID = 0;
+    let slotID = 1;
 
-        for (const day of days) {
-            for (const mealType of mealTypes) {
-                
-                if (data.meals && data.meals.length > 0) {
-                    // Find the corresponding slot in your HTML
-                    const slot = findMealSlot(day, mealType); // You'll need to implement this
-                    if (slot) {
-                        console.log('slot', slot);
-                        updateMealSlot(slot, data.meals[slotID]); // Update with first random meal
-                        slotID++;
-                    }
-                }
-            }
+    for (const mealType of mealTypes) {
+      for (const day of days) {
+        if (data.meals && data.meals.length > 0) {
+          // Find the corresponding slot in your HTML
+          const slot = findMealSlot(day, mealType); // You'll need to implement this
+          if (slot) {
+            chargeMealSlot(slot, data.meals[slotID-1], slotID); // Update with first random meal
+            slotID++;
+          }
         }
-    } catch (error) {
-        console.error('Error generating meals:', error);
+      }
     }
+  } catch (error) {
+    console.error("Error generating meals:", error);
+  }
 });
 
 // Helper function - you need to implement based on your slot structure
 function findMealSlot(day, mealType) {
-    // This depends on how you structure your DOM
-    // Example: Find element with data-day="Monday" and data-meal="breakfast"
-    return document.querySelector(`[data-day="${day}"][data-meal-type="${mealType}"]`);
+  // This depends on how you structure your DOM
+  // Example: Find element with data-day="Monday" and data-meal="breakfast"
+  return document.querySelector(`[data-day="${day}"][data-meal-type="${mealType}"]`);
 }
 
-function updateMealSlot(slotElement, mealData) {
-    // Completely rebuild the slot HTML from scratch every time
-    slotElement.innerHTML = `
-        <div class="meal-time">${capitalizeFirstLetter(slotElement.dataset.mealType)}</div>
+function chargeMealSlot(slotElement, mealData, slotID) {
+  // Completely rebuild the slot HTML from scratch every time
+  slotElement.innerHTML = `
+        <div class="meal-time">${getMealTime(slotID)}</div>
         <a href="/recipes/${mealData.id}/" class="transform transition-transform hover:scale-105">
             <div class="meal-content">${mealData.title}</div>
         </a>
         <button class="add-meal">✏️ Edit</button>
     `;
-    
-    // Remove empty class if it exists
-    slotElement.classList.remove('empty');
 
-    // Helper function
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+  // Reattach click handler
+  slotElement.querySelector(".add-meal").addEventListener("click", (e) => {
+    currentSlotID = slotID;
+    modal.style.display = "flex";
+  });
+
+  // Remove empty class if it exists
+  slotElement.classList.remove("empty");
+
+  // Helper function
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 }
