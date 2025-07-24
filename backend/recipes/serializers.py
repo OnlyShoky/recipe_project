@@ -1,6 +1,6 @@
 from . import models
 from rest_framework import serializers
-from ingredients.serializers import IngredientSerializer
+from ingredients.serializers import IngredientSerializer, NutritionalTableSerializer
 from ingredients.models import Ingredient
 
 
@@ -46,11 +46,13 @@ class RecipeSerializer(serializers.ModelSerializer):
     cook_time = serializers.DurationField()  # Handling the DurationField as it is
     cool_time = serializers.DurationField()  # Handling the DurationField as it is
     total_time = serializers.DurationField()  # Handling the DurationField as it is
+    nutrition = NutritionalTableSerializer( read_only=True)
     
     class Meta:
         model = models.Recipe
         fields = [
-            'title', 
+            'title',
+            'id', 
             'description', 
             'courses', 
             'cuisines', 
@@ -66,5 +68,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             'author', 
             'source', 
             'video_url', 
-            'image'
+            'image',
+            'nutrition'
         ]

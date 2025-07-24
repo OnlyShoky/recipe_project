@@ -159,7 +159,6 @@ document.getElementById("profile-form").addEventListener("submit", function (e) 
   };
 
   localStorage.setItem("nutrientTargets", JSON.stringify(nutrientTargets));
-  updateNutrientSummary();
 });
 // Simple script to show/hide modals (non-functional prototype)
 let currentSlotID = null; // Track which slot we're editing
@@ -314,14 +313,45 @@ function getNutrientClass(value, target) {
 }
 
 function calculateDayNutrients(day) {
-  // This is a placeholder - replace with actual calculation based on meals
-  // You would sum up nutrients from all meals for the day
+  // Get stored meals from localStorage
+  const weeklyMeals = JSON.parse(localStorage.getItem('weeklyMeals')) || { meals: {} };
+  
+  // Initialize totals
+  const totals = {
+    calories: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    fiber: 0
+  };
+
+  // Meal types to check
+  const mealTypes = ['breakfast', 'lunch', 'dinner'];
+
+  // Sum nutrients for all meals of the day
+  mealTypes.forEach(mealType => {
+    const mealKey = `${day}_${mealType}`;
+    const meal = weeklyMeals.meals[mealKey];
+    
+    console.log(`Calculating ${day} ${mealType} nutrients - Meal title: ${meal.title}, calories: ${meal.nutrition.calories}`);
+    
+    if (meal && meal.nutrition) {
+      totals.calories += meal.nutrition.calories || 0;
+      totals.protein += meal.nutrition.protein || 0;
+      totals.carbs += meal.nutrition.carbs || 0;
+      totals.fat += meal.nutrition.fat || 0;
+      totals.fiber += meal.nutrition.fiber || 0;
+    }
+  });
+
+  // Round values
+  console.log(`Day ${day} total nutrients: ${totals.calories}`);
   return {
-    calories: Math.floor(Math.random() * 500) + 1500, // Random between 1500-2000
-    protein: Math.floor(Math.random() * 30) + 40, // Random between 40-70g
-    carbs: Math.floor(Math.random() * 100) + 150, // Random between 150-250g
-    fat: Math.floor(Math.random() * 30) + 40, // Random between 40-70g
-    fiber: Math.floor(Math.random() * 15) + 10, // Random between 10-25g
+    calories: Math.round(totals.calories),
+    protein: Math.round(totals.protein),
+    carbs: Math.round(totals.carbs),
+    fat: Math.round(totals.fat),
+    fiber: Math.round(totals.fiber)
   };
 }
 
@@ -353,34 +383,56 @@ function createNutrientItem(name, value, target, unit) {
   `;
 }
 
-// Call this function whenever meals are updated
-updateNutrientSummary();
+
 
 // Generate Weekly Meals
 
 document.getElementById("generate-weekly-meals").addEventListener("click", async function () {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const mealTypes = ["breakfast", "lunch", "dinner"];
-
+  
   try {
-    // Generate meals for each day and meal type
+    // Clear previous storage
+    localStorage.removeItem('weeklyMeals');
+    
+    // Create storage object
+    const weeklyMeals = {
+      generatedAt: new Date().toISOString(),
+      meals: {}
+    };
+
     const response = await fetch(`/generate-meals`);
     const data = await response.json();
-
     let slotID = 1;
 
     for (const mealType of mealTypes) {
       for (const day of days) {
         if (data.meals && data.meals.length > 0) {
-          // Find the corresponding slot in your HTML
-          const slot = findMealSlot(day, mealType); // You'll need to implement this
+          const slot = findMealSlot(day, mealType);
           if (slot) {
-            chargeMealSlot(slot, data.meals[slotID-1], slotID); // Update with first random meal
+            const meal = data.meals[slotID-1];
+            
+            // Store meal data with day and mealType as composite key
+            weeklyMeals.meals[`${day}_${mealType}`] = {
+              ...meal,
+              day: day,
+              mealType: mealType,
+              slotID: slotID
+            };
+            
+            chargeMealSlot(slot, meal, slotID);
             slotID++;
           }
         }
       }
     }
+    
+    // Save to localStorage
+    localStorage.setItem('weeklyMeals', JSON.stringify(weeklyMeals));
+
+    // Update nutrient summary
+    updateNutrientSummary();
+    
   } catch (error) {
     console.error("Error generating meals:", error);
   }

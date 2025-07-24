@@ -1,3 +1,4 @@
+import json
 from rest_framework import views, status
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
@@ -197,29 +198,9 @@ def home(request):
 
 ## FUNCTION VIEWS
 def generate_random_meals(request):
-    """
-    Return a list of 7 random meals for the week, filtering by meal_type if provided.
-    """
-    if request.method == 'GET':
-        meal_type = request.GET.get('meal_type', None)  # 'breakfast', 'lunch', 'dinner'
-        
-        # Filter recipes by type if you have that field, or get all
-        if meal_type:
-            recipes = list(Recipe.objects.filter(meal_type=meal_type))
-        else:
-            recipes = list(Recipe.objects.all())
-        
-        # Get 7 random recipes (or adjust quantity as needed)
-        random_recipes = sample(recipes, min(21, len(recipes)))
-        
-        # Serialize the data
-        meal_data = [{
-            'id': recipe.id,
-            'title': recipe.title,
-            'meal_type': getattr(recipe, 'meal_type', 'general')
-        } for recipe in random_recipes]
-        
-        return JsonResponse({'meals': meal_data})
+    recipes = Recipe.objects.order_by('?')[:21]
+    serializer = RecipeSerializer(recipes, many=True)
+    return JsonResponse({'meals': serializer.data})
 
 ## API VIEWS
 class RecipeSearchAPIView(views.APIView):

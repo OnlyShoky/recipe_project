@@ -64,7 +64,14 @@
 }
 .meal-content {
   font-size: 0.9em;
+  /* Safe truncation that won't break clickability */
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
+
+
+
 .add-meal {
   position: absolute;
   bottom: 5px;
